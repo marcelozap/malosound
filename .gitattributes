@@ -1,0 +1,46 @@
+# Keep git away from the binaries it will happily corrupt, and normalise the rest.
+# Without this file git attempts line-based text merges on Ableton and Max files
+# and produces something the DAW cannot open.
+
+* text=auto eol=lf
+
+# ------------------------------------------------------------------------ Max
+# .maxpat is JSON and IS the diffable source, so diff stays ON. But line-merging
+# two Max patchers yields a patch Max refuses to load — never auto-merge them.
+*.maxpat  text eol=lf -merge linguist-language=JSON
+*.maxhelp text eol=lf -merge linguist-language=JSON
+*.amxd    binary
+
+# -------------------------------------------------------------------- Ableton
+# All of these are gzipped XML. Binary to git, always.
+*.als binary
+*.alp binary
+*.adg binary
+*.adv binary
+*.adp binary
+*.ams binary
+*.agr binary
+*.ask binary
+
+# ------------------------------------------------------------- audio and MIDI
+# MIDI is small and is real musical source — it is committable. The audio marks
+# are belt-and-braces for anything that sneaks past .gitignore via `git add -f`.
+*.mid  binary
+*.midi binary
+*.wav  binary
+*.aif  binary
+*.aiff binary
+*.flac binary
+*.mp3  binary
+
+# ------------------------------------------------------------------ art / web
+*.png binary
+*.jpg binary
+*.svg text eol=lf
+
+# -------------------------------------------------------------------- scripts
+# PowerShell runs on the PC and wants CRLF; shell scripts run on the Mac.
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.sh  text eol=lf

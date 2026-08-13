@@ -1,0 +1,78 @@
+# malosound — what git tracks, and what it must never touch.
+#
+# The one rule this file exists to enforce: AUDIO BYTES NEVER GO IN GIT.
+# This repo holds code and configuration. The bytes live in the library
+# (see LIBRARY_PATH.md). The repo references the library; the library holds it.
+#
+# TWO THINGS GIT CANNOT PROTECT. Do not assume a rule below covers them:
+#   projects/          — ignored wholesale, by design. Live sets never enter git.
+#   Samples/Imported/  — only ever exists INSIDE a Live project, therefore inside
+#                        the ignore above. It is NOT regenerable, and no
+#                        .gitignore rule can save it. docs/BACKUP.md is what
+#                        protects it. (A `Samples/Processed/` rule used to sit
+#                        here looking reassuring and doing nothing. It is gone.)
+
+# ------------------------------------------------------------------ Live sets
+# Binary, churns on every save, drags gigabytes of samples behind it.
+projects/
+Backup/
+*.als.bak
+Ableton Project Info/
+*.asd
+
+# ---------------------------------------------------------------------- audio
+# There are NO negations below this block. If you want one, the answer is
+# docs/BACKUP.md or a pointer in the release metadata — not git.
+*.wav
+*.aif
+*.aiff
+*.flac
+*.mp3
+*.m4a
+*.ogg
+*.wv
+*.rex
+*.rx2
+bounces/
+renders/
+releases/**/masters/
+releases/**/audio/
+
+# ------------------------------------------------------- Max for Live devices
+# Source of truth is the UNFROZEN devices/<Name>/src/*.maxpat — text, diffable,
+# reviewable, committed. The ONLY .amxd git accepts is a FROZEN export sitting
+# in devices/<Name>/dist/. Freezing embeds the dependencies; an unfrozen device
+# that leaves this machine is a device that will not open. .githooks/pre-commit
+# enforces both halves — read it before you fight it.
+*.amxd
+!devices/*/dist/*.amxd
+*.maxpat.bak
+*.maxhelp
+Max Autosave/
+*.maxsnap
+devices/**/externals/
+
+# ---------------------------------------------------------------------- build
+artifacts/
+build/
+_to_delete/
+cmake-build*/
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.vst3
+*.component
+
+# ----------------------------------------------------------------------- junk
+# The Ableton plan targets a MacBook + PC rig, so both dialects of noise land here.
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+*.swp
+.venv/
+node_modules/
