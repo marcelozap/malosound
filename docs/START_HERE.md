@@ -153,3 +153,27 @@ fresh session from rebuilding things that already work.
   `reference/cheatsheet.md` has the full triage list.
 - **A Live set opens with missing files.** Point Live at the library once, then
   **File → Collect All and Save**.
+
+## Housekeeping from the session that set this up
+
+Two bits of debris, neither harmful, both trivial to clear **from Windows** —
+they exist because a cloud session reaches your disk through a bridge that is not
+allowed to delete files.
+
+**`_to_delete/`** holds the transfer archive, some stale git lock files, and a
+throwaway `TestDevice` used to verify the pre-commit hook actually blocks what it
+claims to. Nothing in it is needed. It is gitignored. Delete the whole folder.
+
+**`.git/objects/**/tmp_obj_*`** are orphaned temporary objects from git
+operations that could not clean up after themselves. Harmless — git ignores
+anything not matching an object name — but to tidy:
+
+```powershell
+git gc --prune=now
+```
+
+Also worth knowing: git run **from a cloud session over the folder bridge** leaves
+a `.git/*.lock` behind after every operation, because the mount forbids unlink.
+Git run **natively on Windows, by you** has no such problem. So use git yourself
+as normal; if a future cloud session reports "Another git process seems to be
+running", that is this, and the fix is deleting the stale `.lock` file.
