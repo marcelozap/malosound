@@ -1,0 +1,115 @@
+#!/bin/sh
+# malosound — pre-commit
+#
+# .gitignore can only stop files nobody meant to add. This hook stops the
+# mistakes that look deliberate: an unfrozen device, a master that snuck in
+# behind `git add -f`, a binary with no diffable source next to it.
+#
+# Enabled per clone (git does not version core.hooksPath):
+#     git config core.hooksPath .githooks
+#     scripts/setup-repo.sh   # or scripts/setup-repo.ps1 on Windows
+#
+# Escape hatch, for when you know better: git commit --no-verify
+
+set -u
+
+RED='\033[0;31m'; YEL='\033[0;33m'; GRN='\033[0;32m'; OFF='\033[0m'
+[ -t 1 ] || { RED=''; YEL=''; GRN=''; OFF=''; }
+
+fail=0
+warn=0
+
+say_fail() { printf "${RED}BLOCKED${OFF}  %s\n" "$1"; fail=1; }
+say_warn() { printf "${YEL}warning${OFF}  %s\n" "$1"; warn=1; }
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+# --------------------------------------------------------------------------
+# 1. Audio bytes never go in git.
+# --------------------------------------------------------------------------
+printf '%s\n' "$staged" | while IFS= read -r f; do
+    case "$f" in
+        *.wav|*.aif|*.aiff|*.flac|*.mp3|*.m4a|*.ogg|*.wv|*.rex|*.rx2)
+            printf 'AUDIO %s\n' "$f" ;;
+    esac
+done > /tmp/malo_audio.$$ 2>/dev/null
+
+if [ -s /tmp/malo_audio.$$ ]; then
+    while IFS= read -r line; do
+        say_fail "audio file staged: ${line#AUDIO }"
+    done < /tmp/malo_audio.$$
+    printf '         The repo references the library; the library holds the bytes.\n'
+    printf '         See LIBRARY_PATH.md. For a release, commit the metadata and\n'
+    printf '         point at the file — see releases/README.md.\n'
+fi
+rm -f /tmp/malo_audio.$$
+
+# --------------------------------------------------------------------------
+# 2. Max for Live: .amxd must be FROZEN and must live in devices/<Name>/dist/.
+# --------------------------------------------------------------------------
+for f in $(printf '%s\n' "$staged" | grep -i '\.amxd$' || true); do
+    case "$f" in
+        devices/*/dist/*) ;;
+        *)
+            say_fail "device outside dist/: $f"
+            printf '         Frozen exports belong in devices/<Name>/dist/.\n'
+            printf '         The unfrozen .maxpat source belongs in devices/<Name>/src/.\n'
+            continue ;;
+    esac
+
+    # Frozen devices carry the freeze manifest in the patcher JSON. No manifest,
+    # no embedded dependencies — the device will not open on the other machine.
+    if ! git show ":$f" 2>/dev/null | grep -qa 'frozen_files\|frozen_object_list'; then
+        say_fail "device looks UNFROZEN: $f"
+        printf '         Freeze it in Max (the snowflake in the M4L toolbar), re-export,\n'
+        printf '         then stage it. An unfrozen device that leaves this machine is a\n'
+        printf '         device that does not open.\n'
+    fi
+
+    # A binary with no readable source is a binary nobody can review or fix.
+    dev_dir=$(printf '%s' "$f" | sed 's|/dist/.*||')
+    if [ -z "$(git ls-files "$dev_dir/src" | grep -i '\.maxpat$' || true)" ] \
+    && [ -z "$(git diff --cached --name-only | grep -i "^$dev_dir/src/.*\.maxpat$" || true)" ]; then
+        say_fail "no .maxpat source for $f"
+        printf '         Commit the unfrozen patcher at %s/src/ in the same change.\n' "$dev_dir"
+    fi
+done
+
+# --------------------------------------------------------------------------
+# 3. Size guard. Nothing in this repo has a legitimate reason to be large.
+# --------------------------------------------------------------------------
+LIMIT=$((20 * 1024 * 1024))
+for f in $staged; do
+    size=$(git cat-file -s ":$f" 2>/dev/null || echo 0)
+    if [ "$size" -gt "$LIMIT" ]; then
+        mb=$((size / 1024 / 1024))
+        say_fail "large file (${mb} MB): $f"
+        printf '         Git keeps this forever, in every clone, on every machine.\n'
+    fi
+done
+
+# --------------------------------------------------------------------------
+# 4. Live sets. projects/ is ignored, so an .als here is intentional — but it is
+#    only correct in ableton/templates/.
+# --------------------------------------------------------------------------
+for f in $(printf '%s\n' "$staged" | grep -i '\.als$' || true); do
+    case "$f" in
+        ableton/templates/*) ;;
+        *) say_warn "Live set outside ableton/templates/: $f"
+           printf '         Live sets stay out of git — see docs/BACKUP.md.\n' ;;
+    esac
+done
+
+# --------------------------------------------------------------------------
+if [ "$fail" -ne 0 ]; then
+    printf "\n${RED}commit blocked.${OFF} Fix the above, or bypass with --no-verify if you are sure.\n"
+    exit 1
+fi
+
+if [ "$warn" -ne 0 ]; then
+    printf "\n${YEL}committing with warnings.${OFF}\n"
+else
+    printf "${GRN}pre-commit checks passed.${OFF}\n"
+fi
+exit 0
