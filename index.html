@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="maloSound is Project XIV's proof-of-concept release pipeline: free listening, direct support, and cryptographic provenance for independent music."
+    />
+    <title>maloSound.ai - Project XIV</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #050507;
+        --ink: #f7f3eb;
+        --muted: #b9b0a2;
+        --line: rgba(255, 255, 255, 0.16);
+        --panel: rgba(12, 13, 16, 0.72);
+        --hot: #ff3d81;
+        --blue: #43d9ff;
+        --gold: #f1c15b;
+        --green: #76d19b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        scroll-behavior: smooth;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      .stage {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background:
+          linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+          radial-gradient(circle at 64% 28%, rgba(255, 61, 129, 0.24), transparent 25%),
+          radial-gradient(circle at 30% 48%, rgba(67, 217, 255, 0.18), transparent 29%),
+          linear-gradient(180deg, #08080d 0%, #050507 66%, #090806 100%);
+        background-size: 48px 48px, 48px 48px, auto, auto, auto;
+      }
+
+      .stage::before {
+        position: absolute;
+        inset: 8vh auto auto 50%;
+        width: min(52vw, 560px);
+        aspect-ratio: 1;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        border-radius: 50%;
+        transform: translateX(-28%);
+        box-shadow:
+          0 0 0 28px rgba(67, 217, 255, 0.025),
+          inset 0 0 90px rgba(255, 61, 129, 0.12),
+          0 0 120px rgba(67, 217, 255, 0.12);
+        content: "";
+      }
+
+      .stage::after {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(115deg, transparent 0 24%, rgba(241, 193, 91, 0.08) 24.2% 24.6%, transparent 24.8% 100%),
+          linear-gradient(68deg, transparent 0 57%, rgba(67, 217, 255, 0.08) 57.2% 57.6%, transparent 57.8% 100%);
+        content: "";
+      }
+
+      .shell {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero {
+        min-height: 92vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        padding: clamp(18px, 4vw, 48px);
+      }
+
+      .topbar,
+      .hero-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .mark {
+        color: var(--ink);
+        font-size: clamp(19px, 2vw, 30px);
+        font-weight: 850;
+        letter-spacing: 0;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .status::before {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 18px var(--green);
+        content: "";
+      }
+
+      .headline {
+        align-self: end;
+        max-width: 760px;
+        padding-bottom: clamp(28px, 8vh, 88px);
+      }
+
+      h1 {
+        max-width: 10ch;
+        margin: 0;
+        font-size: clamp(48px, 10vw, 128px);
+        line-height: 0.88;
+        letter-spacing: 0;
+      }
+
+      .headline p {
+        max-width: 620px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: clamp(16px, 1.6vw, 21px);
+        line-height: 1.5;
+      }
+
+      .actions,
+      .links,
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .button,
+      .tag {
+        min-height: 38px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--ink);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 12px;
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 1;
+        backdrop-filter: blur(14px);
+      }
+
+      .button.primary {
+        border-color: rgba(255, 61, 129, 0.72);
+        background: linear-gradient(135deg, rgba(255, 61, 129, 0.88), rgba(241, 193, 91, 0.78));
+        color: #07070a;
+        font-weight: 800;
+      }
+
+      .button:hover,
+      .tag:hover {
+        border-color: rgba(67, 217, 255, 0.72);
+      }
+
+      .readout {
+        max-width: 340px;
+        color: var(--muted);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 12px;
+        line-height: 1.45;
+        text-align: right;
+      }
+
+      .section {
+        background:
+          linear-gradient(180deg, rgba(5, 5, 7, 0) 0%, rgba(5, 5, 7, 0.94) 8%),
+          #050507;
+        padding: 76px clamp(18px, 5vw, 72px);
+      }
+
+      .inner {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+
+      .eyebrow {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--blue);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 12px;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        max-width: 760px;
+        margin: 0 0 16px;
+        font-size: clamp(30px, 5vw, 66px);
+        line-height: 0.98;
+        letter-spacing: 0;
+      }
+
+      h3 {
+        margin: 0 0 10px;
+        font-size: 21px;
+        line-height: 1.15;
+        letter-spacing: 0;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.58;
+      }
+
+      .lead {
+        max-width: 760px;
+        margin-bottom: 34px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .card {
+        min-height: 188px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(12, 13, 16, 0.78);
+        padding: 18px;
+        backdrop-filter: blur(18px);
+      }
+
+      .card strong {
+        color: var(--ink);
+      }
+
+      .tags {
+        margin-top: 16px;
+      }
+
+      .tag {
+        min-height: 30px;
+        padding: 7px 9px;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 12px;
+      }
+
+      .split {
+        display: grid;
+        grid-template-columns: 0.74fr 1.26fr;
+        gap: 22px;
+        align-items: start;
+        margin-top: 76px;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .list li {
+        border-left: 2px solid var(--hot);
+        background: rgba(255, 255, 255, 0.045);
+        padding: 12px 14px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .mono {
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        word-break: break-all;
+      }
+
+      footer {
+        border-top: 1px solid var(--line);
+        background: #050507;
+        padding: 28px clamp(18px, 5vw, 72px) 48px;
+        color: var(--muted);
+      }
+
+      footer .inner {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      @media (max-width: 760px) {
+        .hero {
+          min-height: 94vh;
+          padding: 18px;
+        }
+
+        .topbar,
+        .hero-foot,
+        footer .inner {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .headline {
+          align-self: start;
+          padding-top: 86px;
+          padding-bottom: 0;
+        }
+
+        h1 {
+          max-width: 9ch;
+          font-size: clamp(42px, 14vw, 60px);
+          line-height: 0.94;
+        }
+
+        .headline p {
+          max-width: 340px;
+          font-size: 14px;
+          line-height: 1.42;
+        }
+
+        .readout {
+          max-width: 100%;
+          text-align: left;
+        }
+
+        .section {
+          padding-top: 70px;
+        }
+
+        .grid,
+        .split {
+          grid-template-columns: 1fr;
+        }
+
+        .card {
+          min-height: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage" aria-hidden="true"></div>
+    <main class="shell">
+      <section class="hero" id="top">
+        <header class="topbar">
+          <div class="mark">maloSound.ai</div>
+          <div class="status">Victoria proof package verified</div>
+        </header>
+
+        <div class="headline">
+          <h1>Music with its receipt attached.</h1>
+          <p>
+            Project XIV's maloSound is a proof-of-concept release system for independent artists:
+            listen free, support direct, and verify the files without waiting on a platform.
+          </p>
+        </div>
+
+        <nav class="hero-foot" aria-label="Primary links">
+          <div class="actions">
+            <a class="button primary" href="releases/victoria-2026-08-26/index.html">Open Victoria Proof</a>
+            <a class="button" href="#my-friend">My Friend</a>
+            <a class="button" href="#why">Why This Helps</a>
+            <a class="button" href="#proof">Proof Stack</a>
+          </div>
+          <div class="readout">
+            RELEASE&nbsp;&nbsp; Victoria<br />
+            AUDIO&nbsp;&nbsp;&nbsp;&nbsp; MP3 / 53:20<br />
+            CHAIN&nbsp;&nbsp;&nbsp;&nbsp; Ed25519 + SHA-256<br />
+            STATUS&nbsp;&nbsp;&nbsp; local proof, no token
+          </div>
+        </nav>
+      </section>
+
+      <section class="section" id="model">
+        <div class="inner">
+          <span class="eyebrow">POC MODEL</span>
+          <h2>Not Spotify-first. Not crypto-first.</h2>
+          <p class="lead">
+            The first job is to make the song easy to hear. The second job is to make direct support
+            feel real, useful, and verifiable. Blockchain can come later as a distribution option,
+            but the site starts with files, hashes, manifests, and receipts.
+          </p>
+
+          <div class="grid">
+            <article class="card">
+              <h3>Free discovery</h3>
+              <p>Short clips belong on Instagram. Full listens and visual drops can live on YouTube.</p>
+              <div class="tags">
+                <span class="tag">snippets</span>
+                <span class="tag">video</span>
+                <span class="tag">no gate</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <h3>Direct support</h3>
+              <p>People who want to keep the song can download the release bundle straight from the artist.</p>
+              <div class="tags">
+                <span class="tag">audio</span>
+                <span class="tag">source</span>
+                <span class="tag">manifest</span>
+              </div>
+            </article>
+
+            <article class="card">
+              <h3>Portable proof</h3>
+              <p>The receipt records the audio hash, analysis hash, signature, and ledger position.</p>
+              <div class="tags">
+                <span class="tag">SHA-256</span>
+                <span class="tag">Ed25519</span>
+                <span class="tag">ERC-2981 metadata</span>
+              </div>
+            </article>
+          </div>
+
+          <section class="split" id="my-friend">
+            <div>
+              <span class="eyebrow">FIRST ALBUM</span>
+              <h2>My Friend</h2>
+            </div>
+            <div>
+              <p>
+                The first public demonstration is a three-song album about Rosco. Human first,
+                technical second: the music carries the feeling, and the provenance stack travels
+                with the release for anyone who wants to inspect it.
+              </p>
+              <div class="tags">
+                <span class="tag">3 songs</span>
+                <span class="tag">Rosco</span>
+                <span class="tag">bedroom funk/R&amp;B</span>
+                <span class="tag">Spanish / English</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="split" id="proof">
+            <div>
+              <span class="eyebrow">VERIFIED ARTIFACT</span>
+              <h2>Victoria is the first proof package.</h2>
+            </div>
+            <div>
+              <ul class="list">
+                <li><strong>Audio:</strong> <span class="mono">vicotira9-08pm.mp3</span></li>
+                <li><strong>Analysis:</strong> AudioAnalysisV1 with beat times, RMS, zero-crossing, spectral rolloff, and provenance.</li>
+                <li><strong>Ledger:</strong> Ed25519/SHA-256 hash-chain receipt with verified chain integrity.</li>
+                <li><strong>Boundary:</strong> no smart contract deployed, no token minted, no wallet connected.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="split" id="why">
+            <div>
+              <span class="eyebrow">ARTIST CASE</span>
+              <h2>Why it matters.</h2>
+            </div>
+            <div>
+              <ul class="list">
+                <li>Artists can publish a verifiable release without asking a streaming platform to be the source of truth.</li>
+                <li>Supporters can keep a local file and a receipt that proves exactly what they downloaded.</li>
+                <li>Royalty metadata can be written down before any chain, marketplace, or distributor is involved.</li>
+                <li>The community gets a guide: how the release was made, what the proof means, and where the proof stops.</li>
+              </ul>
+            </div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="inner">
+        <div>Project XIV / maloSound</div>
+        <div>Listen free. Support direct. Verify the file.</div>
+      </div>
+    </footer>
+  </body>
+</html>

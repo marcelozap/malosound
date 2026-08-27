@@ -1,0 +1,8 @@
+{
+  "analysis_path": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/data/gold/audio_analysis/vicotira9-08pm.audioanalysis.v1.json",
+  "analysis_sha256": "d553ebbb42f9389fc40b1eea64d34be48cf002396234cb043c17c8ac75c2ac32",
+  "determinism": "same AudioAnalysisV1 source hash produces identical pattern text",
+  "pattern_path": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/scripts/strudel/tracks/victoria-2026-08-26/pattern.js",
+  "pattern_sha256": "cff7d48e57e0febb786f14c23216b6f64ebd284faf5eb6b9630f0eb8093796be",
+  "schema": "malosound.procedural_companion.v1"
+}

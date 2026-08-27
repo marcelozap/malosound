@@ -1,0 +1,79 @@
+{
+  "artist": {
+    "key_fingerprint": "MS1-BBVQ-2WV7-JAOA-26K3",
+    "name": "Project XIV / maloSound",
+    "public_key": "55cf872ab278db5ad87521b9d658ac64edf38e46323c61d96a8e925bb1332282",
+    "slug": "malosound"
+  },
+  "boundary": "Local cryptographic proof only. No contract deployed, no token minted, no wallet connected, no third-party attestation.",
+  "created_at": "2026-08-26T16:01:53+00:00",
+  "files": {
+    "analysis": {
+      "bytes": 463531,
+      "path": "data/vicotira9-08pm.audioanalysis.v1.json",
+      "sha256": "d553ebbb42f9389fc40b1eea64d34be48cf002396234cb043c17c8ac75c2ac32",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/data/gold/audio_analysis/vicotira9-08pm.audioanalysis.v1.json"
+    },
+    "artist": {
+      "bytes": 313,
+      "path": "ARTIST.json",
+      "sha256": "76384d78d674e36748f627e5155c70eca5ebb9f70432906344424f187422d056",
+      "source": "generated"
+    },
+    "audio": {
+      "bytes": 64005376,
+      "path": "audio/vicotira9-08pm.mp3",
+      "sha256": "70b946d3fbe147cdf176529d51b1b6725eb3f3887864b029d253f237d9a7b1b6",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/projects/2026-08-26_victoria/Recorded/vicotira9-08pm.mp3"
+    },
+    "companion": {
+      "bytes": 488,
+      "path": "source/pattern.js",
+      "sha256": "cff7d48e57e0febb786f14c23216b6f64ebd284faf5eb6b9630f0eb8093796be",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/scripts/strudel/tracks/victoria-2026-08-26/pattern.js"
+    },
+    "companion_metadata": {
+      "bytes": 587,
+      "path": "source/companion.json",
+      "sha256": "7389a3553e2e193f92eac1f4f1230475e640d64d29a356a9de61ae555badbb29",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/scripts/strudel/tracks/victoria-2026-08-26/companion.json"
+    },
+    "manifest": {
+      "bytes": 739341,
+      "path": "manifest/victoria-2026-08-26.release_manifest_v1.json",
+      "sha256": "6a250d0fd84f0dbaa79cc8c9d1e52558b4864227292b0c56b56c16ba51165f46",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/manifests/victoria-2026-08-26.release_manifest_v1.json"
+    },
+    "page": {
+      "bytes": 6985,
+      "path": "index.html",
+      "sha256": "5fc36ecae8264df6750c90041d1698391e15817e0ec3cddf8fc86729856b2ec1",
+      "source": "generated"
+    },
+    "readme": {
+      "bytes": 1420,
+      "path": "README.md",
+      "sha256": "950feac033ab952a3ebac2d53528690357e903c4b402ea346ae5b727d1063fc8",
+      "source": "generated"
+    },
+    "receipt_excerpt": {
+      "bytes": 1189,
+      "path": "ledger/receipt_excerpt.jsonl",
+      "sha256": "1cc4c4547aaeb6b6e05b32323d25bf8863aa599e983b8538021d571858ccb488",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/data/receipts.jsonl"
+    },
+    "verifier": {
+      "bytes": 12513,
+      "path": "verify.py",
+      "sha256": "cef9e18a7c88a361754edfa9558cef215ceb367d480468d578a9f45195e9811e",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/tools/templates/verify.py"
+    }
+  },
+  "ledger": {
+    "path": "data/receipts.jsonl",
+    "record_hash": "aacfd39c652112a43804d6b73a9c1319e976532236535beab761da4b5280ff5a"
+  },
+  "schema": "malosound.release_package.v2",
+  "slug": "victoria-2026-08-26",
+  "title": "Victoria"
+}
