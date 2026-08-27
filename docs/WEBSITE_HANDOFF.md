@@ -6,11 +6,9 @@ The root `index.html` is the GitHub Pages entry point for `malosound.ai`.
 
 - Homepage: `index.html`
 - Domain file: `CNAME`
-- Public Victoria proof page: `releases/victoria-2026-08-26/index.html`
 
-The homepage borrows the GateKPT visual language: full-screen dark signal field,
-HUD-style top bar, proof sections, compact buttons, and evidence-forward copy.
-It does not copy GateKPT product logic.
+The homepage uses a full-screen dark signal field, HUD-style top bar, proof
+sections, compact buttons, and evidence-forward copy.
 
 ## Release Boundary
 
@@ -33,17 +31,17 @@ Do not force-add MP3 files unless the release policy changes.
 
 ## Current Positioning
 
-`maloSound.ai` is not Spotify-first and not crypto-first. It is a proof-of-
-concept release surface:
+`maloSound.ai` presents MaloSound as the first proof of concept for XIV:
 
-- listen free through Instagram and YouTube
-- support direct through downloads
-- verify authenticity through hashes, manifests, and Ed25519 receipts
-- keep blockchain optional until it helps the artist/community
+- XIV is the orchestrator, business, and role-based AI systems layer
+- MaloSound is the music and artist-tech proof of concept
+- Green Machine is the data, evidence, and risk-review lane
+- public language stays focused on original music, AudioAnalysisV1 summaries,
+  coded rhythm, visual output, release workflow, and ownership
 
 First album frame:
 
 ```text
 My Friend
-3 songs about Rosco
+3 original songs
 ```

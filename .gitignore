@@ -79,3 +79,27 @@ desktop.ini
 __pycache__/
 *.pyc
 node_modules/
+
+# Local signing material for offline release receipts.
+data/keys/
+data/*.pem
+!data/*.pem.pub
+
+# ------------------------------------------------------------------- artists
+# artists/<slug>/artist.json IS tracked — it is the public identity: display
+# name, rights holder, royalty split, PUBLIC key, fingerprint. It is what lets
+# anyone check a release against the right artist.
+#
+# Everything below is per-artist material that must never enter git:
+#   keys/     the private signing seed. Whoever holds it can sign as that artist.
+#   incoming/ raw audio drops.
+#   releases/**/audio/  packaged masters.
+artists/*/keys/
+artists/**/*.pem
+!artists/**/*.pem.pub
+artists/*/incoming/
+**/releases/**/audio/
+**/releases/**/masters/
+
+# Local proof package with private filenames; keep it off the public Pages site.
+releases/victoria-2026-08-26/
