@@ -75,6 +75,7 @@ cmake-build*/
 Thumbs.db
 desktop.ini
 *.swp
+.codex-preview-*.png
 .venv/
 __pycache__/
 *.pyc

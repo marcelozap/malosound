@@ -16,7 +16,7 @@ Do not re-derive it.
 | **The repo** | `C:\Users\Green Machine\XIV\malosound` | Grantable. Request it first. |
 | Cowork "malosound" folder | `C:\Users\Green Machine\Claude\Projects\malosound` | **Empty — not the repo. Ignore it.** |
 | Sample library | `C:\Users\Green Machine\Music\XIV Music Library\` | Not grantable so far. Reference only, never move. |
-| Ableton plan (origin) | `Documents\ChatGPT\gateKPT-conflict-fix\` | Not grantable. **No longer needed — already claimed.** |
+| Ableton plan (origin) | `Documents\ChatGPT\legacy-audio-plan\` | Not grantable. **No longer needed — already claimed.** |
 | Victoria recording | `Desktop\00_XIV_COMMAND_CENTER\07_MALOSOUND_AUDIO_SYSTEM\vicotira9-08pm.mp3` | Not grantable. Blocked. |
 
 Project instructions say the repo is at `C:\Users\XIV\malosound`. It is not.
@@ -51,7 +51,7 @@ Two things that are easy to get wrong:
 `docs/ABLETON_PLUGIN_PLAN.md` is the *Voice Mirror Bridge* design — JUCE C++,
 VST3 + AU, extracts pitch/level/bands/onset from the DAW and streams ~30 Hz
 feature frames over WebSocket/OSC to a PC visual app. Lock-free audio callback,
-no allocations. It belongs to the gateKPT MacBook+PC rig. **Already in `docs/` —
+no allocations. It belongs to the XIV MacBook+PC rig. **Already in `docs/` —
 do not re-claim it.**
 
 ## 3. The .gitignore — current contents and what's wrong

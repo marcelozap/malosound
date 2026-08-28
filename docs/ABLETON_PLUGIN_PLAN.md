@@ -2,7 +2,7 @@
 
 The bridge plugin exists to extract musical control data from the DAW without endangering monitoring, recording, or the live performance.
 
-In the gateKPT MacBook + PC rig, this plugin runs on the MacBook inside Ableton/Logic/MainStage and sends lightweight control data to the PC visual app. See [MACBOOK_PC_DEPLOYMENT_PLAN.md](./MACBOOK_PC_DEPLOYMENT_PLAN.md).
+In the XIV MacBook + PC rig, this plugin runs on the MacBook inside Ableton/Logic/MainStage and sends lightweight control data to the PC visual app. See [MACBOOK_PC_DEPLOYMENT_PLAN.md](./MACBOOK_PC_DEPLOYMENT_PLAN.md).
 
 ## Targets
 
