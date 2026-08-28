@@ -124,22 +124,22 @@
       }
 
       .headline {
-        max-width: 880px;
+        max-width: 1120px;
         margin: 0 auto;
         text-align: center;
       }
 
       h1 {
-        max-width: none;
+        max-width: 1120px;
         margin: 0;
-        font-size: clamp(40px, 7vw, 86px);
-        line-height: 0.94;
+        font-size: clamp(32px, 4.6vw, 58px);
+        line-height: 1.02;
         letter-spacing: 0;
       }
 
       .headline p {
         max-width: 680px;
-        margin: 22px 0 0;
+        margin: 12px 0 0;
         margin-inline: auto;
         color: var(--muted);
         font-size: clamp(16px, 1.6vw, 21px);
@@ -149,8 +149,8 @@
       .hero-main {
         display: grid;
         align-content: center;
-        gap: 28px;
-        padding: 32px 0 18px;
+        gap: 16px;
+        padding: 12px 0 18px;
       }
 
       .hero-stage {
@@ -159,13 +159,80 @@
       }
 
       .hero-stage .system-visual {
-        min-height: clamp(360px, 52vh, 560px);
+        min-height: clamp(300px, 44vh, 430px);
         border: 0;
         background:
           linear-gradient(rgba(68, 221, 255, 0.055) 1px, transparent 1px),
           radial-gradient(circle at 50% 42%, rgba(68, 221, 255, 0.24), transparent 34%),
           radial-gradient(circle at 52% 62%, rgba(120, 215, 157, 0.14), transparent 38%),
           rgba(3, 4, 7, 0.82);
+      }
+
+      .signal-canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .signal-readout {
+        position: absolute;
+        right: 22px;
+        bottom: 24px;
+        display: grid;
+        gap: 6px;
+        min-width: 132px;
+        color: var(--muted);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 11px;
+        text-align: right;
+        text-transform: uppercase;
+      }
+
+      .signal-readout strong {
+        color: var(--cyan);
+        font-weight: 800;
+      }
+
+      .sample-controls,
+      .band-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 7px;
+      }
+
+      .sample-controls {
+        margin-top: 12px;
+      }
+
+      .band-controls {
+        margin-top: 8px;
+      }
+
+      .mini-button {
+        min-height: 34px;
+        border: 1px solid rgba(68, 221, 255, 0.36);
+        border-radius: 0;
+        background: rgba(4, 6, 10, 0.74);
+        color: var(--ink);
+        cursor: pointer;
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        padding: 8px 12px;
+        text-transform: uppercase;
+      }
+
+      .mini-button[aria-pressed="true"] {
+        border-color: var(--cyan);
+        box-shadow: 0 0 22px rgba(68, 221, 255, 0.2);
+        color: var(--cyan);
+      }
+
+      .band-controls .mini-button {
+        min-width: 42px;
+        padding-inline: 9px;
       }
 
       .hero-stage .system-visual::after {
@@ -181,7 +248,7 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 10px;
-        margin-top: 22px;
+        margin-top: 14px;
       }
 
       .audio-button {
@@ -661,33 +728,32 @@
         <div class="hero-main">
           <div class="hero-stage">
             <div class="system-visual" aria-label="Signal-mapped body visual">
+              <canvas class="signal-canvas" data-signal-canvas></canvas>
               <div class="pipeline" aria-hidden="true">
                 <span>audio</span>
                 <span>8 bands</span>
                 <span>features</span>
                 <span>motion map</span>
               </div>
-              <div class="motion-body" aria-hidden="true">
-                <div class="pulse"></div>
-                <div class="pulse"></div>
-                <div class="joint head"></div>
-                <div class="torso"></div>
-                <div class="limb arm-left"></div>
-                <div class="limb arm-right"></div>
-                <div class="limb leg-left"></div>
-                <div class="limb leg-right"></div>
-                <div class="joint" style="inset: 60% auto auto 47%"></div>
+              <div class="signal-readout" aria-live="polite">
+                <span><strong data-readout-motion>motion 00</strong></span>
+                <span data-readout-zone>z 0.00</span>
+                <span data-readout-source>sample 01</span>
               </div>
-              <div class="band-stack" aria-hidden="true">
-                <span class="band"></span>
-                <span class="band"></span>
-                <span class="band"></span>
-                <span class="band"></span>
-                <span class="band"></span>
-                <span class="band"></span>
-                <span class="band"></span>
-                <span class="band"></span>
-              </div>
+            </div>
+            <div class="sample-controls" aria-label="Audio analysis samples">
+              <button class="mini-button" type="button" data-sample="0" aria-pressed="true">Sample 01</button>
+              <button class="mini-button" type="button" data-sample="1" aria-pressed="false">Sample 02</button>
+            </div>
+            <div class="band-controls" aria-label="Band toggles">
+              <button class="mini-button" type="button" data-band="0" aria-pressed="true">B1</button>
+              <button class="mini-button" type="button" data-band="1" aria-pressed="true">B2</button>
+              <button class="mini-button" type="button" data-band="2" aria-pressed="true">B3</button>
+              <button class="mini-button" type="button" data-band="3" aria-pressed="true">B4</button>
+              <button class="mini-button" type="button" data-band="4" aria-pressed="true">B5</button>
+              <button class="mini-button" type="button" data-band="5" aria-pressed="true">B6</button>
+              <button class="mini-button" type="button" data-band="6" aria-pressed="true">B7</button>
+              <button class="mini-button" type="button" data-band="7" aria-pressed="true">B8</button>
             </div>
           </div>
 
@@ -850,87 +916,298 @@
     </footer>
     <script>
       (() => {
+        const canvas = document.querySelector("[data-signal-canvas]");
         const button = document.querySelector("[data-audio-toggle]");
-        if (!button) return;
+        const sampleButtons = Array.from(document.querySelectorAll("[data-sample]"));
+        const bandButtons = Array.from(document.querySelectorAll("[data-band]"));
+        const readoutMotion = document.querySelector("[data-readout-motion]");
+        const readoutZone = document.querySelector("[data-readout-zone]");
+        const readoutSource = document.querySelector("[data-readout-source]");
+        if (!canvas || !button) return;
 
-        let context;
-        let master;
-        let masterConnected = false;
-        let timer;
-        let step = 0;
+        const ctx = canvas.getContext("2d");
+
+        const sources = [
+          { label: "Sample 01", url: "gateway/sample-01.audioanalysis.v1.json" },
+          { label: "Sample 02", url: "gateway/sample-02.audioanalysis.v1.json" },
+        ];
+
+        const activeBands = Array.from({ length: 8 }, () => true);
+        let sampleIndex = 0;
+        let analyses = [];
         let playing = false;
+        let fallbackPhase = 0;
+        let audioContext;
+        let masterGain;
+        let audioTimer;
+        let playStartedAt = 0;
 
-        const makeGain = (value) => {
-          const gain = context.createGain();
-          gain.gain.value = value;
-          gain.connect(master);
-          return gain;
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+        const resize = () => {
+          const rect = canvas.getBoundingClientRect();
+          const ratio = Math.min(window.devicePixelRatio || 1, 2);
+          const width = Math.max(1, Math.floor(rect.width * ratio));
+          const height = Math.max(1, Math.floor(rect.height * ratio));
+          if (canvas.width !== width || canvas.height !== height) {
+            canvas.width = width;
+            canvas.height = height;
+          }
+          ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+          return { width: rect.width, height: rect.height };
         };
 
-        const hit = (frequency, duration, gainValue, type = "sine") => {
-          const now = context.currentTime;
-          const oscillator = context.createOscillator();
-          const gain = makeGain(gainValue);
+        const prepareAnalysis = (data) => {
+          const rows = data?.band_energy?.values || data?.bands || [];
+          const hop = data?.band_energy?.hop_s || data?.energy_curve?.hop_s || 0.18;
+          const means = Array.from({ length: 8 }, () => 0);
+          const deviations = Array.from({ length: 8 }, () => 1);
+
+          rows.forEach((row) => {
+            for (let index = 0; index < 8; index += 1) {
+              means[index] += Number(row[index] || 0);
+            }
+          });
+
+          if (rows.length) {
+            for (let index = 0; index < 8; index += 1) means[index] /= rows.length;
+            rows.forEach((row) => {
+              for (let index = 0; index < 8; index += 1) {
+                const delta = Number(row[index] || 0) - means[index];
+                deviations[index] += delta * delta;
+              }
+            });
+            for (let index = 0; index < 8; index += 1) {
+              deviations[index] = Math.max(0.0001, Math.sqrt(deviations[index] / rows.length));
+            }
+          }
+
+          return { rows, hop, means, deviations };
+        };
+
+        const fallbackBands = () => {
+          fallbackPhase += 0.024;
+          return Array.from({ length: 8 }, (_, index) => {
+            const pulse = Math.sin(fallbackPhase * (1.3 + index * 0.09) + index * 0.7);
+            const lift = Math.sin(fallbackPhase * 0.6 + index);
+            return clamp((pulse * 0.5 + lift * 0.25 + 0.65) * activeBands[index], 0, 1);
+          });
+        };
+
+        const currentBands = () => {
+          const analysis = analyses[sampleIndex];
+          if (!analysis?.rows?.length) return fallbackBands();
+          const elapsed = playing
+            ? (performance.now() / 1000) - playStartedAt
+            : performance.now() / 1000;
+          const row = analysis.rows[Math.floor(elapsed / analysis.hop) % analysis.rows.length] || [];
+          return Array.from({ length: 8 }, (_, index) => {
+            const raw = Number(row[index] || 0);
+            const z = (raw - analysis.means[index]) / analysis.deviations[index];
+            return clamp((z + 1.7) / 3.6, 0, 1) * (activeBands[index] ? 1 : 0);
+          });
+        };
+
+        const ensureAudio = async () => {
+          audioContext = audioContext || new AudioContext();
+          if (audioContext.state === "suspended") await audioContext.resume();
+          masterGain = masterGain || audioContext.createGain();
+          masterGain.gain.value = 0.42;
+          if (!masterGain.numberOfOutputs) return;
+          try {
+            masterGain.connect(audioContext.destination);
+          } catch {
+            /* Already connected. */
+          }
+        };
+
+        const playTone = (frequency, duration, gainValue, type = "sine") => {
+          if (!audioContext || !masterGain) return;
+          const now = audioContext.currentTime;
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
           oscillator.type = type;
           oscillator.frequency.setValueAtTime(frequency, now);
-          oscillator.frequency.exponentialRampToValueAtTime(Math.max(32, frequency * 0.44), now + duration);
-          gain.gain.setValueAtTime(gainValue, now);
+          oscillator.frequency.exponentialRampToValueAtTime(Math.max(35, frequency * 0.62), now + duration);
+          gain.gain.setValueAtTime(Math.max(0.001, gainValue), now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
           oscillator.connect(gain);
+          gain.connect(masterGain);
           oscillator.start(now);
           oscillator.stop(now + duration + 0.02);
         };
 
-        const noise = (duration, gainValue) => {
-          const now = context.currentTime;
-          const buffer = context.createBuffer(1, context.sampleRate * duration, context.sampleRate);
+        const playNoise = (duration, gainValue, highpass = 2800) => {
+          if (!audioContext || !masterGain) return;
+          const now = audioContext.currentTime;
+          const buffer = audioContext.createBuffer(1, Math.max(1, Math.floor(audioContext.sampleRate * duration)), audioContext.sampleRate);
           const data = buffer.getChannelData(0);
           for (let index = 0; index < data.length; index += 1) {
             data[index] = (Math.random() * 2 - 1) * (1 - index / data.length);
           }
-          const source = context.createBufferSource();
-          const filter = context.createBiquadFilter();
-          const gain = makeGain(gainValue);
+          const source = audioContext.createBufferSource();
+          const filter = audioContext.createBiquadFilter();
+          const gain = audioContext.createGain();
           filter.type = "highpass";
-          filter.frequency.value = 4200;
+          filter.frequency.value = highpass;
           gain.gain.setValueAtTime(gainValue, now);
           gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
           source.buffer = buffer;
           source.connect(filter);
           filter.connect(gain);
+          gain.connect(masterGain);
           source.start(now);
           source.stop(now + duration);
         };
 
-        const tick = () => {
+        const sonifySignal = () => {
           if (!playing) return;
-          if (step % 8 === 0 || step % 8 === 3) hit(72, 0.32, 0.34, "sine");
-          if (step % 8 === 4) noise(0.1, 0.16);
-          if (step % 2 === 1) noise(0.035, 0.035);
-          if (step % 16 === 0) hit(110, 1.4, 0.08, "triangle");
-          step = (step + 1) % 16;
+          const bands = currentBands();
+          const low = (bands[0] + bands[1]) / 2;
+          const mid = (bands[2] + bands[3] + bands[4]) / 3;
+          const high = (bands[5] + bands[6] + bands[7]) / 3;
+          if (low > 0.34) playTone(58 + low * 42, 0.22 + low * 0.18, 0.08 + low * 0.18, "sine");
+          if (mid > 0.48) playTone(164 + mid * 92, 0.12, 0.035 + mid * 0.08, "triangle");
+          if (high > 0.25) playNoise(0.035 + high * 0.035, 0.012 + high * 0.035, 3600);
+          if (mid > 0.62 && high > 0.35) playNoise(0.09, 0.04 + mid * 0.04, 1800);
+        };
+
+        const line = (a, b, color, width) => {
+          ctx.strokeStyle = color;
+          ctx.lineWidth = width;
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        };
+
+        const drawBackground = (width, height, energy) => {
+          const gradient = ctx.createRadialGradient(width * 0.5, height * 0.48, 20, width * 0.5, height * 0.48, width * 0.58);
+          gradient.addColorStop(0, "rgba(36, 255, 229, 0.22)");
+          gradient.addColorStop(0.44, "rgba(25, 129, 167, 0.11)");
+          gradient.addColorStop(1, "rgba(1, 4, 12, 0)");
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, width, height);
+
+          ctx.strokeStyle = "rgba(63, 221, 244, 0.13)";
+          ctx.lineWidth = 1;
+          for (let row = 0; row < 9; row += 1) {
+            const y = height * 0.22 + row * height * 0.075;
+            const bend = Math.sin(performance.now() / 1500 + row) * 7 * (0.6 + energy);
+            ctx.beginPath();
+            ctx.moveTo(width * 0.08, y + bend);
+            ctx.quadraticCurveTo(width * 0.5, y + bend * 1.8, width * 0.92, y - bend);
+            ctx.stroke();
+          }
+        };
+
+        const drawBars = (bands, width, height) => {
+          const left = width * 0.08;
+          const base = height * 0.78;
+          bands.forEach((value, index) => {
+            const h = 18 + value * 62;
+            const x = left + index * 17;
+            const hue = 184 + index * 13;
+            ctx.fillStyle = `hsla(${hue}, 86%, 61%, ${activeBands[index] ? 0.88 : 0.18})`;
+            ctx.fillRect(x, base - h, 9, h);
+          });
+          ctx.font = "700 9px ui-monospace, monospace";
+          ctx.fillStyle = "rgba(182, 211, 232, 0.55)";
+          ctx.fillText("MOTION MAP", left, base + 20);
+        };
+
+        const drawBody = (bands, width, height) => {
+          const energy = bands.reduce((sum, value) => sum + value, 0) / bands.length;
+          const low = (bands[0] + bands[1]) / 2;
+          const mid = (bands[2] + bands[3] + bands[4]) / 3;
+          const high = (bands[5] + bands[6] + bands[7]) / 3;
+          const t = performance.now() / 650;
+          const cx = width * 0.5 + Math.sin(t * 0.5) * 18 * mid;
+          const cy = height * 0.48 + Math.cos(t * 0.42) * 10 * low;
+          const sway = Math.sin(t) * (22 + mid * 36);
+          const kick = Math.cos(t * 1.2) * (16 + low * 34);
+          const reach = Math.sin(t * 1.1 + 1.4) * (18 + high * 28);
+
+          const head = { x: cx, y: cy - 115 - high * 12 };
+          const neck = { x: cx, y: cy - 72 };
+          const hip = { x: cx + sway * 0.12, y: cy + 28 + low * 10 };
+          const leftShoulder = { x: cx - 42, y: cy - 55 + sway * 0.12 };
+          const rightShoulder = { x: cx + 42, y: cy - 55 - sway * 0.1 };
+          const leftElbow = { x: cx - 88 - reach, y: cy - 22 + low * 18 };
+          const rightElbow = { x: cx + 78 + reach * 0.65, y: cy - 7 + high * 20 };
+          const leftHand = { x: cx - 112 - reach * 0.45, y: cy + 30 + high * 10 };
+          const rightHand = { x: cx + 118 + reach * 0.36, y: cy + 34 + mid * 18 };
+          const leftKnee = { x: cx - 72 - kick, y: cy + 76 + mid * 17 };
+          const rightKnee = { x: cx + 66 + kick * 0.7, y: cy + 75 - mid * 8 };
+          const leftFoot = { x: cx - 105 - kick * 0.65, y: cy + 145 - low * 8 };
+          const rightFoot = { x: cx + 105 + kick * 0.45, y: cy + 144 + low * 7 };
+
+          ctx.shadowColor = "rgba(37, 255, 225, 0.7)";
+          ctx.shadowBlur = 24 + energy * 28;
+          line(neck, hip, "rgba(92, 75, 255, 0.92)", 24);
+          line(leftShoulder, leftElbow, "rgba(79, 75, 255, 0.9)", 18);
+          line(leftElbow, leftHand, "rgba(43, 216, 255, 0.92)", 13);
+          line(rightShoulder, rightElbow, "rgba(39, 177, 255, 0.9)", 18);
+          line(rightElbow, rightHand, "rgba(35, 255, 206, 0.92)", 13);
+          line(hip, leftKnee, "rgba(48, 255, 139, 0.92)", 22);
+          line(leftKnee, leftFoot, "rgba(37, 255, 158, 0.92)", 16);
+          line(hip, rightKnee, "rgba(44, 255, 135, 0.92)", 22);
+          line(rightKnee, rightFoot, "rgba(36, 255, 196, 0.92)", 16);
+
+          ctx.fillStyle = "rgba(35, 232, 220, 0.95)";
+          ctx.beginPath();
+          ctx.arc(head.x, head.y, 30 + high * 7, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.shadowBlur = 10;
+          ctx.strokeStyle = "rgba(63, 221, 244, 0.6)";
+          ctx.lineWidth = 1.5;
+          for (let ring = 0; ring < 9; ring += 1) {
+            const y = cy - 67 + ring * 16;
+            const radius = 24 + ring * 3 + energy * 18;
+            ctx.beginPath();
+            ctx.ellipse(cx, y, radius, 3 + energy * 4, Math.sin(t) * 0.12, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          if (readoutMotion) readoutMotion.textContent = `motion ${Math.round(energy * 99).toString().padStart(2, "0")}`;
+          if (readoutZone) readoutZone.textContent = `z ${((energy - 0.5) * 4).toFixed(2)}`;
+          if (readoutSource) readoutSource.textContent = sources[sampleIndex].label.toLowerCase();
+        };
+
+        const draw = () => {
+          const { width, height } = resize();
+          ctx.clearRect(0, 0, width, height);
+          const bands = currentBands();
+          const energy = bands.reduce((sum, value) => sum + value, 0) / bands.length;
+          drawBackground(width, height, energy);
+          drawBars(bands, width, height);
+          drawBody(bands, width, height);
+          window.requestAnimationFrame(draw);
+        };
+
+        const setSample = (nextIndex) => {
+          sampleIndex = nextIndex;
+          sampleButtons.forEach((sampleButton, index) => {
+            sampleButton.setAttribute("aria-pressed", String(index === sampleIndex));
+          });
         };
 
         const start = async () => {
-          context = context || new AudioContext();
-          if (context.state === "suspended") await context.resume();
-          master = master || context.createGain();
-          master.gain.value = 0.72;
-          if (!masterConnected) {
-            master.connect(context.destination);
-            masterConnected = true;
-          }
+          await ensureAudio();
+          playStartedAt = performance.now() / 1000;
           playing = true;
           document.body.classList.add("is-audio-live");
           button.classList.add("is-playing");
           button.textContent = "STOP AUDIO";
-          tick();
-          timer = window.setInterval(tick, 260);
+          sonifySignal();
+          audioTimer = window.setInterval(sonifySignal, 165);
         };
 
         const stop = () => {
           playing = false;
-          window.clearInterval(timer);
+          window.clearInterval(audioTimer);
           document.body.classList.remove("is-audio-live");
           button.classList.remove("is-playing");
           button.textContent = "START AUDIO";
@@ -943,6 +1220,39 @@
           }
           start().catch(() => stop());
         });
+
+        sampleButtons.forEach((sampleButton) => {
+          sampleButton.addEventListener("click", () => {
+            setSample(Number(sampleButton.dataset.sample || 0));
+          });
+        });
+
+        bandButtons.forEach((bandButton) => {
+          bandButton.addEventListener("click", () => {
+            const index = Number(bandButton.dataset.band || 0);
+            activeBands[index] = !activeBands[index];
+            bandButton.setAttribute("aria-pressed", String(activeBands[index]));
+          });
+        });
+
+        window.addEventListener("resize", resize);
+
+        Promise.all(
+          sources.map((source) =>
+            fetch(source.url)
+              .then((response) => {
+                if (!response.ok) throw new Error(source.url);
+                return response.json();
+              })
+              .then(prepareAnalysis)
+              .catch(() => null)
+          )
+        ).then((loaded) => {
+          analyses = loaded;
+        });
+
+        setSample(0);
+        draw();
       })();
     </script>
   </body>
