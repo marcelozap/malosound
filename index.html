@@ -293,6 +293,226 @@
         color: var(--ink);
       }
 
+      .system-board {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(320px, 1.08fr);
+        gap: 18px;
+        align-items: stretch;
+        margin-top: 76px;
+      }
+
+      .system-copy {
+        border: 1px solid rgba(68, 221, 255, 0.28);
+        border-radius: 8px;
+        background:
+          linear-gradient(180deg, rgba(68, 221, 255, 0.08), rgba(255, 255, 255, 0.025)),
+          rgba(5, 6, 8, 0.82);
+        padding: clamp(18px, 3vw, 28px);
+      }
+
+      .system-copy h2 {
+        margin-bottom: 22px;
+      }
+
+      .system-proof {
+        display: grid;
+        gap: 10px;
+        margin-top: 24px;
+      }
+
+      .proof-row {
+        display: grid;
+        grid-template-columns: 112px 1fr;
+        gap: 12px;
+        border-left: 2px solid var(--cyan);
+        background: rgba(255, 255, 255, 0.045);
+        padding: 12px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .proof-row strong {
+        color: var(--ink);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .system-visual {
+        position: relative;
+        min-height: 560px;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 8px;
+        background:
+          linear-gradient(rgba(68, 221, 255, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(68, 221, 255, 0.038) 1px, transparent 1px),
+          radial-gradient(circle at 50% 42%, rgba(68, 221, 255, 0.18), transparent 34%),
+          radial-gradient(circle at 62% 62%, rgba(255, 61, 129, 0.16), transparent 32%),
+          rgba(3, 4, 7, 0.94);
+        background-size: 34px 34px, 34px 34px, auto, auto, auto;
+      }
+
+      .system-visual::before {
+        position: absolute;
+        inset: 12%;
+        border: 1px solid rgba(68, 221, 255, 0.22);
+        border-radius: 999px;
+        transform: rotate(-8deg);
+        content: "";
+      }
+
+      .motion-body {
+        position: absolute;
+        inset: 50% auto auto 50%;
+        width: min(360px, 72%);
+        aspect-ratio: 1;
+        transform: translate(-50%, -48%);
+        filter: drop-shadow(0 0 22px rgba(68, 221, 255, 0.38));
+      }
+
+      .joint,
+      .limb,
+      .torso,
+      .pulse {
+        position: absolute;
+      }
+
+      .joint {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 22px var(--green);
+      }
+
+      .joint.head {
+        inset: 8% auto auto 43%;
+        width: 72px;
+        height: 72px;
+        background: #22e1df;
+      }
+
+      .torso {
+        inset: 29% auto auto 45%;
+        width: 58px;
+        height: 140px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, rgba(68, 221, 255, 0.92), rgba(67, 61, 255, 0.74));
+        box-shadow: 0 0 34px rgba(68, 221, 255, 0.44);
+      }
+
+      .limb {
+        height: 18px;
+        border-radius: 999px;
+        transform-origin: left center;
+        background: linear-gradient(90deg, rgba(67, 61, 255, 0.98), rgba(34, 225, 223, 0.98));
+        box-shadow: 0 0 22px rgba(68, 221, 255, 0.44);
+        animation: limb-drift 4.5s ease-in-out infinite;
+      }
+
+      .arm-left {
+        inset: 39% auto auto 31%;
+        width: 116px;
+        transform: rotate(148deg);
+      }
+
+      .arm-right {
+        inset: 40% auto auto 55%;
+        width: 126px;
+        transform: rotate(42deg);
+        animation-delay: -1.2s;
+      }
+
+      .leg-left {
+        inset: 62% auto auto 47%;
+        width: 144px;
+        background: linear-gradient(90deg, rgba(120, 215, 157, 1), rgba(37, 233, 159, 1));
+        transform: rotate(132deg);
+        animation-delay: -0.7s;
+      }
+
+      .leg-right {
+        inset: 62% auto auto 51%;
+        width: 150px;
+        background: linear-gradient(90deg, rgba(120, 215, 157, 1), rgba(37, 233, 159, 1));
+        transform: rotate(46deg);
+        animation-delay: -2.1s;
+      }
+
+      .pulse {
+        inset: 31% auto auto 42%;
+        width: 110px;
+        height: 210px;
+        border: 1px solid rgba(68, 221, 255, 0.55);
+        border-radius: 50%;
+        animation: pulse-ring 2.8s ease-in-out infinite;
+      }
+
+      .pulse:nth-child(2) {
+        transform: scale(0.76);
+        animation-delay: -0.9s;
+      }
+
+      .band-stack {
+        position: absolute;
+        inset: auto auto 24px 22px;
+        display: flex;
+        align-items: end;
+        gap: 7px;
+        height: 72px;
+      }
+
+      .band {
+        width: 10px;
+        min-height: 18px;
+        background: linear-gradient(180deg, var(--green), var(--cyan), #443dff);
+        box-shadow: 0 0 18px rgba(68, 221, 255, 0.35);
+        animation: band-rise 1.6s ease-in-out infinite;
+      }
+
+      .band:nth-child(2) { height: 44px; animation-delay: -0.3s; }
+      .band:nth-child(3) { height: 30px; animation-delay: -0.6s; }
+      .band:nth-child(4) { height: 66px; animation-delay: -0.9s; }
+      .band:nth-child(5) { height: 38px; animation-delay: -1.2s; }
+      .band:nth-child(6) { height: 58px; animation-delay: -1.5s; }
+      .band:nth-child(7) { height: 42px; animation-delay: -1.8s; }
+      .band:nth-child(8) { height: 70px; animation-delay: -2.1s; }
+
+      .pipeline {
+        position: absolute;
+        inset: 22px 22px auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        color: var(--muted);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .pipeline span {
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.045);
+        padding: 7px 9px;
+      }
+
+      @keyframes limb-drift {
+        0%, 100% { translate: 0 0; }
+        50% { translate: 0 -8px; }
+      }
+
+      @keyframes pulse-ring {
+        0%, 100% { opacity: 0.3; transform: scale(0.76); }
+        50% { opacity: 0.9; transform: scale(1.06); }
+      }
+
+      @keyframes band-rise {
+        0%, 100% { transform: scaleY(0.42); }
+        50% { transform: scaleY(1); }
+      }
+
       footer {
         border-top: 1px solid var(--line);
         background: #050608;
@@ -337,12 +557,21 @@
         }
 
         .grid,
-        .split {
+        .split,
+        .system-board {
           grid-template-columns: 1fr;
+        }
+
+        .system-visual {
+          min-height: 430px;
         }
 
         .card {
           min-height: auto;
+        }
+
+        .proof-row {
+          grid-template-columns: 1fr;
         }
       }
     </style>
@@ -424,19 +653,64 @@
             </article>
           </div>
 
-          <section class="split" id="system">
-            <div>
-              <span class="eyebrow">Artist Workflow</span>
-              <h2>The song is only one artifact.</h2>
+          <section class="system-board" id="system">
+            <div class="system-copy">
+              <span class="eyebrow">System</span>
+              <h2>Sound, movement, and release context on one timeline.</h2>
+              <p>
+                MaloSound is not just a place to post songs. It is a way to turn original music into
+                structured memory: what was made, how it measured, what it can trigger, what shipped,
+                and what belongs to the artist.
+              </p>
+              <div class="system-proof">
+                <div class="proof-row">
+                  <strong>Sound</strong>
+                  <span>AudioAnalysisV1 keeps public signal summaries without exposing raw studio files.</span>
+                </div>
+                <div class="proof-row">
+                  <strong>Motion</strong>
+                  <span>Signal features drive visual movement so the song can become a performance surface.</span>
+                </div>
+                <div class="proof-row">
+                  <strong>Memory</strong>
+                  <span>Coded rhythm, release manifests, and receipts make the work inspectable later.</span>
+                </div>
+                <div class="proof-row">
+                  <strong>XIV</strong>
+                  <span>The artist workflow becomes the proving ground for role-based agentic systems.</span>
+                </div>
+              </div>
             </div>
-            <div>
-              <ul class="list">
-                <li><strong>Original music:</strong> songs made inside the artist workflow, not a platform-first product wrapper.</li>
-                <li><strong>AudioAnalysisV1 JSON:</strong> structured metadata and signal features generated from audio artifacts.</li>
-                <li><strong>Coded rhythm:</strong> source-code companions that make rhythm and release context inspectable.</li>
-                <li><strong>Motion-mapped visuals:</strong> visual output driven by signal features and performance concepts.</li>
-                <li><strong>Release operations:</strong> packaging, publishing, feedback, provenance, and ownership records.</li>
-              </ul>
+
+            <div class="system-visual" aria-label="Signal-mapped body visual">
+              <div class="pipeline" aria-hidden="true">
+                <span>audio</span>
+                <span>8 bands</span>
+                <span>features</span>
+                <span>motion map</span>
+                <span>release memory</span>
+              </div>
+              <div class="motion-body" aria-hidden="true">
+                <div class="pulse"></div>
+                <div class="pulse"></div>
+                <div class="joint head"></div>
+                <div class="torso"></div>
+                <div class="limb arm-left"></div>
+                <div class="limb arm-right"></div>
+                <div class="limb leg-left"></div>
+                <div class="limb leg-right"></div>
+                <div class="joint" style="inset: 60% auto auto 47%"></div>
+              </div>
+              <div class="band-stack" aria-hidden="true">
+                <span class="band"></span>
+                <span class="band"></span>
+                <span class="band"></span>
+                <span class="band"></span>
+                <span class="band"></span>
+                <span class="band"></span>
+                <span class="band"></span>
+                <span class="band"></span>
+              </div>
             </div>
           </section>
 
