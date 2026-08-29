@@ -1,0 +1,19 @@
+{
+  "created_at": "2026-08-26T00:00:00+00:00",
+  "key_fingerprint": "MS1-BBVQ-2WV7-JAOA-26K3",
+  "links": {},
+  "name": "Project XIV / maloSound",
+  "paths": {
+    "analysis_root": "data/gold/audio_analysis",
+    "companion_root": "scripts/strudel/tracks",
+    "key": "data/keys/malosound_ed25519_seed.hex",
+    "ledger": "data/receipts.jsonl",
+    "manifest_root": "manifests",
+    "release_root": "releases"
+  },
+  "public_key": "55cf872ab278db5ad87521b9d658ac64edf38e46323c61d96a8e925bb1332282",
+  "rights_holder": "Marcelo Zapata",
+  "royalty_bps": 1000,
+  "schema_version": "malosound.artist.v1",
+  "slug": "malosound"
+}

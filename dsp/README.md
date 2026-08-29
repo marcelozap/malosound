@@ -4,6 +4,20 @@ Realtime feature extraction: level, three-band energy, onset, and monophonic
 pitch. This is the engine behind the Voice Mirror Bridge plugin described in
 [`docs/ABLETON_PLUGIN_PLAN.md`](../docs/ABLETON_PLUGIN_PLAN.md).
 
+Studio control curves also have an allocation-free 1-Euro smoother in
+`include/malosound/OneEuroFilter.h`. Its frozen defaults are `minCutoffHz=3.0`
+and `beta=0.5`, matching the control-surface contract:
+
+```text
+Calibrate -> 1-Euro Filter -> Perception Curve -> Dispatch
+```
+
+MIDI stream parsing lives in `include/malosound/MidiParser.h`. It handles channel
+voice messages needed by the bridge today: note on/off, note-on with zero
+velocity, control change, program change, channel pressure, pitch bend, running
+status, and interleaved realtime bytes. `ActiveNotes` is a fixed-size tracker for
+the MIDI/chord insert path; it does not classify chords yet.
+
 ## Why there is no JUCE in here
 
 JUCE belongs in the *plugin wrapper*, not in the analysis. Keeping this library
@@ -80,6 +94,17 @@ you add a `std::vector`, a `std::string`, or a `std::function` to the audio path
 | `pitchConfidence` | 0–1 | gate the visuals on this, not on `pitchHz != 0` |
 | `onsetStrength` | unitless | rectified energy flux |
 | `onset` | bool | true on exactly one frame per hit |
+
+## Control Input Notes
+
+The first movement-to-DAW loop should stay simple:
+
+```text
+raw MIDI bytes -> MidiParser -> control value -> OneEuroFilter -> perception curve -> dispatch
+```
+
+Use Note On/Off for discrete gestures such as hook and cut. Use CC for continuous
+controls such as movement intensity and voice/vocoder width.
 
 Frames publish at **93 Hz** (48 kHz / 512), comfortably above the 30 Hz the plan
 asks for, so the network thread always has something fresh to send. Pitch runs

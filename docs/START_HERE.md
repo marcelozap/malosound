@@ -13,6 +13,21 @@ cd "C:\Users\Green Machine\XIV\malosound"
 The second command should end in `67 checks, 0 failures`. If it does, the
 analysis core works on your machine and you can start from a known-good state.
 
+For the Windows recording workflow, open the native cockpit:
+
+```powershell
+.\Open-MaloSound-Studio.bat
+```
+
+Use it to generate the local utility stem kit, open the latest kit, and run DSP
+checks without remembering command names.
+
+Fast preflight:
+
+```powershell
+.\Open-MaloSound-Doctor.bat
+```
+
 Then set the backup destination, because right now nothing is protecting your
 Live projects:
 
@@ -48,6 +63,12 @@ sitting in a second `malosound` folder. `lib/parts.js`, `tracks/_TEMPLATE/` and
 
 **`docs/BACKUP.md` + `scripts/backup-projects.ps1`.** The scheme for everything
 git refuses to hold.
+
+**Release provenance fixture.** `tools/run_release_pipeline.py` runs the local
+AudioAnalysisV1, Ed25519 JSONL ledger, Strudel companion, ERC-2981-compatible
+manifest, and release-package steps. `docs/RELEASE_PIPELINE.md` has the exact
+commands. The fixture is complete; the final goal still needs a real WAV under
+`projects/<session>/Recorded/`.
 
 ## What is not built, in the order I would do it
 

@@ -1,0 +1,8 @@
+{
+  "analysis_path": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/analysis/example-take.audioanalysis.v1.json",
+  "analysis_sha256": "5d7bd3ff10f8e85c36034a81cae7e45f199cae4aa0be400be38054a84ef0f5fb",
+  "determinism": "same AudioAnalysisV1 source hash produces identical pattern text",
+  "pattern_path": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/companions/example-track-one/pattern.js",
+  "pattern_sha256": "853af5ad283772b740a369cef4d6198c4fc2727c1ecf1cf99e9856d566ce924a",
+  "schema": "malosound.procedural_companion.v1"
+}

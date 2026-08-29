@@ -1,0 +1,79 @@
+{
+  "artist": {
+    "key_fingerprint": "MS1-RE3L-M2BI-6WNR-OGR4",
+    "name": "Example Artist",
+    "public_key": "5810437c12119622c9d2bab96a54a7242512f7ede44fcbb11ef185c562df8e80",
+    "slug": "example-artist"
+  },
+  "boundary": "Local cryptographic proof only. No contract deployed, no token minted, no wallet connected, no third-party attestation.",
+  "created_at": "2026-08-26T00:00:01+00:00",
+  "files": {
+    "analysis": {
+      "bytes": 1636,
+      "path": "data/example-take.audioanalysis.v1.json",
+      "sha256": "ec240c8bf7a7086f497248d6c315cc10cde4b78b8a65fef92922bf49b326b15f",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/analysis/example-take.audioanalysis.v1.json"
+    },
+    "artist": {
+      "bytes": 309,
+      "path": "ARTIST.json",
+      "sha256": "6d9d5d1664c635b0eb5e82c62e502e76a634677896e6d010569449054c62e8ae",
+      "source": "generated"
+    },
+    "audio": {
+      "bytes": 352844,
+      "path": "audio/example-take.wav",
+      "sha256": "98092f2d46a9ab08bb3bc9f8e8ea2f3be0f2d26298dad811ae9dbfff36a45b32",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/incoming/example-take.wav"
+    },
+    "companion": {
+      "bytes": 486,
+      "path": "source/pattern.js",
+      "sha256": "853af5ad283772b740a369cef4d6198c4fc2727c1ecf1cf99e9856d566ce924a",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/companions/example-track-two/pattern.js"
+    },
+    "companion_metadata": {
+      "bytes": 601,
+      "path": "source/companion.json",
+      "sha256": "56c466f667af7016fd93052b5fe85d717800558163480d8b2989258ad73f74b5",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/companions/example-track-two/companion.json"
+    },
+    "manifest": {
+      "bytes": 6468,
+      "path": "manifest/example-track-two.release_manifest_v1.json",
+      "sha256": "c112874a8002f11ebd1eb17bab55ba81af08afb6303e9e99a80ed9d50a1d707a",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/manifests/example-track-two.release_manifest_v1.json"
+    },
+    "page": {
+      "bytes": 6916,
+      "path": "index.html",
+      "sha256": "0be5af3ddbf7aaaf82b25e3bf1d721557ca964712ed6c3192562338317a9c161",
+      "source": "generated"
+    },
+    "readme": {
+      "bytes": 1414,
+      "path": "README.md",
+      "sha256": "c2ec7f432766c73962c039b15a975d95852b02be86813528b4501dc4ffc04099",
+      "source": "generated"
+    },
+    "receipt_excerpt": {
+      "bytes": 1187,
+      "path": "ledger/receipt_excerpt.jsonl",
+      "sha256": "028924ebf340eaa768c27b037a6d4837cd14df68ba3c0109fb2b71c096e4df3c",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/ledger/receipts.jsonl"
+    },
+    "verifier": {
+      "bytes": 12513,
+      "path": "verify.py",
+      "sha256": "cef9e18a7c88a361754edfa9558cef215ceb367d480468d578a9f45195e9811e",
+      "source": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/tools/templates/verify.py"
+    }
+  },
+  "ledger": {
+    "path": "artists/example-artist/ledger/receipts.jsonl",
+    "record_hash": "88fa8345dca5df0926c0394f019a67ba1d9f7dada9fb14d6a2bc7a597e5a5d28"
+  },
+  "schema": "malosound.release_package.v2",
+  "slug": "example-track-two",
+  "title": "Example Track Two"
+}

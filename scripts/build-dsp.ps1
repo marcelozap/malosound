@@ -13,7 +13,6 @@
     .\scripts\build-dsp.ps1 -Clean -Debug
 #>
 
-[CmdletBinding()]
 param(
     [switch] $Debug,
     [switch] $Clean
@@ -24,12 +23,57 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 $BuildDir = Join-Path $RepoRoot 'dsp\build'
 $Config   = if ($Debug) { 'Debug' } else { 'Release' }
 
+function Invoke-CompilerFallback {
+    $Compiler = $null
+    foreach ($Candidate in @('g++', 'clang++')) {
+        $Command = Get-Command $Candidate -ErrorAction SilentlyContinue
+        if ($Command) {
+            $Compiler = $Command.Source
+            break
+        }
+    }
+
+    if (-not $Compiler) {
+        Write-Host 'cmake not found.' -ForegroundColor Red
+        Write-Host ''
+        Write-Host 'No CMake? One line still works, if you have g++ or clang++:' -ForegroundColor Gray
+        Write-Host '  g++ -std=c++17 -O2 -Idsp/include -Idsp/tests dsp/src/*.cpp dsp/tests/test_dsp.cpp -o test_dsp' -ForegroundColor Gray
+        exit 1
+    }
+
+    Write-Host 'cmake not found; using direct compiler fallback.' -ForegroundColor Yellow
+    Write-Host "compiler: $Compiler" -ForegroundColor Gray
+    New-Item -ItemType Directory -Force -Path $BuildDir | Out-Null
+
+    $Sources = @(Get-ChildItem -Path (Join-Path $RepoRoot 'dsp\src') -Filter '*.cpp' | ForEach-Object { $_.FullName })
+    $Sources += Join-Path $RepoRoot 'dsp\tests\test_dsp.cpp'
+    $Output = Join-Path $BuildDir 'test_dsp.exe'
+    $Optimization = if ($Debug) { '-O0' } else { '-O2' }
+    $Args = @(
+        '-std=c++17',
+        $Optimization,
+        '-Idsp/include',
+        '-Idsp/tests'
+    ) + $Sources + @('-o', $Output)
+
+    Push-Location $RepoRoot
+    try {
+        & $Compiler @Args
+        if ($LASTEXITCODE -ne 0) { throw 'direct compiler build failed' }
+
+        Write-Host "`nrunning tests`n" -ForegroundColor Cyan
+        & $Output
+        if ($LASTEXITCODE -ne 0) { throw 'tests failed' }
+        Write-Host "`nall good." -ForegroundColor Green
+    }
+    finally {
+        Pop-Location
+    }
+}
+
 if (-not (Get-Command cmake -ErrorAction SilentlyContinue)) {
-    Write-Host 'cmake not found.' -ForegroundColor Red
-    Write-Host ''
-    Write-Host 'No CMake? One line still works, if you have g++ or clang++:' -ForegroundColor Gray
-    Write-Host '  g++ -std=c++17 -O2 -Idsp/include -Idsp/tests dsp/src/*.cpp dsp/tests/test_dsp.cpp -o test_dsp' -ForegroundColor Gray
-    exit 1
+    Invoke-CompilerFallback
+    exit 0
 }
 
 if ($Clean -and (Test-Path $BuildDir)) {

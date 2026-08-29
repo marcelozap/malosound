@@ -1,0 +1,89 @@
+{
+  "analysis_note": "deterministic stdlib WAV analysis; loudness, peak, key, and harmonic profile not calculated",
+  "audio_sha256": "98092f2d46a9ab08bb3bc9f8e8ea2f3be0f2d26298dad811ae9dbfff36a45b32",
+  "beat_times": [
+    0.0,
+    0.4998,
+    0.9995,
+    1.4993,
+    1.9991,
+    2.4989,
+    2.9986,
+    3.4984,
+    3.9982,
+    4.498,
+    4.9977,
+    5.4975,
+    5.9973,
+    6.4971,
+    6.9968,
+    7.4966
+  ],
+  "bit_depth": 16,
+  "bpm": 120.05,
+  "channels": 1,
+  "confidence": {
+    "bpm": 1.0,
+    "onsets": 1.0
+  },
+  "created_at": "2026-08-26T00:00:00+00:00",
+  "downbeat_times": [
+    0.0,
+    1.9991,
+    3.9982,
+    5.9973
+  ],
+  "duration_s": 8.0,
+  "energy_curve": {
+    "hop_s": 0.5,
+    "rms": [
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101,
+      0.11949101
+    ]
+  },
+  "model_versions": {
+    "analysis": "malosound-baseline/1.0.0 (deterministic stdlib wav)"
+  },
+  "onset_times": [
+    0.0,
+    0.4998,
+    0.9995,
+    1.4993,
+    1.9991,
+    2.4989,
+    2.9986,
+    3.4984,
+    3.9982,
+    4.498,
+    4.9977,
+    5.4975,
+    5.9973,
+    6.4971,
+    6.9968,
+    7.4966
+  ],
+  "provenance": {
+    "consent": "self-recorded/owned catalog; analysis run by the owner",
+    "license": "all-rights-reserved",
+    "owner": "Example Artist"
+  },
+  "sample_rate": 22050,
+  "schema_version": "1.0.0",
+  "source_id": "98092f2d46a9ab08",
+  "source_name": "example-take.wav",
+  "source_type": "recording"
+}

@@ -1,0 +1,8 @@
+{
+  "analysis_path": "data/gold/audio_analysis/02_beat_grid_click.audioanalysis.v1.json",
+  "analysis_sha256": "0a97c125cb607a6beb64b1588a5991faf5a1f0d34aa8823635f8770b93e637bc",
+  "determinism": "same AudioAnalysisV1 source hash produces identical pattern text",
+  "pattern_path": "scripts/strudel/tracks/provenance-fixture/pattern.js",
+  "pattern_sha256": "71f71b6acf720fcbf6d8f26fba365f926e1b7c99161b31c330de61bdd5bf5ca9",
+  "schema": "malosound.procedural_companion.v1"
+}

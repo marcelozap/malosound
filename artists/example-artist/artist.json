@@ -1,0 +1,19 @@
+{
+  "created_at": "2026-08-26T00:00:00+00:00",
+  "key_fingerprint": "MS1-RE3L-M2BI-6WNR-OGR4",
+  "links": {},
+  "name": "Example Artist",
+  "paths": {
+    "analysis_root": "artists/example-artist/analysis",
+    "companion_root": "artists/example-artist/companions",
+    "key": "artists/example-artist/keys/example-artist_ed25519_seed.hex",
+    "ledger": "artists/example-artist/ledger/receipts.jsonl",
+    "manifest_root": "artists/example-artist/manifests",
+    "release_root": "artists/example-artist/releases"
+  },
+  "public_key": "5810437c12119622c9d2bab96a54a7242512f7ede44fcbb11ef185c562df8e80",
+  "rights_holder": "Example Artist",
+  "royalty_bps": 1000,
+  "schema_version": "malosound.artist.v1",
+  "slug": "example-artist"
+}

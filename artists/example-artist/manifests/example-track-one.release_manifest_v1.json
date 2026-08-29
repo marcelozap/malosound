@@ -1,0 +1,184 @@
+{
+  "_disclaimer": "This manifest is a local cryptographic proof package only. ERC-2981 compatibility describes metadata fields for future use; no smart contract is deployed, no token is minted, no wallet is connected, and no third-party chain or storage provider has verified this release.",
+  "asset_pointers": {
+    "ipfs_cid_stub": "ipfs://CID_NOT_ASSIGNED_LOCAL_ONLY",
+    "local_audio_path": "artists/example-artist/incoming/example-take.wav"
+  },
+  "assets": {
+    "analysis": {
+      "path": "artists/example-artist/analysis/example-take.audioanalysis.v1.json",
+      "sha256": "5d7bd3ff10f8e85c36034a81cae7e45f199cae4aa0be400be38054a84ef0f5fb",
+      "summary": {
+        "calculated_fields": {
+          "analysis_note": "deterministic stdlib WAV analysis; loudness, peak, key, and harmonic profile not calculated",
+          "audio_sha256": "98092f2d46a9ab08bb3bc9f8e8ea2f3be0f2d26298dad811ae9dbfff36a45b32",
+          "beat_times": [
+            0.0,
+            0.4998,
+            0.9995,
+            1.4993,
+            1.9991,
+            2.4989,
+            2.9986,
+            3.4984,
+            3.9982,
+            4.498,
+            4.9977,
+            5.4975,
+            5.9973,
+            6.4971,
+            6.9968,
+            7.4966
+          ],
+          "bit_depth": 16,
+          "bpm": 120.05,
+          "channels": 1,
+          "created_at": "2026-08-26T00:00:00+00:00",
+          "downbeat_times": [
+            0.0,
+            1.9991,
+            3.9982,
+            5.9973
+          ],
+          "energy_curve": {
+            "hop_s": 0.5,
+            "rms": [
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101,
+              0.11949101
+            ]
+          },
+          "onset_times": [
+            0.0,
+            0.4998,
+            0.9995,
+            1.4993,
+            1.9991,
+            2.4989,
+            2.9986,
+            3.4984,
+            3.9982,
+            4.498,
+            4.9977,
+            5.4975,
+            5.9973,
+            6.4971,
+            6.9968,
+            7.4966
+          ]
+        },
+        "confidence": {
+          "bpm": 1.0,
+          "onsets": 1.0
+        },
+        "duration_s": 8.0,
+        "model_versions": {
+          "analysis": "malosound-baseline/1.0.0 (deterministic stdlib wav)"
+        },
+        "provenance": {
+          "consent": "self-recorded/owned catalog; analysis run by the owner",
+          "license": "all-rights-reserved",
+          "owner": "Example Artist"
+        },
+        "sample_rate": 22050,
+        "schema_contract": "AudioAnalysisV1",
+        "schema_version": "1.0.0",
+        "source_id": "98092f2d46a9ab08",
+        "source_name": "example-take.wav",
+        "source_type": "recording",
+        "strict_field_contract": "no unknown AudioAnalysisV1 top-level fields accepted"
+      }
+    },
+    "audio": {
+      "facts": {
+        "bit_depth": 16,
+        "channels": 1,
+        "container": "wav",
+        "duration_s": 8.0,
+        "sample_rate": 22050
+      },
+      "path": "artists/example-artist/incoming/example-take.wav",
+      "sha256": "98092f2d46a9ab08bb3bc9f8e8ea2f3be0f2d26298dad811ae9dbfff36a45b32"
+    },
+    "source_code": {
+      "path": "artists/example-artist/companions/example-track-one/pattern.js",
+      "sha256": "853af5ad283772b740a369cef4d6198c4fc2727c1ecf1cf99e9856d566ce924a"
+    }
+  },
+  "compound_hashes": {
+    "analysis_sha256": "5d7bd3ff10f8e85c36034a81cae7e45f199cae4aa0be400be38054a84ef0f5fb",
+    "audio_sha256": "98092f2d46a9ab08bb3bc9f8e8ea2f3be0f2d26298dad811ae9dbfff36a45b32",
+    "source_sha256": "853af5ad283772b740a369cef4d6198c4fc2727c1ecf1cf99e9856d566ce924a"
+  },
+  "created_at": "2026-08-26T00:00:00+00:00",
+  "ledger": {
+    "latest_receipt": {
+      "analysis": {
+        "name": "example-take.audioanalysis.v1.json",
+        "path": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/analysis/example-take.audioanalysis.v1.json",
+        "sha256": "5d7bd3ff10f8e85c36034a81cae7e45f199cae4aa0be400be38054a84ef0f5fb"
+      },
+      "artist": {
+        "name": "Example Artist",
+        "public_key": "5810437c12119622c9d2bab96a54a7242512f7ede44fcbb11ef185c562df8e80",
+        "slug": "example-artist"
+      },
+      "audio": {
+        "name": "example-take.wav",
+        "path": "/sessions/rcw-01w8njwn5tcfgkc7kzliqvky/mnt/XIV/malosound/artists/example-artist/incoming/example-take.wav",
+        "sha256": "98092f2d46a9ab08bb3bc9f8e8ea2f3be0f2d26298dad811ae9dbfff36a45b32"
+      },
+      "previous_record_hash": "GENESIS",
+      "public_key": "5810437c12119622c9d2bab96a54a7242512f7ede44fcbb11ef185c562df8e80",
+      "record_hash": "9b1e47b705746146e8c131c802517894bd9806992a5a21d8cc44bf607f267fb6",
+      "schema_version": "malosound.receipt.v2",
+      "signature": "e4bceab6f7ec9952955c6c0f0b7c2e5e973e26380873e2903c1bab22aab01ae6d8aa44f39811a565acafb8e3c754dbee71614d6a50b58ae6ebdcd6a09f28030f",
+      "signature_scheme": "ed25519-sha256-local-jsonl-v1",
+      "timestamp": "2026-08-26T00:00:00+00:00",
+      "title": "Example Track One"
+    },
+    "latest_receipt_present": true,
+    "path": "artists/example-artist/ledger/receipts.jsonl"
+  },
+  "manifest_payload_sha256": "02fe2d003843bac7be25084c1e7c2087bb98cfaf8bc1b5923df10afb2de9f0c7",
+  "project": {
+    "name": "Example Artist",
+    "proof_scope": "local_file_based_release_provenance"
+  },
+  "release": {
+    "artist": "Example Artist",
+    "artist_key_fingerprint": "MS1-RE3L-M2BI-6WNR-OGR4",
+    "artist_public_key": "5810437c12119622c9d2bab96a54a7242512f7ede44fcbb11ef185c562df8e80",
+    "artist_slug": "example-artist",
+    "release_type": "direct_release_provenance_bundle",
+    "rights_holder": "Example Artist",
+    "title": "Example Track One"
+  },
+  "royalties": {
+    "denominator_bps": 10000,
+    "erc_2981_compatible": true,
+    "receiver": "Example Artist",
+    "royalty_fraction_bps": 1000,
+    "splits": [
+      {
+        "name": "Example Artist",
+        "role": "artist_producer_creator",
+        "share_bps": 10000
+      }
+    ]
+  },
+  "schema_version": "malosound.release_manifest.v1"
+}

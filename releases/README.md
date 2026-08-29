@@ -47,7 +47,7 @@ No `masters/` folder in git. The master lives in the library and is backed up by
 - **File:** `<name>_master_v<n>_<YYYY-MM-DD>.wav`
 - **Lives at:** `XIV Music Library\...`
 - **Format:** 24-bit / 48 kHz
-- **Loudness:** -14 LUFS integrated, -1.0 dBTP  (streaming target)
+- **Mastering notes:** manual streaming target notes, not AudioAnalysisV1 fields
 - **Mastered by:**
 
 ## Sources

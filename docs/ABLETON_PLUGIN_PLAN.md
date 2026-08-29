@@ -55,6 +55,11 @@ Outputs:
 - Chord color.
 - Root/tension hints.
 
+The dependency-free parser for this path lives in
+`dsp/include/malosound/MidiParser.h`. The first tested contract is MIDI stream
+parsing and active-note tracking; chord classification is intentionally not part
+of the first parser.
+
 ## Realtime Audio Rules
 
 The audio callback must not:

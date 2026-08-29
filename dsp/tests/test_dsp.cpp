@@ -14,6 +14,8 @@
 #include <vector>
 
 #include "malosound/FeatureExtractor.h"
+#include "malosound/MidiParser.h"
+#include "malosound/OneEuroFilter.h"
 #include "malosound/SpscRing.h"
 #include "testing.h"
 
@@ -298,6 +300,178 @@ int main() {
         const auto f = runAndTakeLast(fx, good);
         CHECK(std::isfinite(f.rms));
         CHECK_WITHIN_PERCENT(f.pitchHz, 220.0, 2.0);
+    }
+
+    // -----------------------------------------------------------------------
+    SECTION("studio curves: 1-Euro filter has frozen defaults");
+    {
+        malosound::OneEuroFilter filter;
+        const auto settings = filter.settings();
+        CHECK_NEAR(settings.minCutoffHz, 3.0, 1e-6);
+        CHECK_NEAR(settings.beta, 0.5, 1e-6);
+        CHECK_NEAR(settings.dCutoffHz, 1.0, 1e-6);
+    }
+
+    SECTION("studio curves: 1-Euro filter smooths steady movement");
+    {
+        malosound::OneEuroFilter filter;
+        filter.reset(0.0f, 0.0);
+        const float slow = filter.process(1.0f, 1.0 / 60.0);
+        CHECK(slow > 0.0f);
+        CHECK(slow < 1.0f);
+    }
+
+    SECTION("studio curves: beta opens the filter for fast movement");
+    {
+        malosound::OneEuroFilter fixed({3.0f, 0.0f, 1.0f});
+        malosound::OneEuroFilter adaptive({3.0f, 0.5f, 1.0f});
+        fixed.reset(0.0f, 0.0);
+        adaptive.reset(0.0f, 0.0);
+
+        const float fixedOut = fixed.process(1.0f, 1.0 / 60.0);
+        const float adaptiveOut = adaptive.process(1.0f, 1.0 / 60.0);
+        CHECK(adaptiveOut > fixedOut);
+        CHECK(adaptiveOut < 1.0f);
+    }
+
+    SECTION("studio curves: invalid samples hold the last usable value");
+    {
+        malosound::OneEuroFilter filter;
+        filter.reset(0.25f, 0.0);
+        const float before = filter.value();
+        const float after = filter.process(std::nanf(""), 1.0 / 60.0);
+        CHECK_NEAR(after, before, 1e-6);
+        CHECK(std::isfinite(filter.process(0.75f, 2.0 / 60.0)));
+    }
+
+    SECTION("REALTIME CONTRACT: 1-Euro processing allocates zero bytes");
+    {
+        malosound::OneEuroFilter filter;
+        filter.reset(0.0f, 0.0);
+        std::size_t leaked = 0;
+        {
+            AllocationGuard guard;
+            for (int i = 1; i <= 1000; ++i) {
+                const float value = (i % 120 < 60) ? 1.0f : 0.0f;
+                filter.process(value, static_cast<double>(i) / 60.0);
+            }
+            leaked = guard.count();
+        }
+        CHECK(leaked == 0);
+    }
+
+    // -----------------------------------------------------------------------
+    SECTION("MIDI parser: note on, note off, and note-on zero velocity");
+    {
+        malosound::MidiParser parser;
+        malosound::MidiMessage msg{};
+        CHECK(!parser.feed(0x90, msg));
+        CHECK(!parser.feed(60, msg));
+        CHECK(parser.feed(127, msg));
+        CHECK(msg.type == malosound::MidiMessageType::NoteOn);
+        CHECK(msg.channel == 0);
+        CHECK(msg.data1 == 60);
+        CHECK(msg.data2 == 127);
+        CHECK(msg.isNoteOn());
+
+        CHECK(!parser.feed(0x80, msg));
+        CHECK(!parser.feed(60, msg));
+        CHECK(parser.feed(0, msg));
+        CHECK(msg.type == malosound::MidiMessageType::NoteOff);
+        CHECK(msg.isNoteOffLike());
+
+        CHECK(!parser.feed(0x90, msg));
+        CHECK(!parser.feed(61, msg));
+        CHECK(parser.feed(0, msg));
+        CHECK(msg.type == malosound::MidiMessageType::NoteOn);
+        CHECK(msg.isNoteOffLike());
+    }
+
+    SECTION("MIDI parser: control change and running status");
+    {
+        malosound::MidiParser parser;
+        malosound::MidiMessage msg{};
+        CHECK(!parser.feed(0xB2, msg));
+        CHECK(!parser.feed(21, msg));
+        CHECK(parser.feed(96, msg));
+        CHECK(msg.type == malosound::MidiMessageType::ControlChange);
+        CHECK(msg.channel == 2);
+        CHECK(msg.data1 == 21);
+        CHECK(msg.data2 == 96);
+
+        CHECK(!parser.feed(22, msg));
+        CHECK(parser.feed(110, msg));
+        CHECK(msg.type == malosound::MidiMessageType::ControlChange);
+        CHECK(msg.channel == 2);
+        CHECK(msg.data1 == 22);
+        CHECK(msg.data2 == 110);
+    }
+
+    SECTION("MIDI parser: realtime byte does not break pending message");
+    {
+        malosound::MidiParser parser;
+        malosound::MidiMessage msg{};
+        CHECK(!parser.feed(0x90, msg));
+        CHECK(!parser.feed(60, msg));
+        CHECK(parser.feed(0xF8, msg));
+        CHECK(msg.type == malosound::MidiMessageType::Realtime);
+        CHECK(parser.feed(100, msg));
+        CHECK(msg.type == malosound::MidiMessageType::NoteOn);
+        CHECK(msg.data1 == 60);
+        CHECK(msg.data2 == 100);
+    }
+
+    SECTION("MIDI parser: malformed data is ignored until status arrives");
+    {
+        malosound::MidiParser parser;
+        malosound::MidiMessage msg{};
+        CHECK(!parser.feed(64, msg));
+        CHECK(!parser.feed(0xC0, msg));
+        CHECK(parser.feed(10, msg));
+        CHECK(msg.type == malosound::MidiMessageType::ProgramChange);
+        CHECK(msg.data1 == 10);
+    }
+
+    SECTION("MIDI active notes: tracks held notes and bounds");
+    {
+        malosound::MidiParser parser;
+        malosound::ActiveNotes active;
+        malosound::MidiMessage msg{};
+
+        const std::uint8_t bytes[] = {0x90, 64, 100, 67, 100, 60, 100, 67, 0, 0x80, 60, 0};
+        for (const auto byte : bytes) {
+            if (parser.feed(byte, msg)) {
+                active.handle(msg);
+            }
+        }
+
+        CHECK(active.count() == 1);
+        CHECK(active.isActive(64));
+        CHECK(!active.isActive(67));
+        CHECK(!active.isActive(60));
+        CHECK(active.lowest() == 64);
+        CHECK(active.highest() == 64);
+    }
+
+    SECTION("REALTIME CONTRACT: MIDI parsing and active-note tracking allocate zero bytes");
+    {
+        malosound::MidiParser parser;
+        malosound::ActiveNotes active;
+        malosound::MidiMessage msg{};
+        const std::uint8_t bytes[] = {0x90, 60, 127, 64, 100, 67, 100, 64, 0, 0xB0, 21, 96, 0xF8};
+        std::size_t leaked = 0;
+        {
+            AllocationGuard guard;
+            for (int i = 0; i < 1000; ++i) {
+                for (const auto byte : bytes) {
+                    if (parser.feed(byte, msg)) {
+                        active.handle(msg);
+                    }
+                }
+            }
+            leaked = guard.count();
+        }
+        CHECK(leaked == 0);
     }
 
     SECTION("host buffer sizes: 64/128/256/512/1024 all behave identically");
