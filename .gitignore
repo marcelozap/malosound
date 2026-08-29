@@ -102,16 +102,11 @@ artists/*/incoming/
 **/releases/**/audio/
 **/releases/**/masters/
 
-# Local proof package with private filenames; keep it off the public Pages site.
-releases/victoria-2026-08-26/
-
-# Local POC release packages and generated proof material that may contain
-# private track names, unreleased source paths, local machine paths, or raw
-# receipt excerpts. Promote only sanitized examples into git.
-releases/victoria/
-releases/*victoria*/
-scripts/strudel/tracks/victoria/
-scripts/strudel/tracks/victoria-*/
-manifests/victoria*.json
+# Local POC proof material may contain private track names, unreleased source
+# paths, local machine paths, or raw receipt excerpts. Promote only sanitized
+# examples into git; put machine-specific proof folders in `.git/info/exclude`.
 data/receipts.jsonl
-data/gold/audio_analysis/vicotira*.json
+
+# Internal-only operating brief: names the retired brand, the internal working
+# title, and internal verification rules. Keep it local, never on the public repo.
+docs/CREATIVE_TECH_PROOF_LANE.md
