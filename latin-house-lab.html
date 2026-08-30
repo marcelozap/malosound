@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Malo Sound: Latin house rhythms, club percussion, and an interactive browser groove tunnel."
+    />
+    <title>Malo Sound | Latin House Rhythm Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="latin-house-lab.css" />
+  </head>
+  <body>
+    <main class="experience" aria-label="Malo Sound Latin House Rhythm Lab">
+      <canvas id="tunnel" aria-hidden="true"></canvas>
+
+      <section class="hud hud-top" aria-label="Game status">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <div>
+            <p>Malo Sound</p>
+            <h1>Latin House Rhythm Lab</h1>
+          </div>
+        </div>
+
+        <div class="scorebar" aria-live="polite">
+          <div>
+            <span>Score</span>
+            <strong id="score">000000</strong>
+          </div>
+          <div>
+            <span>Combo</span>
+            <strong id="combo">0</strong>
+          </div>
+          <div>
+            <span>Sync</span>
+            <strong id="accuracy">100%</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="center-stage">
+        <div class="reticle" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <button id="startButton" class="start-button" type="button">
+          <span>Start Groove</span>
+          <small>Tap, click, or press space</small>
+        </button>
+      </section>
+
+      <section class="hud hud-bottom" aria-label="Controls">
+        <div class="lanes" aria-label="Rhythm lanes">
+          <button class="lane-key" type="button" data-key="d">
+            <span>D</span>
+            <small>Kick</small>
+          </button>
+          <button class="lane-key" type="button" data-key="f">
+            <span>F</span>
+            <small>Clave</small>
+          </button>
+          <button class="lane-key" type="button" data-key="j">
+            <span>J</span>
+            <small>Conga</small>
+          </button>
+          <button class="lane-key" type="button" data-key="k">
+            <span>K</span>
+            <small>Brass</small>
+          </button>
+        </div>
+
+        <div class="transport">
+          <button id="muteButton" class="icon-button" type="button" aria-label="Mute audio" title="Mute audio">
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M4 9v6h4l5 4V5L8 9H4Z"></path>
+              <path d="M16 9.5a4 4 0 0 1 0 5"></path>
+              <path d="M18.5 7a7 7 0 0 1 0 10"></path>
+            </svg>
+          </button>
+          <label class="tempo">
+            <span>BPM</span>
+            <input id="tempo" type="range" min="92" max="156" value="128" />
+            <strong id="tempoValue">128</strong>
+          </label>
+        </div>
+      </section>
+    </main>
+
+    <script src="latin-house-lab.js"></script>
+  </body>
+</html>
