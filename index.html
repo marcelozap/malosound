@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="MaloSound is a Latin house music project with interactive rhythm tools, release workflow, visuals, and ownership infrastructure."
+      content="Malo Sound AI is a Latin house artist project with interactive rhythm tools, release workflow, visuals, and ownership infrastructure."
     />
-    <title>MaloSound - Latin House Music System</title>
+    <title>Malo Sound AI - Latin House Music System</title>
     <style>
       :root {
         color-scheme: dark;
@@ -121,6 +121,15 @@
         background: var(--green);
         box-shadow: 0 0 18px var(--green);
         content: "";
+      }
+
+      .identity-note {
+        color: var(--muted);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 11px;
+        line-height: 1.45;
+        text-align: right;
+        text-transform: uppercase;
       }
 
       .headline {
@@ -381,6 +390,96 @@
         background: rgba(11, 13, 17, 0.78);
         padding: 18px;
         backdrop-filter: blur(18px);
+      }
+
+      .persona-board {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(320px, 1.1fr);
+        gap: 12px;
+        align-items: stretch;
+        margin: 34px 0 76px;
+      }
+
+      .persona-copy,
+      .persona-stack {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(11, 13, 17, 0.8);
+        backdrop-filter: blur(18px);
+      }
+
+      .persona-copy {
+        display: grid;
+        align-content: space-between;
+        gap: 28px;
+        padding: clamp(18px, 3vw, 28px);
+      }
+
+      .persona-name {
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(42px, 7vw, 92px);
+        font-weight: 900;
+        line-height: 0.88;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .persona-kicker {
+        color: var(--gold);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .persona-note {
+        max-width: 560px;
+      }
+
+      .persona-stack {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1px;
+        overflow: hidden;
+        background: var(--line);
+      }
+
+      .persona-tile {
+        display: grid;
+        align-content: space-between;
+        min-height: 178px;
+        padding: 18px;
+        background:
+          linear-gradient(135deg, rgba(255, 61, 129, 0.1), transparent 42%),
+          rgba(5, 6, 8, 0.94);
+      }
+
+      .persona-tile strong {
+        color: var(--ink);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .persona-tile span {
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      .identity-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .identity-strip span {
+        border: 1px solid rgba(240, 193, 90, 0.32);
+        border-radius: 999px;
+        color: var(--gold);
+        font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+        font-size: 11px;
+        padding: 7px 10px;
+        text-transform: uppercase;
       }
 
       .tags {
@@ -687,6 +786,10 @@
           text-align: left;
         }
 
+        .identity-note {
+          text-align: left;
+        }
+
         .hero-main {
           align-content: start;
           padding-top: 28px;
@@ -697,6 +800,8 @@
         }
 
         .grid,
+        .persona-board,
+        .persona-stack,
         .split,
         .system-board {
           grid-template-columns: 1fr;
@@ -710,6 +815,10 @@
           min-height: auto;
         }
 
+        .persona-tile {
+          min-height: 140px;
+        }
+
         .signal-row {
           grid-template-columns: 1fr;
         }
@@ -721,7 +830,7 @@
     <main class="page">
       <section class="hero" id="top">
         <header class="topbar">
-          <div class="mark">MaloSound</div>
+          <div class="mark">Malo Sound AI</div>
           <div class="status">Latin house music system</div>
         </header>
 
@@ -759,10 +868,11 @@
 
           <div class="headline">
             <h1>Latin house into signal. Signal into motion.</h1>
-            <p>MaloSound is where club percussion, coded rhythm, and independent release infrastructure meet.</p>
+            <p>Malo Sound AI is where club percussion, coded rhythm, and independent release infrastructure meet.</p>
             <div class="hero-actions" aria-label="Primary controls">
               <button class="button audio-button" type="button" data-audio-toggle>START AUDIO</button>
               <a class="button primary" href="latin-house-lab.html">Rhythm Lab</a>
+              <a class="button" href="#persona">Persona</a>
               <a class="button" href="#system">System</a>
               <a class="button" href="#artifacts">Artifacts</a>
             </div>
@@ -773,7 +883,7 @@
       <section class="section" id="definition">
         <div class="inner">
           <span class="eyebrow">Definition</span>
-          <h2>MaloSound is the Latin house music system inside XIV.</h2>
+          <h2>Malo Sound AI is the Latin house artist system inside XIV.</h2>
           <p class="lead">
             It starts with Latin house: kick, clave, conga, bass, brass, vocal chops, and late-night movement.
             Around that sound is artist-tech infrastructure: recording workflow,
@@ -794,7 +904,7 @@
             </article>
 
             <article class="card">
-              <h3>MaloSound</h3>
+              <h3>Malo Sound AI</h3>
               <p>The Latin house music and artist-tech system: original songs, metadata, visuals, release workflow, and ownership.</p>
               <div class="tags">
                 <span class="tag">music</span>
@@ -814,12 +924,51 @@
             </article>
           </div>
 
+          <section class="persona-board" id="persona">
+            <div class="persona-copy">
+              <div>
+                <span class="persona-kicker">Artist Persona</span>
+                <h2 class="persona-name">Malo Sound AI</h2>
+                <p class="persona-note">
+                  A Latin house identity built for dark rooms, hot percussion, clean systems, and motion-reactive visuals.
+                  The persona is part producer, part engineer, part dance-floor archivist: music first, tools in service of the groove.
+                </p>
+              </div>
+              <div class="identity-strip" aria-label="Identity tags">
+                <span>Latin house</span>
+                <span>Clave logic</span>
+                <span>Club motion</span>
+                <span>Signal visuals</span>
+                <span>Artist-owned</span>
+              </div>
+            </div>
+
+            <div class="persona-stack" aria-label="Persona details">
+              <div class="persona-tile">
+                <strong>Sound</strong>
+                <span>Four-on-the-floor pressure, syncopated percussion, conga rolls, piano stabs, brass hits, and warm bass movement.</span>
+              </div>
+              <div class="persona-tile">
+                <strong>Voice</strong>
+                <span>Direct, nocturnal, confident, and human. Less label talk, more body signal: move first, explain after.</span>
+              </div>
+              <div class="persona-tile">
+                <strong>Visuals</strong>
+                <span>Black room, neon pulse, gold heat, cyan signal, rose impact. Everything should feel like rhythm becoming light.</span>
+              </div>
+              <div class="persona-tile">
+                <strong>Release Code</strong>
+                <span>Independent artist system. Public music and tools, private masters and keys. No confusion with MaloSound Records.</span>
+              </div>
+            </div>
+          </section>
+
           <section class="system-board" id="system">
             <div class="system-copy">
               <span class="eyebrow">System</span>
               <h2>Sound, movement, and release context on one timeline.</h2>
               <p>
-                MaloSound is not just a place to post songs. It is a way to turn original music into
+                Malo Sound AI is not just a place to post songs. It is a way to turn original music into
                 structured memory: what was made, how it measured, what it can trigger, what shipped,
                 and what belongs to the artist.
               </p>
@@ -884,7 +1033,7 @@
               <p>
                 A song is emotional, technical, personal, publishable, and measurable at the same time.
                 It creates real pressure across recording, editing, analysis, visual direction, release
-                packaging, audience feedback, rights, and ownership. That makes MaloSound a useful music system:
+                packaging, audience feedback, rights, and ownership. That makes Malo Sound AI a useful music system:
                 it tests XIV on work that cannot be reduced to a dashboard or a pitch deck.
               </p>
             </div>
@@ -913,7 +1062,8 @@
 
     <footer>
       <div class="inner">
-        <div>MaloSound / Project XIV</div>
+        <div>Malo Sound AI / Project XIV</div>
+        <div class="identity-note">Independent Latin house project. Not affiliated with MaloSound Records.</div>
         <div>Original music. Structured memory. Independent release workflow.</div>
       </div>
     </footer>
