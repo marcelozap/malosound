@@ -318,6 +318,10 @@ laneButtons.forEach((button) => {
 
 window.addEventListener("keydown", (event) => {
   const key = event.key.toLowerCase();
+  if (key === "escape") {
+    window.location.href = "./";
+    return;
+  }
   if (key === " " && !running) {
     event.preventDefault();
     start();

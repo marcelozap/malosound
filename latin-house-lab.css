@@ -26,6 +26,10 @@ body {
   overflow: hidden;
 }
 
+a {
+  color: inherit;
+}
+
 button,
 input {
   font: inherit;
@@ -67,6 +71,7 @@ input {
 
 .hud {
   position: absolute;
+  z-index: 5;
   left: clamp(1rem, 4vw, 3rem);
   right: clamp(1rem, 4vw, 3rem);
   display: flex;
@@ -90,6 +95,7 @@ input {
 }
 
 .brand,
+.site-nav,
 .scorebar,
 .transport,
 .lane-key {
@@ -139,6 +145,44 @@ input {
 .brand h1 {
   font-size: clamp(1rem, 2vw, 1.35rem);
   line-height: 1.05;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem;
+  max-width: 32rem;
+  padding: 0.45rem;
+  border-radius: 8px;
+}
+
+.site-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  padding: 0.55rem 0.72rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.site-nav a:hover,
+.site-nav a:focus-visible {
+  border-color: rgba(85, 214, 255, 0.56);
+  color: var(--ink);
+  outline: none;
+}
+
+.site-nav .exit-link {
+  border-color: rgba(255, 209, 102, 0.48);
+  color: var(--gold);
 }
 
 .scorebar {
@@ -334,11 +378,23 @@ input {
   }
 
   .brand,
+  .site-nav,
   .scorebar,
   .lanes,
   .transport {
     width: 100%;
     min-width: 0;
+  }
+
+  .site-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .site-nav a {
+    min-height: 2.35rem;
+    padding-inline: 0.3rem;
+    font-size: 0.68rem;
   }
 
   .scorebar {
