@@ -1,6 +1,21 @@
-# malosound
+# MaloSound.ai
 
-Music and audio: Max for Live devices, DSP, Ableton, releases.
+**How I hear the market.**
+
+MaloSound.ai is my personal journal of the market as an artist. I share writings,
+music, and a developing theory: one song per market day, each the same duration,
+with a different expression inspired by each session.
+
+The journal has two editions: a personal reading before the open, followed by
+the day's song and reflection after the close. XIV is my trading system product;
+MaloSound is my voice as an artist.
+
+The public website starts at `index.html`. Read the opening essay at
+[`One song. One session.`](writings/one-song-one-session.html). See
+[`docs/WEBSITE_HANDOFF.md`](docs/WEBSITE_HANDOFF.md) for publishing the daily editions.
+
+The studio also holds the music tools behind the practice: Max for Live devices,
+DSP, Ableton workflows, and releases.
 
 **New here, or coming back after a break? → [`docs/START_HERE.md`](docs/START_HERE.md)**
 
