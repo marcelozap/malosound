@@ -1,0 +1,5999 @@
+{
+  "symbol": "SPY",
+  "date": "2026-09-03",
+  "session_start": "2026-09-03T09:30:00-04:00",
+  "session_end": "2026-09-03T16:00:00-04:00",
+  "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1m&includePrePost=false",
+  "source_sha256": "4672cae650a0fe435e7f7fcfbfd9a79ed3ec94ee206824c16faae1fb782ad299",
+  "validation": {
+    "expected_bars": 390,
+    "observed_bars": 389,
+    "missing_bars": 1,
+    "duplicate_bars": 0,
+    "imputed_bars": 0,
+    "timezone": "America/New_York",
+    "regular_session_only": true,
+    "exchange_certified": false
+  },
+  "missing_minutes": [
+    264
+  ],
+  "missing_intervals": [
+    {
+      "start_minute": 264,
+      "end_minute": 265,
+      "start_et": "13:54",
+      "end_et": "13:55",
+      "audio_start_seconds": 132.0,
+      "audio_end_seconds": 132.5
+    }
+  ],
+  "terminal_price": {
+    "price": 773.1699829101562,
+    "source_kind": "vendor_daily_close",
+    "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1d&includePrePost=false",
+    "source_sha256": "c66ab3d79e3aab3b562e60da4e67bb879d8cc0fc500c820ceceff82f913057b2",
+    "boundary_minute": 390,
+    "note": "Vendor daily close used only as the session-end price boundary. No separate 16:00 intraday print exists in this snapshot; final minute close remains preserved."
+  },
+  "daily_reconciliation": {
+    "source_sha256": "c66ab3d79e3aab3b562e60da4e67bb879d8cc0fc500c820ceceff82f913057b2",
+    "source_url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1d&includePrePost=false",
+    "daily_ohlcv": {
+      "high": 774.030029296875,
+      "low": 767.4500122070312,
+      "volume": 43531600.0,
+      "open": 767.9000244140625,
+      "close": 773.1699829101562
+    },
+    "minute_volume_sum": 36127884,
+    "minute_minus_daily_ohlc": {
+      "open": 0.52996826171875,
+      "high": 0.0,
+      "low": 0.01995849609375
+    },
+    "ohlc_agreement_within_2_cents": false,
+    "minute_volume_fraction_of_daily": 0.8299231822400279,
+    "last_minute_close_difference": -0.05999755859375,
+    "ending_price_difference": 0.0,
+    "caveat": "389 observed minute bars; 1 explicit null minute(s), unfilled. Minute opening price differs from the vendor daily open; both are preserved and this analysis begins at the observed first-minute open. Minute low also differs slightly. Summed observed volume differs from the vendor daily total. No missing volume is allocated to bars. Dynamics use observed minute volume only. The same vendor daily check is not independent exchange verification."
+  },
+  "price_boundaries": [
+    {
+      "minute": 0,
+      "price": 768.4299926757812,
+      "source_kind": "session_open"
+    },
+    {
+      "minute": 1,
+      "price": 768.4199829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 2,
+      "price": 768.2999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 3,
+      "price": 768.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 4,
+      "price": 769.2100219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 5,
+      "price": 768.969970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 6,
+      "price": 768.9400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 7,
+      "price": 768.7899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 8,
+      "price": 769.3499755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 9,
+      "price": 769.4400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 10,
+      "price": 769.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 11,
+      "price": 769.4699096679688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 12,
+      "price": 769.7899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 13,
+      "price": 769.6300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 14,
+      "price": 769.5,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 15,
+      "price": 769.7899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 16,
+      "price": 769.7794799804688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 17,
+      "price": 769.7763061523438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 18,
+      "price": 769.8427124023438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 19,
+      "price": 769.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 20,
+      "price": 769.6400146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 21,
+      "price": 769.9232788085938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 22,
+      "price": 770.010009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 23,
+      "price": 769.8049926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 24,
+      "price": 769.5693969726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 25,
+      "price": 769.5900268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 26,
+      "price": 769.3699951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 27,
+      "price": 769.2100219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 28,
+      "price": 769.1400146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 29,
+      "price": 769.3800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 30,
+      "price": 769.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 31,
+      "price": 768.739990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 32,
+      "price": 768.4299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 33,
+      "price": 768.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 34,
+      "price": 768.60009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 35,
+      "price": 768.125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 36,
+      "price": 768.2999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 37,
+      "price": 768.280029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 38,
+      "price": 767.780029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 39,
+      "price": 767.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 40,
+      "price": 767.8099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 41,
+      "price": 767.6599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 42,
+      "price": 768.0499877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 43,
+      "price": 768.1199951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 44,
+      "price": 768.1300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 45,
+      "price": 768.3599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 46,
+      "price": 768.530029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 47,
+      "price": 768.394775390625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 48,
+      "price": 768.4500122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 49,
+      "price": 768.3599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 50,
+      "price": 768.8499755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 51,
+      "price": 768.844970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 52,
+      "price": 768.5698852539062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 53,
+      "price": 768.8099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 54,
+      "price": 768.8800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 55,
+      "price": 768.8599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 56,
+      "price": 768.7000122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 57,
+      "price": 768.77001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 58,
+      "price": 768.8900146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 59,
+      "price": 768.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 60,
+      "price": 768.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 61,
+      "price": 768.9450073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 62,
+      "price": 768.52001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 63,
+      "price": 768.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 64,
+      "price": 768.22998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 65,
+      "price": 767.9000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 66,
+      "price": 768.3250122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 67,
+      "price": 768.2899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 68,
+      "price": 768.2999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 69,
+      "price": 768.2999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 70,
+      "price": 768.1500244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 71,
+      "price": 768.0399780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 72,
+      "price": 768.4199829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 73,
+      "price": 768.4149780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 74,
+      "price": 768.1599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 75,
+      "price": 768.2000122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 76,
+      "price": 768.3800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 77,
+      "price": 768.2249755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 78,
+      "price": 768.5505981445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 79,
+      "price": 768.75,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 80,
+      "price": 768.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 81,
+      "price": 768.5900268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 82,
+      "price": 768.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 83,
+      "price": 768.22998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 84,
+      "price": 768.2849731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 85,
+      "price": 768.6099853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 86,
+      "price": 768.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 87,
+      "price": 768.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 88,
+      "price": 768.6300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 89,
+      "price": 768.9299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 90,
+      "price": 769.280029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 91,
+      "price": 769.4400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 92,
+      "price": 769.5349731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 93,
+      "price": 769.760009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 94,
+      "price": 770.010009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 95,
+      "price": 770.4450073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 96,
+      "price": 770.5900268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 97,
+      "price": 770.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 98,
+      "price": 770.6599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 99,
+      "price": 770.8099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 100,
+      "price": 770.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 101,
+      "price": 770.969970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 102,
+      "price": 771.2150268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 103,
+      "price": 771.2000122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 104,
+      "price": 771.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 105,
+      "price": 771.52001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 106,
+      "price": 771.716796875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 107,
+      "price": 771.7999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 108,
+      "price": 771.780029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 109,
+      "price": 771.905029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 110,
+      "price": 772.0100708007812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 111,
+      "price": 771.5999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 112,
+      "price": 771.614990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 113,
+      "price": 771.8900146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 114,
+      "price": 772.1500244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 115,
+      "price": 772.0599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 116,
+      "price": 772.219970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 117,
+      "price": 772.4400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 118,
+      "price": 772.6099853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 119,
+      "price": 772.64501953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 120,
+      "price": 772.9400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 121,
+      "price": 773.1300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 122,
+      "price": 773.1400146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 123,
+      "price": 773.0,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 124,
+      "price": 772.77001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 125,
+      "price": 772.8558959960938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 126,
+      "price": 772.8200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 127,
+      "price": 772.6599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 128,
+      "price": 772.4400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 129,
+      "price": 772.5700073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 130,
+      "price": 772.4650268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 131,
+      "price": 772.389892578125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 132,
+      "price": 772.5,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 133,
+      "price": 772.6799926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 134,
+      "price": 772.8099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 135,
+      "price": 772.5800170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 136,
+      "price": 772.7899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 137,
+      "price": 772.75,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 138,
+      "price": 772.75,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 139,
+      "price": 772.864990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 140,
+      "price": 772.9349975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 141,
+      "price": 773.010009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 142,
+      "price": 773.1854248046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 143,
+      "price": 773.2150268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 144,
+      "price": 773.0623779296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 145,
+      "price": 773.14501953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 146,
+      "price": 773.114990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 147,
+      "price": 773.0050048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 148,
+      "price": 773.155029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 149,
+      "price": 773.1900024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 150,
+      "price": 773.3200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 151,
+      "price": 773.1799926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 152,
+      "price": 773.0800170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 153,
+      "price": 773.1500244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 154,
+      "price": 773.0700073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 155,
+      "price": 772.7999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 156,
+      "price": 772.760009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 157,
+      "price": 772.5999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 158,
+      "price": 772.5150146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 159,
+      "price": 772.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 160,
+      "price": 772.530029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 161,
+      "price": 772.625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 162,
+      "price": 772.4382934570312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 163,
+      "price": 772.380126953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 164,
+      "price": 772.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 165,
+      "price": 772.6799926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 166,
+      "price": 772.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 167,
+      "price": 772.6199951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 168,
+      "price": 772.6594848632812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 169,
+      "price": 772.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 170,
+      "price": 772.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 171,
+      "price": 772.6599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 172,
+      "price": 772.6900024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 173,
+      "price": 772.5499877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 174,
+      "price": 772.594970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 175,
+      "price": 772.510009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 176,
+      "price": 772.2949829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 177,
+      "price": 772.2449951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 178,
+      "price": 772.4550170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 179,
+      "price": 772.4199829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 180,
+      "price": 772.4349975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 181,
+      "price": 772.4450073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 182,
+      "price": 772.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 183,
+      "price": 772.3150024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 184,
+      "price": 772.5900268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 185,
+      "price": 772.4600219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 186,
+      "price": 772.4099731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 187,
+      "price": 772.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 188,
+      "price": 772.60498046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 189,
+      "price": 772.9050903320312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 190,
+      "price": 772.9600219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 191,
+      "price": 772.989990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 192,
+      "price": 773.1199951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 193,
+      "price": 773.0499877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 194,
+      "price": 773.1199951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 195,
+      "price": 773.1400146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 196,
+      "price": 773.1500244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 197,
+      "price": 773.1500244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 198,
+      "price": 773.14501953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 199,
+      "price": 773.0800170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 200,
+      "price": 773.0900268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 201,
+      "price": 773.0604858398438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 202,
+      "price": 772.89501953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 203,
+      "price": 772.8259887695312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 204,
+      "price": 772.7449951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 205,
+      "price": 772.8400268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 206,
+      "price": 772.8400268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 207,
+      "price": 772.760009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 208,
+      "price": 772.969970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 209,
+      "price": 772.9099731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 210,
+      "price": 772.8800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 211,
+      "price": 772.75,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 212,
+      "price": 772.8499755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 213,
+      "price": 772.6599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 214,
+      "price": 772.7294921875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 215,
+      "price": 772.7899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 216,
+      "price": 772.8200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 217,
+      "price": 772.6400146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 218,
+      "price": 772.5999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 219,
+      "price": 772.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 220,
+      "price": 772.4299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 221,
+      "price": 772.47998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 222,
+      "price": 772.4299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 223,
+      "price": 772.3800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 224,
+      "price": 772.4400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 225,
+      "price": 772.4349975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 226,
+      "price": 772.5399780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 227,
+      "price": 772.4099731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 228,
+      "price": 772.510986328125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 229,
+      "price": 772.4199829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 230,
+      "price": 772.3350219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 231,
+      "price": 772.2899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 232,
+      "price": 772.219970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 233,
+      "price": 772.1900024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 234,
+      "price": 772.2899780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 235,
+      "price": 772.2750244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 236,
+      "price": 772.4099731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 237,
+      "price": 772.4600219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 238,
+      "price": 772.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 239,
+      "price": 772.5700073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 240,
+      "price": 772.668701171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 241,
+      "price": 772.77001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 242,
+      "price": 772.7999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 243,
+      "price": 772.8250122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 244,
+      "price": 772.8800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 245,
+      "price": 772.8599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 246,
+      "price": 772.969970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 247,
+      "price": 773.0399780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 248,
+      "price": 772.9000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 249,
+      "price": 772.9749755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 250,
+      "price": 773.010009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 251,
+      "price": 773.0900268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 252,
+      "price": 773.1300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 253,
+      "price": 773.1300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 254,
+      "price": 773.0700073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 255,
+      "price": 773.0599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 256,
+      "price": 773.1300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 257,
+      "price": 773.0700073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 258,
+      "price": 773.030029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 259,
+      "price": 772.9500122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 260,
+      "price": 772.97998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 261,
+      "price": 773.0494995117188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 262,
+      "price": 773.260009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 263,
+      "price": 773.4299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 264,
+      "price": 773.4400024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 265,
+      "price": 773.403076171875,
+      "source_kind": "next_observed_bar_open"
+    },
+    {
+      "minute": 266,
+      "price": 773.4500122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 267,
+      "price": 773.469970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 268,
+      "price": 773.2999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 269,
+      "price": 773.260009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 270,
+      "price": 773.2750244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 271,
+      "price": 773.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 272,
+      "price": 773.7949829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 273,
+      "price": 773.6799926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 274,
+      "price": 773.77001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 275,
+      "price": 773.77001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 276,
+      "price": 773.7750244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 277,
+      "price": 773.77001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 278,
+      "price": 773.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 279,
+      "price": 773.7111206054688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 280,
+      "price": 773.7949829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 281,
+      "price": 773.8109741210938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 282,
+      "price": 773.8099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 283,
+      "price": 773.739990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 284,
+      "price": 773.8800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 285,
+      "price": 773.8150024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 286,
+      "price": 774.02001953125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 287,
+      "price": 773.9299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 288,
+      "price": 773.9550170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 289,
+      "price": 773.7999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 290,
+      "price": 773.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 291,
+      "price": 773.75,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 292,
+      "price": 773.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 293,
+      "price": 773.7050170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 294,
+      "price": 773.5800170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 295,
+      "price": 773.75,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 296,
+      "price": 773.7650146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 297,
+      "price": 773.7249755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 298,
+      "price": 773.6900024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 299,
+      "price": 773.780029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 300,
+      "price": 773.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 301,
+      "price": 773.72998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 302,
+      "price": 773.6300048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 303,
+      "price": 773.6749877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 304,
+      "price": 773.8400268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 305,
+      "price": 773.8599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 306,
+      "price": 773.8201293945312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 307,
+      "price": 773.8400268554688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 308,
+      "price": 773.8200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 309,
+      "price": 773.8099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 310,
+      "price": 773.8200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 311,
+      "price": 773.719970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 312,
+      "price": 773.6630249023438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 313,
+      "price": 773.5800170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 314,
+      "price": 773.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 315,
+      "price": 773.5999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 316,
+      "price": 773.6599731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 317,
+      "price": 773.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 318,
+      "price": 773.739990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 319,
+      "price": 773.6900024414062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 320,
+      "price": 773.7550048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 321,
+      "price": 773.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 322,
+      "price": 773.594970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 323,
+      "price": 773.5700073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 324,
+      "price": 773.6400146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 325,
+      "price": 773.6199951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 326,
+      "price": 773.489990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 327,
+      "price": 773.5,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 328,
+      "price": 773.4550170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 329,
+      "price": 773.5549926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 330,
+      "price": 773.6699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 331,
+      "price": 773.47998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 332,
+      "price": 773.581298828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 333,
+      "price": 773.510009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 334,
+      "price": 773.530029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 335,
+      "price": 773.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 336,
+      "price": 773.6099853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 337,
+      "price": 773.6325073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 338,
+      "price": 773.5999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 339,
+      "price": 773.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 340,
+      "price": 773.5599975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 341,
+      "price": 773.6099243164062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 342,
+      "price": 773.510009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 343,
+      "price": 773.5399780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 344,
+      "price": 773.4500122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 345,
+      "price": 773.3800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 346,
+      "price": 773.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 347,
+      "price": 773.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 348,
+      "price": 773.4199829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 349,
+      "price": 773.47998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 350,
+      "price": 773.5999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 351,
+      "price": 773.4299926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 352,
+      "price": 773.4304809570312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 353,
+      "price": 773.3599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 354,
+      "price": 773.3200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 355,
+      "price": 773.1799926757812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 356,
+      "price": 773.2100219726562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 357,
+      "price": 773.3300170898438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 358,
+      "price": 773.3001098632812,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 359,
+      "price": 773.3800048828125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 360,
+      "price": 773.4099731445312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 361,
+      "price": 773.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 362,
+      "price": 773.5,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 363,
+      "price": 773.47998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 364,
+      "price": 773.375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 365,
+      "price": 773.3099975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 366,
+      "price": 773.3599853515625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 367,
+      "price": 773.4149780273438,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 368,
+      "price": 773.530029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 369,
+      "price": 773.469970703125,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 370,
+      "price": 773.4390258789062,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 371,
+      "price": 773.4500122070312,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 372,
+      "price": 773.2999877929688,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 373,
+      "price": 773.3200073242188,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 374,
+      "price": 773.280029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 375,
+      "price": 773.22998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 376,
+      "price": 773.4000244140625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 377,
+      "price": 773.239990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 378,
+      "price": 773.239990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 379,
+      "price": 773.2650146484375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 380,
+      "price": 773.239990234375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 381,
+      "price": 773.2249755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 382,
+      "price": 773.22998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 383,
+      "price": 773.1699829101562,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 384,
+      "price": 773.0999755859375,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 385,
+      "price": 773.22998046875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 386,
+      "price": 772.9349975585938,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 387,
+      "price": 772.905029296875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 388,
+      "price": 773.010009765625,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 389,
+      "price": 772.8699951171875,
+      "source_kind": "minute_close"
+    },
+    {
+      "minute": 390,
+      "price": 773.1699829101562,
+      "source_kind": "vendor_daily_close"
+    }
+  ],
+  "prepared_at": "2026-09-04T23:53:04-04:00",
+  "summary": {
+    "open": 768.4299926757812,
+    "close": 773.1699829101562,
+    "last_minute_bar_close": 773.1099853515625,
+    "high": 774.030029296875,
+    "low": 767.469970703125,
+    "high_bar_et": "14:16",
+    "low_bar_et": "10:56"
+  },
+  "duration_seconds": 195,
+  "tempo_bpm": 80,
+  "sections": [
+    {
+      "name": "An early lift",
+      "start_minute": 0,
+      "end_minute": 20,
+      "drum_density": 1.1,
+      "pad_gain": 0.65,
+      "lead_gain": 1.05,
+      "reason": "The first measured leg rises with high relative activity and range; state a clear motif with bright short accents."
+    },
+    {
+      "name": "The opening gives way",
+      "start_minute": 20,
+      "end_minute": 40,
+      "drum_density": 1.05,
+      "pad_gain": 0.75,
+      "lead_gain": 1.08,
+      "reason": "The next leg falls sharply; keep the pulse while the price-derived notes drop."
+    },
+    {
+      "name": "Unsteady ground",
+      "start_minute": 40,
+      "end_minute": 85,
+      "drum_density": 0.75,
+      "pad_gain": 0.8,
+      "lead_gain": 1.1,
+      "reason": "A modest net recovery contains substantial movement on lower observed volume; leave more room around the unstable contour."
+    },
+    {
+      "name": "The climb takes hold",
+      "start_minute": 85,
+      "end_minute": 122,
+      "drum_density": 1.2,
+      "pad_gain": 1.08,
+      "lead_gain": 1.2,
+      "reason": "This leg contains the 10:56 low and then the strongest sustained rise; let the actual melody climb with a fuller arrangement."
+    },
+    {
+      "name": "Holding altitude",
+      "start_minute": 122,
+      "end_minute": 233,
+      "drum_density": 0.65,
+      "pad_gain": 1.15,
+      "lead_gain": 0.9,
+      "reason": "Price drifts lower from the new register while observed activity and range subside; broaden the pad and reduce percussion density."
+    },
+    {
+      "name": "A quieter high",
+      "start_minute": 233,
+      "end_minute": 286,
+      "drum_density": 0.65,
+      "pad_gain": 1.2,
+      "lead_gain": 1.08,
+      "reason": "Price climbs toward the afternoon high on relatively quiet observed minutes. Keep the ascent light and preserve the explicitly missing 13:54 minute as silence."
+    },
+    {
+      "name": "Settling above the open",
+      "start_minute": 286,
+      "end_minute": 390,
+      "drum_density": 0.9,
+      "pad_gain": 1.0,
+      "lead_gain": 0.95,
+      "reason": "The final leg eases from the high, with more activity near the close. Allow the phrase to descend while its final register remains above the opening."
+    }
+  ],
+  "data_note": "Observed minute volume totals 36,127,884 shares, 82.99% of the vendor daily total. No missing volume is invented; musical dynamics use observed volumes only.",
+  "price_convention": "Observed first-minute open at boundary 0; minute closes at end boundaries. Gap 13:54–13:55 is not joined. The 13:55 boundary uses the genuinely observed next bar open. Boundary 390 uses the attributed vendor daily close, not a separate 16:00 print.",
+  "minutes": [
+    {
+      "minute": 0,
+      "timestamp_et": "2026-09-03T09:30:00-04:00",
+      "open": 768.4299926757812,
+      "high": 768.4400024414062,
+      "low": 768.4199829101562,
+      "close": 768.4199829101562,
+      "volume": 1168326,
+      "missing": false
+    },
+    {
+      "minute": 1,
+      "timestamp_et": "2026-09-03T09:31:00-04:00",
+      "open": 768.4199829101562,
+      "high": 768.52001953125,
+      "low": 768.1500244140625,
+      "close": 768.2999877929688,
+      "volume": 254632,
+      "missing": false
+    },
+    {
+      "minute": 2,
+      "timestamp_et": "2026-09-03T09:32:00-04:00",
+      "open": 768.2899780273438,
+      "high": 768.6699829101562,
+      "low": 768.260009765625,
+      "close": 768.5599975585938,
+      "volume": 198242,
+      "missing": false
+    },
+    {
+      "minute": 3,
+      "timestamp_et": "2026-09-03T09:33:00-04:00",
+      "open": 768.5499877929688,
+      "high": 769.2349853515625,
+      "low": 768.5200805664062,
+      "close": 769.2100219726562,
+      "volume": 234537,
+      "missing": false
+    },
+    {
+      "minute": 4,
+      "timestamp_et": "2026-09-03T09:34:00-04:00",
+      "open": 769.2100219726562,
+      "high": 769.22998046875,
+      "low": 768.9299926757812,
+      "close": 768.969970703125,
+      "volume": 257159,
+      "missing": false
+    },
+    {
+      "minute": 5,
+      "timestamp_et": "2026-09-03T09:35:00-04:00",
+      "open": 768.969970703125,
+      "high": 769.0800170898438,
+      "low": 768.7100219726562,
+      "close": 768.9400024414062,
+      "volume": 176172,
+      "missing": false
+    },
+    {
+      "minute": 6,
+      "timestamp_et": "2026-09-03T09:36:00-04:00",
+      "open": 768.9500122070312,
+      "high": 769.0499877929688,
+      "low": 768.510009765625,
+      "close": 768.7899780273438,
+      "volume": 137179,
+      "missing": false
+    },
+    {
+      "minute": 7,
+      "timestamp_et": "2026-09-03T09:37:00-04:00",
+      "open": 768.7999877929688,
+      "high": 769.4000244140625,
+      "low": 768.7899780273438,
+      "close": 769.3499755859375,
+      "volume": 142838,
+      "missing": false
+    },
+    {
+      "minute": 8,
+      "timestamp_et": "2026-09-03T09:38:00-04:00",
+      "open": 769.3599853515625,
+      "high": 769.5499877929688,
+      "low": 769.2899780273438,
+      "close": 769.4400024414062,
+      "volume": 175552,
+      "missing": false
+    },
+    {
+      "minute": 9,
+      "timestamp_et": "2026-09-03T09:39:00-04:00",
+      "open": 769.4400024414062,
+      "high": 769.7999877929688,
+      "low": 769.40087890625,
+      "close": 769.72998046875,
+      "volume": 130477,
+      "missing": false
+    },
+    {
+      "minute": 10,
+      "timestamp_et": "2026-09-03T09:40:00-04:00",
+      "open": 769.739990234375,
+      "high": 769.77001953125,
+      "low": 769.4124755859375,
+      "close": 769.4699096679688,
+      "volume": 99767,
+      "missing": false
+    },
+    {
+      "minute": 11,
+      "timestamp_et": "2026-09-03T09:41:00-04:00",
+      "open": 769.4600219726562,
+      "high": 769.8300170898438,
+      "low": 769.3499755859375,
+      "close": 769.7899780273438,
+      "volume": 144016,
+      "missing": false
+    },
+    {
+      "minute": 12,
+      "timestamp_et": "2026-09-03T09:42:00-04:00",
+      "open": 769.8200073242188,
+      "high": 769.8900146484375,
+      "low": 769.5700073242188,
+      "close": 769.6300048828125,
+      "volume": 62091,
+      "missing": false
+    },
+    {
+      "minute": 13,
+      "timestamp_et": "2026-09-03T09:43:00-04:00",
+      "open": 769.5900268554688,
+      "high": 769.64501953125,
+      "low": 769.4249877929688,
+      "close": 769.5,
+      "volume": 105869,
+      "missing": false
+    },
+    {
+      "minute": 14,
+      "timestamp_et": "2026-09-03T09:44:00-04:00",
+      "open": 769.510009765625,
+      "high": 769.8499755859375,
+      "low": 769.4199829101562,
+      "close": 769.7899780273438,
+      "volume": 66413,
+      "missing": false
+    },
+    {
+      "minute": 15,
+      "timestamp_et": "2026-09-03T09:45:00-04:00",
+      "open": 769.8099975585938,
+      "high": 769.9199829101562,
+      "low": 769.6701049804688,
+      "close": 769.7794799804688,
+      "volume": 130808,
+      "missing": false
+    },
+    {
+      "minute": 16,
+      "timestamp_et": "2026-09-03T09:46:00-04:00",
+      "open": 769.7650146484375,
+      "high": 769.8800048828125,
+      "low": 769.594970703125,
+      "close": 769.7763061523438,
+      "volume": 75161,
+      "missing": false
+    },
+    {
+      "minute": 17,
+      "timestamp_et": "2026-09-03T09:47:00-04:00",
+      "open": 769.7799072265625,
+      "high": 769.9600219726562,
+      "low": 769.739990234375,
+      "close": 769.8427124023438,
+      "volume": 130509,
+      "missing": false
+    },
+    {
+      "minute": 18,
+      "timestamp_et": "2026-09-03T09:48:00-04:00",
+      "open": 769.8699951171875,
+      "high": 769.9349975585938,
+      "low": 769.6500244140625,
+      "close": 769.6699829101562,
+      "volume": 69174,
+      "missing": false
+    },
+    {
+      "minute": 19,
+      "timestamp_et": "2026-09-03T09:49:00-04:00",
+      "open": 769.6500244140625,
+      "high": 769.77001953125,
+      "low": 769.4299926757812,
+      "close": 769.6400146484375,
+      "volume": 1300817,
+      "missing": false
+    },
+    {
+      "minute": 20,
+      "timestamp_et": "2026-09-03T09:50:00-04:00",
+      "open": 769.6400146484375,
+      "high": 770.02001953125,
+      "low": 769.6099853515625,
+      "close": 769.9232788085938,
+      "volume": 128993,
+      "missing": false
+    },
+    {
+      "minute": 21,
+      "timestamp_et": "2026-09-03T09:51:00-04:00",
+      "open": 769.9099731445312,
+      "high": 770.02001953125,
+      "low": 769.739990234375,
+      "close": 770.010009765625,
+      "volume": 101457,
+      "missing": false
+    },
+    {
+      "minute": 22,
+      "timestamp_et": "2026-09-03T09:52:00-04:00",
+      "open": 770.0150146484375,
+      "high": 770.0449829101562,
+      "low": 769.7899780273438,
+      "close": 769.8049926757812,
+      "volume": 207561,
+      "missing": false
+    },
+    {
+      "minute": 23,
+      "timestamp_et": "2026-09-03T09:53:00-04:00",
+      "open": 769.7899780273438,
+      "high": 769.8200073242188,
+      "low": 769.510009765625,
+      "close": 769.5693969726562,
+      "volume": 100736,
+      "missing": false
+    },
+    {
+      "minute": 24,
+      "timestamp_et": "2026-09-03T09:54:00-04:00",
+      "open": 769.5499877929688,
+      "high": 769.5999755859375,
+      "low": 769.3099975585938,
+      "close": 769.5900268554688,
+      "volume": 179043,
+      "missing": false
+    },
+    {
+      "minute": 25,
+      "timestamp_et": "2026-09-03T09:55:00-04:00",
+      "open": 769.5800170898438,
+      "high": 769.6099853515625,
+      "low": 769.3699951171875,
+      "close": 769.3699951171875,
+      "volume": 90895,
+      "missing": false
+    },
+    {
+      "minute": 26,
+      "timestamp_et": "2026-09-03T09:56:00-04:00",
+      "open": 769.3800048828125,
+      "high": 769.3800048828125,
+      "low": 769.2100219726562,
+      "close": 769.2100219726562,
+      "volume": 50147,
+      "missing": false
+    },
+    {
+      "minute": 27,
+      "timestamp_et": "2026-09-03T09:57:00-04:00",
+      "open": 769.260009765625,
+      "high": 769.3800048828125,
+      "low": 769.1099853515625,
+      "close": 769.1400146484375,
+      "volume": 63851,
+      "missing": false
+    },
+    {
+      "minute": 28,
+      "timestamp_et": "2026-09-03T09:58:00-04:00",
+      "open": 769.1400146484375,
+      "high": 769.3800048828125,
+      "low": 769.1400146484375,
+      "close": 769.3800048828125,
+      "volume": 66508,
+      "missing": false
+    },
+    {
+      "minute": 29,
+      "timestamp_et": "2026-09-03T09:59:00-04:00",
+      "open": 769.3800048828125,
+      "high": 769.5999755859375,
+      "low": 769.22998046875,
+      "close": 769.5599975585938,
+      "volume": 66132,
+      "missing": false
+    },
+    {
+      "minute": 30,
+      "timestamp_et": "2026-09-03T10:00:00-04:00",
+      "open": 769.530029296875,
+      "high": 769.5700073242188,
+      "low": 768.739990234375,
+      "close": 768.739990234375,
+      "volume": 188827,
+      "missing": false
+    },
+    {
+      "minute": 31,
+      "timestamp_et": "2026-09-03T10:01:00-04:00",
+      "open": 768.7999877929688,
+      "high": 768.7999877929688,
+      "low": 768.39501953125,
+      "close": 768.4299926757812,
+      "volume": 168381,
+      "missing": false
+    },
+    {
+      "minute": 32,
+      "timestamp_et": "2026-09-03T10:02:00-04:00",
+      "open": 768.4149780273438,
+      "high": 768.510009765625,
+      "low": 768.14501953125,
+      "close": 768.4000244140625,
+      "volume": 115642,
+      "missing": false
+    },
+    {
+      "minute": 33,
+      "timestamp_et": "2026-09-03T10:03:00-04:00",
+      "open": 768.4099731445312,
+      "high": 768.6199951171875,
+      "low": 768.22998046875,
+      "close": 768.60009765625,
+      "volume": 96778,
+      "missing": false
+    },
+    {
+      "minute": 34,
+      "timestamp_et": "2026-09-03T10:04:00-04:00",
+      "open": 768.625,
+      "high": 768.6400146484375,
+      "low": 768.1099853515625,
+      "close": 768.125,
+      "volume": 134613,
+      "missing": false
+    },
+    {
+      "minute": 35,
+      "timestamp_et": "2026-09-03T10:05:00-04:00",
+      "open": 768.1199951171875,
+      "high": 768.2999877929688,
+      "low": 767.969970703125,
+      "close": 768.2999877929688,
+      "volume": 175854,
+      "missing": false
+    },
+    {
+      "minute": 36,
+      "timestamp_et": "2026-09-03T10:06:00-04:00",
+      "open": 768.2999877929688,
+      "high": 768.3400268554688,
+      "low": 768.0399780273438,
+      "close": 768.280029296875,
+      "volume": 289643,
+      "missing": false
+    },
+    {
+      "minute": 37,
+      "timestamp_et": "2026-09-03T10:07:00-04:00",
+      "open": 768.280029296875,
+      "high": 768.3049926757812,
+      "low": 767.75,
+      "close": 767.780029296875,
+      "volume": 274190,
+      "missing": false
+    },
+    {
+      "minute": 38,
+      "timestamp_et": "2026-09-03T10:08:00-04:00",
+      "open": 767.760009765625,
+      "high": 767.875,
+      "low": 767.6099853515625,
+      "close": 767.72998046875,
+      "volume": 205039,
+      "missing": false
+    },
+    {
+      "minute": 39,
+      "timestamp_et": "2026-09-03T10:09:00-04:00",
+      "open": 767.739990234375,
+      "high": 767.9400024414062,
+      "low": 767.6500244140625,
+      "close": 767.8099975585938,
+      "volume": 73317,
+      "missing": false
+    },
+    {
+      "minute": 40,
+      "timestamp_et": "2026-09-03T10:10:00-04:00",
+      "open": 767.8300170898438,
+      "high": 767.894775390625,
+      "low": 767.530029296875,
+      "close": 767.6599731445312,
+      "volume": 91669,
+      "missing": false
+    },
+    {
+      "minute": 41,
+      "timestamp_et": "2026-09-03T10:11:00-04:00",
+      "open": 767.6599731445312,
+      "high": 768.0499877929688,
+      "low": 767.5700073242188,
+      "close": 768.0499877929688,
+      "volume": 106358,
+      "missing": false
+    },
+    {
+      "minute": 42,
+      "timestamp_et": "2026-09-03T10:12:00-04:00",
+      "open": 768.0599975585938,
+      "high": 768.263427734375,
+      "low": 767.9000854492188,
+      "close": 768.1199951171875,
+      "volume": 115393,
+      "missing": false
+    },
+    {
+      "minute": 43,
+      "timestamp_et": "2026-09-03T10:13:00-04:00",
+      "open": 768.1099853515625,
+      "high": 768.280029296875,
+      "low": 767.8800048828125,
+      "close": 768.1300048828125,
+      "volume": 112421,
+      "missing": false
+    },
+    {
+      "minute": 44,
+      "timestamp_et": "2026-09-03T10:14:00-04:00",
+      "open": 768.1300048828125,
+      "high": 768.3800048828125,
+      "low": 768.0599975585938,
+      "close": 768.3599853515625,
+      "volume": 53677,
+      "missing": false
+    },
+    {
+      "minute": 45,
+      "timestamp_et": "2026-09-03T10:15:00-04:00",
+      "open": 768.3599853515625,
+      "high": 768.6900024414062,
+      "low": 768.3099975585938,
+      "close": 768.530029296875,
+      "volume": 55400,
+      "missing": false
+    },
+    {
+      "minute": 46,
+      "timestamp_et": "2026-09-03T10:16:00-04:00",
+      "open": 768.5499877929688,
+      "high": 768.6300048828125,
+      "low": 768.340087890625,
+      "close": 768.394775390625,
+      "volume": 59300,
+      "missing": false
+    },
+    {
+      "minute": 47,
+      "timestamp_et": "2026-09-03T10:17:00-04:00",
+      "open": 768.4000244140625,
+      "high": 768.4691162109375,
+      "low": 768.22021484375,
+      "close": 768.4500122070312,
+      "volume": 61256,
+      "missing": false
+    },
+    {
+      "minute": 48,
+      "timestamp_et": "2026-09-03T10:18:00-04:00",
+      "open": 768.4400024414062,
+      "high": 768.4400024414062,
+      "low": 768.280029296875,
+      "close": 768.3599853515625,
+      "volume": 42344,
+      "missing": false
+    },
+    {
+      "minute": 49,
+      "timestamp_et": "2026-09-03T10:19:00-04:00",
+      "open": 768.4099731445312,
+      "high": 768.8800048828125,
+      "low": 768.3900146484375,
+      "close": 768.8499755859375,
+      "volume": 60102,
+      "missing": false
+    },
+    {
+      "minute": 50,
+      "timestamp_et": "2026-09-03T10:20:00-04:00",
+      "open": 768.8499755859375,
+      "high": 768.9899291992188,
+      "low": 768.7899780273438,
+      "close": 768.844970703125,
+      "volume": 66908,
+      "missing": false
+    },
+    {
+      "minute": 51,
+      "timestamp_et": "2026-09-03T10:21:00-04:00",
+      "open": 768.8599853515625,
+      "high": 768.9000244140625,
+      "low": 768.5,
+      "close": 768.5698852539062,
+      "volume": 63724,
+      "missing": false
+    },
+    {
+      "minute": 52,
+      "timestamp_et": "2026-09-03T10:22:00-04:00",
+      "open": 768.5999755859375,
+      "high": 768.8099975585938,
+      "low": 768.5999755859375,
+      "close": 768.8099975585938,
+      "volume": 43569,
+      "missing": false
+    },
+    {
+      "minute": 53,
+      "timestamp_et": "2026-09-03T10:23:00-04:00",
+      "open": 768.8200073242188,
+      "high": 768.989990234375,
+      "low": 768.8200073242188,
+      "close": 768.8800048828125,
+      "volume": 45118,
+      "missing": false
+    },
+    {
+      "minute": 54,
+      "timestamp_et": "2026-09-03T10:24:00-04:00",
+      "open": 768.8807983398438,
+      "high": 769.0700073242188,
+      "low": 768.850830078125,
+      "close": 768.8599853515625,
+      "volume": 44976,
+      "missing": false
+    },
+    {
+      "minute": 55,
+      "timestamp_et": "2026-09-03T10:25:00-04:00",
+      "open": 768.8800048828125,
+      "high": 768.8800048828125,
+      "low": 768.510009765625,
+      "close": 768.7000122070312,
+      "volume": 62292,
+      "missing": false
+    },
+    {
+      "minute": 56,
+      "timestamp_et": "2026-09-03T10:26:00-04:00",
+      "open": 768.7150268554688,
+      "high": 768.9598999023438,
+      "low": 768.7150268554688,
+      "close": 768.77001953125,
+      "volume": 41093,
+      "missing": false
+    },
+    {
+      "minute": 57,
+      "timestamp_et": "2026-09-03T10:27:00-04:00",
+      "open": 768.7999877929688,
+      "high": 768.9099731445312,
+      "low": 768.75,
+      "close": 768.8900146484375,
+      "volume": 55621,
+      "missing": false
+    },
+    {
+      "minute": 58,
+      "timestamp_et": "2026-09-03T10:28:00-04:00",
+      "open": 768.8900146484375,
+      "high": 768.9299926757812,
+      "low": 768.6599731445312,
+      "close": 768.6699829101562,
+      "volume": 54411,
+      "missing": false
+    },
+    {
+      "minute": 59,
+      "timestamp_et": "2026-09-03T10:29:00-04:00",
+      "open": 768.6799926757812,
+      "high": 768.7999877929688,
+      "low": 768.6699829101562,
+      "close": 768.6699829101562,
+      "volume": 31385,
+      "missing": false
+    },
+    {
+      "minute": 60,
+      "timestamp_et": "2026-09-03T10:30:00-04:00",
+      "open": 768.6699829101562,
+      "high": 768.969970703125,
+      "low": 768.530029296875,
+      "close": 768.9450073242188,
+      "volume": 78474,
+      "missing": false
+    },
+    {
+      "minute": 61,
+      "timestamp_et": "2026-09-03T10:31:00-04:00",
+      "open": 768.9099731445312,
+      "high": 768.9099731445312,
+      "low": 768.3599853515625,
+      "close": 768.52001953125,
+      "volume": 132169,
+      "missing": false
+    },
+    {
+      "minute": 62,
+      "timestamp_et": "2026-09-03T10:32:00-04:00",
+      "open": 768.52001953125,
+      "high": 768.5700073242188,
+      "low": 768.2219848632812,
+      "close": 768.489990234375,
+      "volume": 50258,
+      "missing": false
+    },
+    {
+      "minute": 63,
+      "timestamp_et": "2026-09-03T10:33:00-04:00",
+      "open": 768.5,
+      "high": 768.6199951171875,
+      "low": 768.2100219726562,
+      "close": 768.22998046875,
+      "volume": 49790,
+      "missing": false
+    },
+    {
+      "minute": 64,
+      "timestamp_et": "2026-09-03T10:34:00-04:00",
+      "open": 768.22998046875,
+      "high": 768.260009765625,
+      "low": 767.8300170898438,
+      "close": 767.9000244140625,
+      "volume": 46621,
+      "missing": false
+    },
+    {
+      "minute": 65,
+      "timestamp_et": "2026-09-03T10:35:00-04:00",
+      "open": 767.8800048828125,
+      "high": 768.3699951171875,
+      "low": 767.8400268554688,
+      "close": 768.3250122070312,
+      "volume": 58044,
+      "missing": false
+    },
+    {
+      "minute": 66,
+      "timestamp_et": "2026-09-03T10:36:00-04:00",
+      "open": 768.3400268554688,
+      "high": 768.4600219726562,
+      "low": 768.1699829101562,
+      "close": 768.2899780273438,
+      "volume": 43345,
+      "missing": false
+    },
+    {
+      "minute": 67,
+      "timestamp_et": "2026-09-03T10:37:00-04:00",
+      "open": 768.280029296875,
+      "high": 768.3800048828125,
+      "low": 768.1500244140625,
+      "close": 768.2999877929688,
+      "volume": 50666,
+      "missing": false
+    },
+    {
+      "minute": 68,
+      "timestamp_et": "2026-09-03T10:38:00-04:00",
+      "open": 768.3099975585938,
+      "high": 768.52001953125,
+      "low": 768.1749877929688,
+      "close": 768.2999877929688,
+      "volume": 50365,
+      "missing": false
+    },
+    {
+      "minute": 69,
+      "timestamp_et": "2026-09-03T10:39:00-04:00",
+      "open": 768.280029296875,
+      "high": 768.280029296875,
+      "low": 768.0800170898438,
+      "close": 768.1500244140625,
+      "volume": 46428,
+      "missing": false
+    },
+    {
+      "minute": 70,
+      "timestamp_et": "2026-09-03T10:40:00-04:00",
+      "open": 768.155029296875,
+      "high": 768.3200073242188,
+      "low": 768.0399780273438,
+      "close": 768.0399780273438,
+      "volume": 47879,
+      "missing": false
+    },
+    {
+      "minute": 71,
+      "timestamp_et": "2026-09-03T10:41:00-04:00",
+      "open": 768.0399780273438,
+      "high": 768.4199829101562,
+      "low": 768.030029296875,
+      "close": 768.4199829101562,
+      "volume": 46311,
+      "missing": false
+    },
+    {
+      "minute": 72,
+      "timestamp_et": "2026-09-03T10:42:00-04:00",
+      "open": 768.4199829101562,
+      "high": 768.6599731445312,
+      "low": 768.3699951171875,
+      "close": 768.4149780273438,
+      "volume": 46077,
+      "missing": false
+    },
+    {
+      "minute": 73,
+      "timestamp_et": "2026-09-03T10:43:00-04:00",
+      "open": 768.4400024414062,
+      "high": 768.468994140625,
+      "low": 768.0999755859375,
+      "close": 768.1599731445312,
+      "volume": 39687,
+      "missing": false
+    },
+    {
+      "minute": 74,
+      "timestamp_et": "2026-09-03T10:44:00-04:00",
+      "open": 768.1900024414062,
+      "high": 768.27001953125,
+      "low": 768.1300048828125,
+      "close": 768.2000122070312,
+      "volume": 20553,
+      "missing": false
+    },
+    {
+      "minute": 75,
+      "timestamp_et": "2026-09-03T10:45:00-04:00",
+      "open": 768.1699829101562,
+      "high": 768.3900146484375,
+      "low": 768.030029296875,
+      "close": 768.3800048828125,
+      "volume": 48638,
+      "missing": false
+    },
+    {
+      "minute": 76,
+      "timestamp_et": "2026-09-03T10:46:00-04:00",
+      "open": 768.3699951171875,
+      "high": 768.39501953125,
+      "low": 768.1400146484375,
+      "close": 768.2249755859375,
+      "volume": 49349,
+      "missing": false
+    },
+    {
+      "minute": 77,
+      "timestamp_et": "2026-09-03T10:47:00-04:00",
+      "open": 768.2000122070312,
+      "high": 768.6500244140625,
+      "low": 768.1699829101562,
+      "close": 768.5505981445312,
+      "volume": 31263,
+      "missing": false
+    },
+    {
+      "minute": 78,
+      "timestamp_et": "2026-09-03T10:48:00-04:00",
+      "open": 768.5650024414062,
+      "high": 768.77001953125,
+      "low": 768.4099731445312,
+      "close": 768.75,
+      "volume": 51820,
+      "missing": false
+    },
+    {
+      "minute": 79,
+      "timestamp_et": "2026-09-03T10:49:00-04:00",
+      "open": 768.739990234375,
+      "high": 768.7750244140625,
+      "low": 768.530029296875,
+      "close": 768.719970703125,
+      "volume": 71093,
+      "missing": false
+    },
+    {
+      "minute": 80,
+      "timestamp_et": "2026-09-03T10:50:00-04:00",
+      "open": 768.72998046875,
+      "high": 768.8300170898438,
+      "low": 768.4600219726562,
+      "close": 768.5900268554688,
+      "volume": 90414,
+      "missing": false
+    },
+    {
+      "minute": 81,
+      "timestamp_et": "2026-09-03T10:51:00-04:00",
+      "open": 768.5900268554688,
+      "high": 768.5999755859375,
+      "low": 768.27001953125,
+      "close": 768.489990234375,
+      "volume": 48618,
+      "missing": false
+    },
+    {
+      "minute": 82,
+      "timestamp_et": "2026-09-03T10:52:00-04:00",
+      "open": 768.469970703125,
+      "high": 768.469970703125,
+      "low": 768.226318359375,
+      "close": 768.22998046875,
+      "volume": 51708,
+      "missing": false
+    },
+    {
+      "minute": 83,
+      "timestamp_et": "2026-09-03T10:53:00-04:00",
+      "open": 768.22998046875,
+      "high": 768.3099975585938,
+      "low": 768.2000122070312,
+      "close": 768.2849731445312,
+      "volume": 27697,
+      "missing": false
+    },
+    {
+      "minute": 84,
+      "timestamp_et": "2026-09-03T10:54:00-04:00",
+      "open": 768.27001953125,
+      "high": 768.6500244140625,
+      "low": 768.25,
+      "close": 768.6099853515625,
+      "volume": 31340,
+      "missing": false
+    },
+    {
+      "minute": 85,
+      "timestamp_et": "2026-09-03T10:55:00-04:00",
+      "open": 768.6199951171875,
+      "high": 768.75,
+      "low": 768.5300903320312,
+      "close": 768.719970703125,
+      "volume": 42330,
+      "missing": false
+    },
+    {
+      "minute": 86,
+      "timestamp_et": "2026-09-03T10:56:00-04:00",
+      "open": 768.719970703125,
+      "high": 768.8200073242188,
+      "low": 767.469970703125,
+      "close": 768.4000244140625,
+      "volume": 589443,
+      "missing": false
+    },
+    {
+      "minute": 87,
+      "timestamp_et": "2026-09-03T10:57:00-04:00",
+      "open": 768.4099731445312,
+      "high": 768.6300048828125,
+      "low": 768.25,
+      "close": 768.6300048828125,
+      "volume": 234976,
+      "missing": false
+    },
+    {
+      "minute": 88,
+      "timestamp_et": "2026-09-03T10:58:00-04:00",
+      "open": 768.6400146484375,
+      "high": 768.9799194335938,
+      "low": 768.6400146484375,
+      "close": 768.9299926757812,
+      "volume": 58728,
+      "missing": false
+    },
+    {
+      "minute": 89,
+      "timestamp_et": "2026-09-03T10:59:00-04:00",
+      "open": 768.9199829101562,
+      "high": 769.3300170898438,
+      "low": 768.9000244140625,
+      "close": 769.280029296875,
+      "volume": 65311,
+      "missing": false
+    },
+    {
+      "minute": 90,
+      "timestamp_et": "2026-09-03T11:00:00-04:00",
+      "open": 769.260009765625,
+      "high": 769.5399780273438,
+      "low": 769.25,
+      "close": 769.4400024414062,
+      "volume": 83191,
+      "missing": false
+    },
+    {
+      "minute": 91,
+      "timestamp_et": "2026-09-03T11:01:00-04:00",
+      "open": 769.4550170898438,
+      "high": 769.6400146484375,
+      "low": 769.4299926757812,
+      "close": 769.5349731445312,
+      "volume": 90111,
+      "missing": false
+    },
+    {
+      "minute": 92,
+      "timestamp_et": "2026-09-03T11:02:00-04:00",
+      "open": 769.530029296875,
+      "high": 769.780029296875,
+      "low": 769.52001953125,
+      "close": 769.760009765625,
+      "volume": 63378,
+      "missing": false
+    },
+    {
+      "minute": 93,
+      "timestamp_et": "2026-09-03T11:03:00-04:00",
+      "open": 769.780029296875,
+      "high": 770.1699829101562,
+      "low": 769.75,
+      "close": 770.010009765625,
+      "volume": 182734,
+      "missing": false
+    },
+    {
+      "minute": 94,
+      "timestamp_et": "2026-09-03T11:04:00-04:00",
+      "open": 770.0198974609375,
+      "high": 770.489990234375,
+      "low": 769.969970703125,
+      "close": 770.4450073242188,
+      "volume": 175239,
+      "missing": false
+    },
+    {
+      "minute": 95,
+      "timestamp_et": "2026-09-03T11:05:00-04:00",
+      "open": 770.4600219726562,
+      "high": 770.6400146484375,
+      "low": 770.4600219726562,
+      "close": 770.5900268554688,
+      "volume": 181183,
+      "missing": false
+    },
+    {
+      "minute": 96,
+      "timestamp_et": "2026-09-03T11:06:00-04:00",
+      "open": 770.594970703125,
+      "high": 770.6900024414062,
+      "low": 770.4299926757812,
+      "close": 770.489990234375,
+      "volume": 231189,
+      "missing": false
+    },
+    {
+      "minute": 97,
+      "timestamp_et": "2026-09-03T11:07:00-04:00",
+      "open": 770.489990234375,
+      "high": 770.7138061523438,
+      "low": 770.4600219726562,
+      "close": 770.6599731445312,
+      "volume": 134923,
+      "missing": false
+    },
+    {
+      "minute": 98,
+      "timestamp_et": "2026-09-03T11:08:00-04:00",
+      "open": 770.6593017578125,
+      "high": 770.8900146484375,
+      "low": 770.5999755859375,
+      "close": 770.8099975585938,
+      "volume": 67869,
+      "missing": false
+    },
+    {
+      "minute": 99,
+      "timestamp_et": "2026-09-03T11:09:00-04:00",
+      "open": 770.8250122070312,
+      "high": 770.8800048828125,
+      "low": 770.7000122070312,
+      "close": 770.72998046875,
+      "volume": 53652,
+      "missing": false
+    },
+    {
+      "minute": 100,
+      "timestamp_et": "2026-09-03T11:10:00-04:00",
+      "open": 770.7315063476562,
+      "high": 771.0399780273438,
+      "low": 770.6699829101562,
+      "close": 770.969970703125,
+      "volume": 102465,
+      "missing": false
+    },
+    {
+      "minute": 101,
+      "timestamp_et": "2026-09-03T11:11:00-04:00",
+      "open": 770.97802734375,
+      "high": 771.260009765625,
+      "low": 770.9199829101562,
+      "close": 771.2150268554688,
+      "volume": 123916,
+      "missing": false
+    },
+    {
+      "minute": 102,
+      "timestamp_et": "2026-09-03T11:12:00-04:00",
+      "open": 771.2100219726562,
+      "high": 771.280029296875,
+      "low": 771.1400146484375,
+      "close": 771.2000122070312,
+      "volume": 59870,
+      "missing": false
+    },
+    {
+      "minute": 103,
+      "timestamp_et": "2026-09-03T11:13:00-04:00",
+      "open": 771.1900024414062,
+      "high": 771.4299926757812,
+      "low": 771.1799926757812,
+      "close": 771.4000244140625,
+      "volume": 111503,
+      "missing": false
+    },
+    {
+      "minute": 104,
+      "timestamp_et": "2026-09-03T11:14:00-04:00",
+      "open": 771.4199829101562,
+      "high": 771.52001953125,
+      "low": 771.2999877929688,
+      "close": 771.52001953125,
+      "volume": 131671,
+      "missing": false
+    },
+    {
+      "minute": 105,
+      "timestamp_et": "2026-09-03T11:15:00-04:00",
+      "open": 771.5399780273438,
+      "high": 771.72998046875,
+      "low": 771.489990234375,
+      "close": 771.716796875,
+      "volume": 218091,
+      "missing": false
+    },
+    {
+      "minute": 106,
+      "timestamp_et": "2026-09-03T11:16:00-04:00",
+      "open": 771.7150268554688,
+      "high": 771.8300170898438,
+      "low": 771.5999755859375,
+      "close": 771.7999877929688,
+      "volume": 153191,
+      "missing": false
+    },
+    {
+      "minute": 107,
+      "timestamp_et": "2026-09-03T11:17:00-04:00",
+      "open": 771.7899780273438,
+      "high": 771.889892578125,
+      "low": 771.6500244140625,
+      "close": 771.780029296875,
+      "volume": 83742,
+      "missing": false
+    },
+    {
+      "minute": 108,
+      "timestamp_et": "2026-09-03T11:18:00-04:00",
+      "open": 771.7750244140625,
+      "high": 771.905029296875,
+      "low": 771.6300048828125,
+      "close": 771.905029296875,
+      "volume": 225093,
+      "missing": false
+    },
+    {
+      "minute": 109,
+      "timestamp_et": "2026-09-03T11:19:00-04:00",
+      "open": 771.9099731445312,
+      "high": 772.0399780273438,
+      "low": 771.8599853515625,
+      "close": 772.0100708007812,
+      "volume": 135317,
+      "missing": false
+    },
+    {
+      "minute": 110,
+      "timestamp_et": "2026-09-03T11:20:00-04:00",
+      "open": 772.010009765625,
+      "high": 772.010009765625,
+      "low": 771.5900268554688,
+      "close": 771.5999755859375,
+      "volume": 153495,
+      "missing": false
+    },
+    {
+      "minute": 111,
+      "timestamp_et": "2026-09-03T11:21:00-04:00",
+      "open": 771.5900268554688,
+      "high": 771.6500244140625,
+      "low": 771.469970703125,
+      "close": 771.614990234375,
+      "volume": 115394,
+      "missing": false
+    },
+    {
+      "minute": 112,
+      "timestamp_et": "2026-09-03T11:22:00-04:00",
+      "open": 771.619873046875,
+      "high": 771.9600219726562,
+      "low": 771.5800170898438,
+      "close": 771.8900146484375,
+      "volume": 68811,
+      "missing": false
+    },
+    {
+      "minute": 113,
+      "timestamp_et": "2026-09-03T11:23:00-04:00",
+      "open": 771.885009765625,
+      "high": 772.1799926757812,
+      "low": 771.885009765625,
+      "close": 772.1500244140625,
+      "volume": 137617,
+      "missing": false
+    },
+    {
+      "minute": 114,
+      "timestamp_et": "2026-09-03T11:24:00-04:00",
+      "open": 772.155029296875,
+      "high": 772.2249755859375,
+      "low": 772.0599975585938,
+      "close": 772.0599975585938,
+      "volume": 96974,
+      "missing": false
+    },
+    {
+      "minute": 115,
+      "timestamp_et": "2026-09-03T11:25:00-04:00",
+      "open": 772.0800170898438,
+      "high": 772.219970703125,
+      "low": 772.010009765625,
+      "close": 772.219970703125,
+      "volume": 83916,
+      "missing": false
+    },
+    {
+      "minute": 116,
+      "timestamp_et": "2026-09-03T11:26:00-04:00",
+      "open": 772.219970703125,
+      "high": 772.47998046875,
+      "low": 772.1799926757812,
+      "close": 772.4400024414062,
+      "volume": 100673,
+      "missing": false
+    },
+    {
+      "minute": 117,
+      "timestamp_et": "2026-09-03T11:27:00-04:00",
+      "open": 772.4400024414062,
+      "high": 772.6500244140625,
+      "low": 772.3900146484375,
+      "close": 772.6099853515625,
+      "volume": 94573,
+      "missing": false
+    },
+    {
+      "minute": 118,
+      "timestamp_et": "2026-09-03T11:28:00-04:00",
+      "open": 772.594970703125,
+      "high": 772.6699829101562,
+      "low": 772.52001953125,
+      "close": 772.64501953125,
+      "volume": 73686,
+      "missing": false
+    },
+    {
+      "minute": 119,
+      "timestamp_et": "2026-09-03T11:29:00-04:00",
+      "open": 772.6400146484375,
+      "high": 772.9500122070312,
+      "low": 772.6400146484375,
+      "close": 772.9400024414062,
+      "volume": 166757,
+      "missing": false
+    },
+    {
+      "minute": 120,
+      "timestamp_et": "2026-09-03T11:30:00-04:00",
+      "open": 772.9400024414062,
+      "high": 773.135498046875,
+      "low": 772.7899780273438,
+      "close": 773.1300048828125,
+      "volume": 162370,
+      "missing": false
+    },
+    {
+      "minute": 121,
+      "timestamp_et": "2026-09-03T11:31:00-04:00",
+      "open": 773.1300048828125,
+      "high": 773.2100219726562,
+      "low": 772.9600219726562,
+      "close": 773.1400146484375,
+      "volume": 135889,
+      "missing": false
+    },
+    {
+      "minute": 122,
+      "timestamp_et": "2026-09-03T11:32:00-04:00",
+      "open": 773.1199951171875,
+      "high": 773.1599731445312,
+      "low": 772.9199829101562,
+      "close": 773.0,
+      "volume": 84583,
+      "missing": false
+    },
+    {
+      "minute": 123,
+      "timestamp_et": "2026-09-03T11:33:00-04:00",
+      "open": 773.010009765625,
+      "high": 773.0399780273438,
+      "low": 772.5,
+      "close": 772.77001953125,
+      "volume": 157558,
+      "missing": false
+    },
+    {
+      "minute": 124,
+      "timestamp_et": "2026-09-03T11:34:00-04:00",
+      "open": 772.7550048828125,
+      "high": 772.8800048828125,
+      "low": 772.6400146484375,
+      "close": 772.8558959960938,
+      "volume": 84847,
+      "missing": false
+    },
+    {
+      "minute": 125,
+      "timestamp_et": "2026-09-03T11:35:00-04:00",
+      "open": 772.8599853515625,
+      "high": 772.97998046875,
+      "low": 772.7899780273438,
+      "close": 772.8200073242188,
+      "volume": 67972,
+      "missing": false
+    },
+    {
+      "minute": 126,
+      "timestamp_et": "2026-09-03T11:36:00-04:00",
+      "open": 772.8201293945312,
+      "high": 772.8201293945312,
+      "low": 772.6295776367188,
+      "close": 772.6599731445312,
+      "volume": 80109,
+      "missing": false
+    },
+    {
+      "minute": 127,
+      "timestamp_et": "2026-09-03T11:37:00-04:00",
+      "open": 772.6500244140625,
+      "high": 772.760009765625,
+      "low": 772.4400024414062,
+      "close": 772.4400024414062,
+      "volume": 92677,
+      "missing": false
+    },
+    {
+      "minute": 128,
+      "timestamp_et": "2026-09-03T11:38:00-04:00",
+      "open": 772.4400024414062,
+      "high": 772.5700073242188,
+      "low": 772.4199829101562,
+      "close": 772.5700073242188,
+      "volume": 79332,
+      "missing": false
+    },
+    {
+      "minute": 129,
+      "timestamp_et": "2026-09-03T11:39:00-04:00",
+      "open": 772.5599975585938,
+      "high": 772.635009765625,
+      "low": 772.4500122070312,
+      "close": 772.4650268554688,
+      "volume": 63877,
+      "missing": false
+    },
+    {
+      "minute": 130,
+      "timestamp_et": "2026-09-03T11:40:00-04:00",
+      "open": 772.469970703125,
+      "high": 772.614990234375,
+      "low": 772.3499755859375,
+      "close": 772.389892578125,
+      "volume": 50735,
+      "missing": false
+    },
+    {
+      "minute": 131,
+      "timestamp_et": "2026-09-03T11:41:00-04:00",
+      "open": 772.3820190429688,
+      "high": 772.5499877929688,
+      "low": 772.2750244140625,
+      "close": 772.5,
+      "volume": 114737,
+      "missing": false
+    },
+    {
+      "minute": 132,
+      "timestamp_et": "2026-09-03T11:42:00-04:00",
+      "open": 772.5,
+      "high": 772.7349853515625,
+      "low": 772.4349975585938,
+      "close": 772.6799926757812,
+      "volume": 45958,
+      "missing": false
+    },
+    {
+      "minute": 133,
+      "timestamp_et": "2026-09-03T11:43:00-04:00",
+      "open": 772.6799926757812,
+      "high": 772.8400268554688,
+      "low": 772.6599731445312,
+      "close": 772.8099975585938,
+      "volume": 53978,
+      "missing": false
+    },
+    {
+      "minute": 134,
+      "timestamp_et": "2026-09-03T11:44:00-04:00",
+      "open": 772.8200073242188,
+      "high": 772.8200073242188,
+      "low": 772.5499877929688,
+      "close": 772.5800170898438,
+      "volume": 41667,
+      "missing": false
+    },
+    {
+      "minute": 135,
+      "timestamp_et": "2026-09-03T11:45:00-04:00",
+      "open": 772.5850219726562,
+      "high": 772.8162231445312,
+      "low": 772.5800170898438,
+      "close": 772.7899780273438,
+      "volume": 43954,
+      "missing": false
+    },
+    {
+      "minute": 136,
+      "timestamp_et": "2026-09-03T11:46:00-04:00",
+      "open": 772.8099975585938,
+      "high": 772.8400268554688,
+      "low": 772.719970703125,
+      "close": 772.75,
+      "volume": 70495,
+      "missing": false
+    },
+    {
+      "minute": 137,
+      "timestamp_et": "2026-09-03T11:47:00-04:00",
+      "open": 772.72998046875,
+      "high": 772.760009765625,
+      "low": 772.6400146484375,
+      "close": 772.75,
+      "volume": 69458,
+      "missing": false
+    },
+    {
+      "minute": 138,
+      "timestamp_et": "2026-09-03T11:48:00-04:00",
+      "open": 772.75,
+      "high": 772.9199829101562,
+      "low": 772.7000122070312,
+      "close": 772.864990234375,
+      "volume": 49693,
+      "missing": false
+    },
+    {
+      "minute": 139,
+      "timestamp_et": "2026-09-03T11:49:00-04:00",
+      "open": 772.864990234375,
+      "high": 773.0,
+      "low": 772.864990234375,
+      "close": 772.9349975585938,
+      "volume": 60114,
+      "missing": false
+    },
+    {
+      "minute": 140,
+      "timestamp_et": "2026-09-03T11:50:00-04:00",
+      "open": 772.9400024414062,
+      "high": 773.02001953125,
+      "low": 772.9199829101562,
+      "close": 773.010009765625,
+      "volume": 56995,
+      "missing": false
+    },
+    {
+      "minute": 141,
+      "timestamp_et": "2026-09-03T11:51:00-04:00",
+      "open": 773.0150146484375,
+      "high": 773.2100219726562,
+      "low": 772.9500122070312,
+      "close": 773.1854248046875,
+      "volume": 61008,
+      "missing": false
+    },
+    {
+      "minute": 142,
+      "timestamp_et": "2026-09-03T11:52:00-04:00",
+      "open": 773.1699829101562,
+      "high": 773.260009765625,
+      "low": 773.1599731445312,
+      "close": 773.2150268554688,
+      "volume": 70842,
+      "missing": false
+    },
+    {
+      "minute": 143,
+      "timestamp_et": "2026-09-03T11:53:00-04:00",
+      "open": 773.2100219726562,
+      "high": 773.25,
+      "low": 773.02001953125,
+      "close": 773.0623779296875,
+      "volume": 61478,
+      "missing": false
+    },
+    {
+      "minute": 144,
+      "timestamp_et": "2026-09-03T11:54:00-04:00",
+      "open": 773.0599975585938,
+      "high": 773.1799926757812,
+      "low": 773.0,
+      "close": 773.14501953125,
+      "volume": 89536,
+      "missing": false
+    },
+    {
+      "minute": 145,
+      "timestamp_et": "2026-09-03T11:55:00-04:00",
+      "open": 773.14501953125,
+      "high": 773.219970703125,
+      "low": 773.094970703125,
+      "close": 773.114990234375,
+      "volume": 60834,
+      "missing": false
+    },
+    {
+      "minute": 146,
+      "timestamp_et": "2026-09-03T11:56:00-04:00",
+      "open": 773.1199951171875,
+      "high": 773.1300048828125,
+      "low": 772.9500122070312,
+      "close": 773.0050048828125,
+      "volume": 57097,
+      "missing": false
+    },
+    {
+      "minute": 147,
+      "timestamp_et": "2026-09-03T11:57:00-04:00",
+      "open": 772.989990234375,
+      "high": 773.239990234375,
+      "low": 772.989990234375,
+      "close": 773.155029296875,
+      "volume": 49119,
+      "missing": false
+    },
+    {
+      "minute": 148,
+      "timestamp_et": "2026-09-03T11:58:00-04:00",
+      "open": 773.1500244140625,
+      "high": 773.2449951171875,
+      "low": 773.1500244140625,
+      "close": 773.1900024414062,
+      "volume": 45789,
+      "missing": false
+    },
+    {
+      "minute": 149,
+      "timestamp_et": "2026-09-03T11:59:00-04:00",
+      "open": 773.2100219726562,
+      "high": 773.3200073242188,
+      "low": 773.1300048828125,
+      "close": 773.3200073242188,
+      "volume": 73744,
+      "missing": false
+    },
+    {
+      "minute": 150,
+      "timestamp_et": "2026-09-03T12:00:00-04:00",
+      "open": 773.3099975585938,
+      "high": 773.3099975585938,
+      "low": 773.1199951171875,
+      "close": 773.1799926757812,
+      "volume": 44372,
+      "missing": false
+    },
+    {
+      "minute": 151,
+      "timestamp_et": "2026-09-03T12:01:00-04:00",
+      "open": 773.1799926757812,
+      "high": 773.280029296875,
+      "low": 773.0800170898438,
+      "close": 773.0800170898438,
+      "volume": 54867,
+      "missing": false
+    },
+    {
+      "minute": 152,
+      "timestamp_et": "2026-09-03T12:02:00-04:00",
+      "open": 773.0850219726562,
+      "high": 773.2000122070312,
+      "low": 773.0599975585938,
+      "close": 773.1500244140625,
+      "volume": 53960,
+      "missing": false
+    },
+    {
+      "minute": 153,
+      "timestamp_et": "2026-09-03T12:03:00-04:00",
+      "open": 773.1500244140625,
+      "high": 773.1599731445312,
+      "low": 773.030029296875,
+      "close": 773.0700073242188,
+      "volume": 122566,
+      "missing": false
+    },
+    {
+      "minute": 154,
+      "timestamp_et": "2026-09-03T12:04:00-04:00",
+      "open": 773.0601196289062,
+      "high": 773.0800170898438,
+      "low": 772.780029296875,
+      "close": 772.7999877929688,
+      "volume": 94184,
+      "missing": false
+    },
+    {
+      "minute": 155,
+      "timestamp_et": "2026-09-03T12:05:00-04:00",
+      "open": 772.7999267578125,
+      "high": 772.8699951171875,
+      "low": 772.739990234375,
+      "close": 772.760009765625,
+      "volume": 127677,
+      "missing": false
+    },
+    {
+      "minute": 156,
+      "timestamp_et": "2026-09-03T12:06:00-04:00",
+      "open": 772.77001953125,
+      "high": 772.77197265625,
+      "low": 772.5599975585938,
+      "close": 772.5999755859375,
+      "volume": 88490,
+      "missing": false
+    },
+    {
+      "minute": 157,
+      "timestamp_et": "2026-09-03T12:07:00-04:00",
+      "open": 772.5880126953125,
+      "high": 772.6400146484375,
+      "low": 772.5050048828125,
+      "close": 772.5150146484375,
+      "volume": 60234,
+      "missing": false
+    },
+    {
+      "minute": 158,
+      "timestamp_et": "2026-09-03T12:08:00-04:00",
+      "open": 772.52001953125,
+      "high": 772.6099853515625,
+      "low": 772.469970703125,
+      "close": 772.5599975585938,
+      "volume": 110481,
+      "missing": false
+    },
+    {
+      "minute": 159,
+      "timestamp_et": "2026-09-03T12:09:00-04:00",
+      "open": 772.5900268554688,
+      "high": 772.6599731445312,
+      "low": 772.530029296875,
+      "close": 772.530029296875,
+      "volume": 50436,
+      "missing": false
+    },
+    {
+      "minute": 160,
+      "timestamp_et": "2026-09-03T12:10:00-04:00",
+      "open": 772.510009765625,
+      "high": 772.6400756835938,
+      "low": 772.4500122070312,
+      "close": 772.625,
+      "volume": 63715,
+      "missing": false
+    },
+    {
+      "minute": 161,
+      "timestamp_et": "2026-09-03T12:11:00-04:00",
+      "open": 772.625,
+      "high": 772.6699829101562,
+      "low": 772.4099731445312,
+      "close": 772.4382934570312,
+      "volume": 76080,
+      "missing": false
+    },
+    {
+      "minute": 162,
+      "timestamp_et": "2026-09-03T12:12:00-04:00",
+      "open": 772.4498901367188,
+      "high": 772.52001953125,
+      "low": 772.3800048828125,
+      "close": 772.380126953125,
+      "volume": 39992,
+      "missing": false
+    },
+    {
+      "minute": 163,
+      "timestamp_et": "2026-09-03T12:13:00-04:00",
+      "open": 772.3900146484375,
+      "high": 772.52001953125,
+      "low": 772.375,
+      "close": 772.489990234375,
+      "volume": 84856,
+      "missing": false
+    },
+    {
+      "minute": 164,
+      "timestamp_et": "2026-09-03T12:14:00-04:00",
+      "open": 772.5,
+      "high": 772.7100219726562,
+      "low": 772.5,
+      "close": 772.6799926757812,
+      "volume": 78729,
+      "missing": false
+    },
+    {
+      "minute": 165,
+      "timestamp_et": "2026-09-03T12:15:00-04:00",
+      "open": 772.6900024414062,
+      "high": 772.75,
+      "low": 772.6199951171875,
+      "close": 772.719970703125,
+      "volume": 56501,
+      "missing": false
+    },
+    {
+      "minute": 166,
+      "timestamp_et": "2026-09-03T12:16:00-04:00",
+      "open": 772.739990234375,
+      "high": 772.760009765625,
+      "low": 772.5399780273438,
+      "close": 772.6199951171875,
+      "volume": 40103,
+      "missing": false
+    },
+    {
+      "minute": 167,
+      "timestamp_et": "2026-09-03T12:17:00-04:00",
+      "open": 772.6300048828125,
+      "high": 772.6799926757812,
+      "low": 772.5809936523438,
+      "close": 772.6594848632812,
+      "volume": 38441,
+      "missing": false
+    },
+    {
+      "minute": 168,
+      "timestamp_et": "2026-09-03T12:18:00-04:00",
+      "open": 772.6400146484375,
+      "high": 772.6900024414062,
+      "low": 772.5750122070312,
+      "close": 772.6699829101562,
+      "volume": 41674,
+      "missing": false
+    },
+    {
+      "minute": 169,
+      "timestamp_et": "2026-09-03T12:19:00-04:00",
+      "open": 772.6749877929688,
+      "high": 772.8699951171875,
+      "low": 772.6749877929688,
+      "close": 772.72998046875,
+      "volume": 42405,
+      "missing": false
+    },
+    {
+      "minute": 170,
+      "timestamp_et": "2026-09-03T12:20:00-04:00",
+      "open": 772.75,
+      "high": 772.77001953125,
+      "low": 772.5631103515625,
+      "close": 772.6599731445312,
+      "volume": 49685,
+      "missing": false
+    },
+    {
+      "minute": 171,
+      "timestamp_et": "2026-09-03T12:21:00-04:00",
+      "open": 772.6699829101562,
+      "high": 772.7100219726562,
+      "low": 772.6500244140625,
+      "close": 772.6900024414062,
+      "volume": 37588,
+      "missing": false
+    },
+    {
+      "minute": 172,
+      "timestamp_et": "2026-09-03T12:22:00-04:00",
+      "open": 772.7000122070312,
+      "high": 772.8099975585938,
+      "low": 772.5499877929688,
+      "close": 772.5499877929688,
+      "volume": 49965,
+      "missing": false
+    },
+    {
+      "minute": 173,
+      "timestamp_et": "2026-09-03T12:23:00-04:00",
+      "open": 772.5499877929688,
+      "high": 772.6300048828125,
+      "low": 772.52001953125,
+      "close": 772.594970703125,
+      "volume": 50602,
+      "missing": false
+    },
+    {
+      "minute": 174,
+      "timestamp_et": "2026-09-03T12:24:00-04:00",
+      "open": 772.5999755859375,
+      "high": 772.6300048828125,
+      "low": 772.4849853515625,
+      "close": 772.510009765625,
+      "volume": 54162,
+      "missing": false
+    },
+    {
+      "minute": 175,
+      "timestamp_et": "2026-09-03T12:25:00-04:00",
+      "open": 772.510009765625,
+      "high": 772.510009765625,
+      "low": 772.2899780273438,
+      "close": 772.2949829101562,
+      "volume": 69319,
+      "missing": false
+    },
+    {
+      "minute": 176,
+      "timestamp_et": "2026-09-03T12:26:00-04:00",
+      "open": 772.2949829101562,
+      "high": 772.3900146484375,
+      "low": 772.2100219726562,
+      "close": 772.2449951171875,
+      "volume": 38014,
+      "missing": false
+    },
+    {
+      "minute": 177,
+      "timestamp_et": "2026-09-03T12:27:00-04:00",
+      "open": 772.2498779296875,
+      "high": 772.4600219726562,
+      "low": 772.22998046875,
+      "close": 772.4550170898438,
+      "volume": 43964,
+      "missing": false
+    },
+    {
+      "minute": 178,
+      "timestamp_et": "2026-09-03T12:28:00-04:00",
+      "open": 772.4600219726562,
+      "high": 772.47998046875,
+      "low": 772.37841796875,
+      "close": 772.4199829101562,
+      "volume": 36467,
+      "missing": false
+    },
+    {
+      "minute": 179,
+      "timestamp_et": "2026-09-03T12:29:00-04:00",
+      "open": 772.4299926757812,
+      "high": 772.469970703125,
+      "low": 772.3599853515625,
+      "close": 772.4349975585938,
+      "volume": 21818,
+      "missing": false
+    },
+    {
+      "minute": 180,
+      "timestamp_et": "2026-09-03T12:30:00-04:00",
+      "open": 772.4500122070312,
+      "high": 772.5,
+      "low": 772.3599853515625,
+      "close": 772.4450073242188,
+      "volume": 46116,
+      "missing": false
+    },
+    {
+      "minute": 181,
+      "timestamp_et": "2026-09-03T12:31:00-04:00",
+      "open": 772.489990234375,
+      "high": 772.530029296875,
+      "low": 772.3099975585938,
+      "close": 772.4000244140625,
+      "volume": 29297,
+      "missing": false
+    },
+    {
+      "minute": 182,
+      "timestamp_et": "2026-09-03T12:32:00-04:00",
+      "open": 772.4099731445312,
+      "high": 772.4099731445312,
+      "low": 772.2999877929688,
+      "close": 772.3150024414062,
+      "volume": 180652,
+      "missing": false
+    },
+    {
+      "minute": 183,
+      "timestamp_et": "2026-09-03T12:33:00-04:00",
+      "open": 772.3300170898438,
+      "high": 772.5900268554688,
+      "low": 772.3150024414062,
+      "close": 772.5900268554688,
+      "volume": 36930,
+      "missing": false
+    },
+    {
+      "minute": 184,
+      "timestamp_et": "2026-09-03T12:34:00-04:00",
+      "open": 772.594970703125,
+      "high": 772.6099853515625,
+      "low": 772.4000244140625,
+      "close": 772.4600219726562,
+      "volume": 31490,
+      "missing": false
+    },
+    {
+      "minute": 185,
+      "timestamp_et": "2026-09-03T12:35:00-04:00",
+      "open": 772.4600219726562,
+      "high": 772.47998046875,
+      "low": 772.3699951171875,
+      "close": 772.4099731445312,
+      "volume": 36518,
+      "missing": false
+    },
+    {
+      "minute": 186,
+      "timestamp_et": "2026-09-03T12:36:00-04:00",
+      "open": 772.4299926757812,
+      "high": 772.5549926757812,
+      "low": 772.4299926757812,
+      "close": 772.489990234375,
+      "volume": 27504,
+      "missing": false
+    },
+    {
+      "minute": 187,
+      "timestamp_et": "2026-09-03T12:37:00-04:00",
+      "open": 772.47998046875,
+      "high": 772.6300048828125,
+      "low": 772.3800048828125,
+      "close": 772.60498046875,
+      "volume": 57970,
+      "missing": false
+    },
+    {
+      "minute": 188,
+      "timestamp_et": "2026-09-03T12:38:00-04:00",
+      "open": 772.6199951171875,
+      "high": 772.9099731445312,
+      "low": 772.6199951171875,
+      "close": 772.9050903320312,
+      "volume": 64999,
+      "missing": false
+    },
+    {
+      "minute": 189,
+      "timestamp_et": "2026-09-03T12:39:00-04:00",
+      "open": 772.9099731445312,
+      "high": 773.0599975585938,
+      "low": 772.8900146484375,
+      "close": 772.9600219726562,
+      "volume": 51646,
+      "missing": false
+    },
+    {
+      "minute": 190,
+      "timestamp_et": "2026-09-03T12:40:00-04:00",
+      "open": 772.969970703125,
+      "high": 773.0050048828125,
+      "low": 772.9199829101562,
+      "close": 772.989990234375,
+      "volume": 40875,
+      "missing": false
+    },
+    {
+      "minute": 191,
+      "timestamp_et": "2026-09-03T12:41:00-04:00",
+      "open": 772.97998046875,
+      "high": 773.1799926757812,
+      "low": 772.97998046875,
+      "close": 773.1199951171875,
+      "volume": 47320,
+      "missing": false
+    },
+    {
+      "minute": 192,
+      "timestamp_et": "2026-09-03T12:42:00-04:00",
+      "open": 773.1099853515625,
+      "high": 773.1799926757812,
+      "low": 773.0499877929688,
+      "close": 773.0499877929688,
+      "volume": 44537,
+      "missing": false
+    },
+    {
+      "minute": 193,
+      "timestamp_et": "2026-09-03T12:43:00-04:00",
+      "open": 773.0599975585938,
+      "high": 773.1500244140625,
+      "low": 773.0349731445312,
+      "close": 773.1199951171875,
+      "volume": 25529,
+      "missing": false
+    },
+    {
+      "minute": 194,
+      "timestamp_et": "2026-09-03T12:44:00-04:00",
+      "open": 773.1199951171875,
+      "high": 773.2000122070312,
+      "low": 773.0999755859375,
+      "close": 773.1400146484375,
+      "volume": 36587,
+      "missing": false
+    },
+    {
+      "minute": 195,
+      "timestamp_et": "2026-09-03T12:45:00-04:00",
+      "open": 773.1300048828125,
+      "high": 773.1799926757812,
+      "low": 773.030029296875,
+      "close": 773.1500244140625,
+      "volume": 47995,
+      "missing": false
+    },
+    {
+      "minute": 196,
+      "timestamp_et": "2026-09-03T12:46:00-04:00",
+      "open": 773.135009765625,
+      "high": 773.1799926757812,
+      "low": 773.052490234375,
+      "close": 773.1500244140625,
+      "volume": 35708,
+      "missing": false
+    },
+    {
+      "minute": 197,
+      "timestamp_et": "2026-09-03T12:47:00-04:00",
+      "open": 773.1649780273438,
+      "high": 773.2100219726562,
+      "low": 773.0900268554688,
+      "close": 773.14501953125,
+      "volume": 50079,
+      "missing": false
+    },
+    {
+      "minute": 198,
+      "timestamp_et": "2026-09-03T12:48:00-04:00",
+      "open": 773.1300048828125,
+      "high": 773.1500244140625,
+      "low": 773.0150146484375,
+      "close": 773.0800170898438,
+      "volume": 43607,
+      "missing": false
+    },
+    {
+      "minute": 199,
+      "timestamp_et": "2026-09-03T12:49:00-04:00",
+      "open": 773.0750122070312,
+      "high": 773.22998046875,
+      "low": 773.030029296875,
+      "close": 773.0900268554688,
+      "volume": 38649,
+      "missing": false
+    },
+    {
+      "minute": 200,
+      "timestamp_et": "2026-09-03T12:50:00-04:00",
+      "open": 773.1099853515625,
+      "high": 773.1300048828125,
+      "low": 773.0045776367188,
+      "close": 773.0604858398438,
+      "volume": 45616,
+      "missing": false
+    },
+    {
+      "minute": 201,
+      "timestamp_et": "2026-09-03T12:51:00-04:00",
+      "open": 773.0789794921875,
+      "high": 773.1099853515625,
+      "low": 772.8599853515625,
+      "close": 772.89501953125,
+      "volume": 39020,
+      "missing": false
+    },
+    {
+      "minute": 202,
+      "timestamp_et": "2026-09-03T12:52:00-04:00",
+      "open": 772.8800048828125,
+      "high": 772.9099731445312,
+      "low": 772.7999877929688,
+      "close": 772.8259887695312,
+      "volume": 24301,
+      "missing": false
+    },
+    {
+      "minute": 203,
+      "timestamp_et": "2026-09-03T12:53:00-04:00",
+      "open": 772.8099975585938,
+      "high": 772.8400268554688,
+      "low": 772.739990234375,
+      "close": 772.7449951171875,
+      "volume": 29766,
+      "missing": false
+    },
+    {
+      "minute": 204,
+      "timestamp_et": "2026-09-03T12:54:00-04:00",
+      "open": 772.739990234375,
+      "high": 772.8699951171875,
+      "low": 772.72998046875,
+      "close": 772.8400268554688,
+      "volume": 36050,
+      "missing": false
+    },
+    {
+      "minute": 205,
+      "timestamp_et": "2026-09-03T12:55:00-04:00",
+      "open": 772.8300170898438,
+      "high": 772.8800048828125,
+      "low": 772.780029296875,
+      "close": 772.8400268554688,
+      "volume": 30622,
+      "missing": false
+    },
+    {
+      "minute": 206,
+      "timestamp_et": "2026-09-03T12:56:00-04:00",
+      "open": 772.8499755859375,
+      "high": 772.8800048828125,
+      "low": 772.739990234375,
+      "close": 772.760009765625,
+      "volume": 37576,
+      "missing": false
+    },
+    {
+      "minute": 207,
+      "timestamp_et": "2026-09-03T12:57:00-04:00",
+      "open": 772.780029296875,
+      "high": 773.010009765625,
+      "low": 772.7725219726562,
+      "close": 772.969970703125,
+      "volume": 34058,
+      "missing": false
+    },
+    {
+      "minute": 208,
+      "timestamp_et": "2026-09-03T12:58:00-04:00",
+      "open": 772.9749755859375,
+      "high": 773.010009765625,
+      "low": 772.8900146484375,
+      "close": 772.9099731445312,
+      "volume": 28450,
+      "missing": false
+    },
+    {
+      "minute": 209,
+      "timestamp_et": "2026-09-03T12:59:00-04:00",
+      "open": 772.9099731445312,
+      "high": 772.958984375,
+      "low": 772.8699951171875,
+      "close": 772.8800048828125,
+      "volume": 31449,
+      "missing": false
+    },
+    {
+      "minute": 210,
+      "timestamp_et": "2026-09-03T13:00:00-04:00",
+      "open": 772.9000244140625,
+      "high": 773.0,
+      "low": 772.72998046875,
+      "close": 772.75,
+      "volume": 34753,
+      "missing": false
+    },
+    {
+      "minute": 211,
+      "timestamp_et": "2026-09-03T13:01:00-04:00",
+      "open": 772.7449951171875,
+      "high": 772.8599853515625,
+      "low": 772.739990234375,
+      "close": 772.8499755859375,
+      "volume": 28616,
+      "missing": false
+    },
+    {
+      "minute": 212,
+      "timestamp_et": "2026-09-03T13:02:00-04:00",
+      "open": 772.85498046875,
+      "high": 772.8599853515625,
+      "low": 772.6599731445312,
+      "close": 772.6599731445312,
+      "volume": 21479,
+      "missing": false
+    },
+    {
+      "minute": 213,
+      "timestamp_et": "2026-09-03T13:03:00-04:00",
+      "open": 772.6699829101562,
+      "high": 772.760009765625,
+      "low": 772.6599731445312,
+      "close": 772.7294921875,
+      "volume": 27413,
+      "missing": false
+    },
+    {
+      "minute": 214,
+      "timestamp_et": "2026-09-03T13:04:00-04:00",
+      "open": 772.719970703125,
+      "high": 772.7899780273438,
+      "low": 772.7100219726562,
+      "close": 772.7899780273438,
+      "volume": 23897,
+      "missing": false
+    },
+    {
+      "minute": 215,
+      "timestamp_et": "2026-09-03T13:05:00-04:00",
+      "open": 772.7999877929688,
+      "high": 772.8900146484375,
+      "low": 772.77001953125,
+      "close": 772.8200073242188,
+      "volume": 22433,
+      "missing": false
+    },
+    {
+      "minute": 216,
+      "timestamp_et": "2026-09-03T13:06:00-04:00",
+      "open": 772.8200073242188,
+      "high": 772.8400268554688,
+      "low": 772.6400146484375,
+      "close": 772.6400146484375,
+      "volume": 39109,
+      "missing": false
+    },
+    {
+      "minute": 217,
+      "timestamp_et": "2026-09-03T13:07:00-04:00",
+      "open": 772.6300048828125,
+      "high": 772.6500244140625,
+      "low": 772.5800170898438,
+      "close": 772.5999755859375,
+      "volume": 39823,
+      "missing": false
+    },
+    {
+      "minute": 218,
+      "timestamp_et": "2026-09-03T13:08:00-04:00",
+      "open": 772.5999755859375,
+      "high": 772.6298828125,
+      "low": 772.489990234375,
+      "close": 772.489990234375,
+      "volume": 81072,
+      "missing": false
+    },
+    {
+      "minute": 219,
+      "timestamp_et": "2026-09-03T13:09:00-04:00",
+      "open": 772.489990234375,
+      "high": 772.5346069335938,
+      "low": 772.4199829101562,
+      "close": 772.4299926757812,
+      "volume": 33963,
+      "missing": false
+    },
+    {
+      "minute": 220,
+      "timestamp_et": "2026-09-03T13:10:00-04:00",
+      "open": 772.4199829101562,
+      "high": 772.510009765625,
+      "low": 772.3900146484375,
+      "close": 772.47998046875,
+      "volume": 28445,
+      "missing": false
+    },
+    {
+      "minute": 221,
+      "timestamp_et": "2026-09-03T13:11:00-04:00",
+      "open": 772.47998046875,
+      "high": 772.5,
+      "low": 772.39501953125,
+      "close": 772.4299926757812,
+      "volume": 17832,
+      "missing": false
+    },
+    {
+      "minute": 222,
+      "timestamp_et": "2026-09-03T13:12:00-04:00",
+      "open": 772.4400024414062,
+      "high": 772.469970703125,
+      "low": 772.3300170898438,
+      "close": 772.3800048828125,
+      "volume": 37442,
+      "missing": false
+    },
+    {
+      "minute": 223,
+      "timestamp_et": "2026-09-03T13:13:00-04:00",
+      "open": 772.3900146484375,
+      "high": 772.47998046875,
+      "low": 772.3599853515625,
+      "close": 772.4400024414062,
+      "volume": 58089,
+      "missing": false
+    },
+    {
+      "minute": 224,
+      "timestamp_et": "2026-09-03T13:14:00-04:00",
+      "open": 772.4600219726562,
+      "high": 772.489990234375,
+      "low": 772.3800048828125,
+      "close": 772.4349975585938,
+      "volume": 39044,
+      "missing": false
+    },
+    {
+      "minute": 225,
+      "timestamp_et": "2026-09-03T13:15:00-04:00",
+      "open": 772.4400024414062,
+      "high": 772.5599975585938,
+      "low": 772.4400024414062,
+      "close": 772.5399780273438,
+      "volume": 53465,
+      "missing": false
+    },
+    {
+      "minute": 226,
+      "timestamp_et": "2026-09-03T13:16:00-04:00",
+      "open": 772.52001953125,
+      "high": 772.5499877929688,
+      "low": 772.4000244140625,
+      "close": 772.4099731445312,
+      "volume": 27447,
+      "missing": false
+    },
+    {
+      "minute": 227,
+      "timestamp_et": "2026-09-03T13:17:00-04:00",
+      "open": 772.4398803710938,
+      "high": 772.5599975585938,
+      "low": 772.4249877929688,
+      "close": 772.510986328125,
+      "volume": 27574,
+      "missing": false
+    },
+    {
+      "minute": 228,
+      "timestamp_et": "2026-09-03T13:18:00-04:00",
+      "open": 772.510009765625,
+      "high": 772.5700073242188,
+      "low": 772.3900146484375,
+      "close": 772.4199829101562,
+      "volume": 22007,
+      "missing": false
+    },
+    {
+      "minute": 229,
+      "timestamp_et": "2026-09-03T13:19:00-04:00",
+      "open": 772.4299926757812,
+      "high": 772.5,
+      "low": 772.3300170898438,
+      "close": 772.3350219726562,
+      "volume": 21798,
+      "missing": false
+    },
+    {
+      "minute": 230,
+      "timestamp_et": "2026-09-03T13:20:00-04:00",
+      "open": 772.3300170898438,
+      "high": 772.3300170898438,
+      "low": 772.2000122070312,
+      "close": 772.2899780273438,
+      "volume": 30424,
+      "missing": false
+    },
+    {
+      "minute": 231,
+      "timestamp_et": "2026-09-03T13:21:00-04:00",
+      "open": 772.2999877929688,
+      "high": 772.3200073242188,
+      "low": 772.1500244140625,
+      "close": 772.219970703125,
+      "volume": 35889,
+      "missing": false
+    },
+    {
+      "minute": 232,
+      "timestamp_et": "2026-09-03T13:22:00-04:00",
+      "open": 772.2100219726562,
+      "high": 772.2299194335938,
+      "low": 772.1400146484375,
+      "close": 772.1900024414062,
+      "volume": 28844,
+      "missing": false
+    },
+    {
+      "minute": 233,
+      "timestamp_et": "2026-09-03T13:23:00-04:00",
+      "open": 772.1799926757812,
+      "high": 772.3200073242188,
+      "low": 772.1199951171875,
+      "close": 772.2899780273438,
+      "volume": 26278,
+      "missing": false
+    },
+    {
+      "minute": 234,
+      "timestamp_et": "2026-09-03T13:24:00-04:00",
+      "open": 772.2999877929688,
+      "high": 772.3200073242188,
+      "low": 772.239990234375,
+      "close": 772.2750244140625,
+      "volume": 28063,
+      "missing": false
+    },
+    {
+      "minute": 235,
+      "timestamp_et": "2026-09-03T13:25:00-04:00",
+      "open": 772.280029296875,
+      "high": 772.4099731445312,
+      "low": 772.260009765625,
+      "close": 772.4099731445312,
+      "volume": 25753,
+      "missing": false
+    },
+    {
+      "minute": 236,
+      "timestamp_et": "2026-09-03T13:26:00-04:00",
+      "open": 772.4000244140625,
+      "high": 772.489990234375,
+      "low": 772.385009765625,
+      "close": 772.4600219726562,
+      "volume": 39466,
+      "missing": false
+    },
+    {
+      "minute": 237,
+      "timestamp_et": "2026-09-03T13:27:00-04:00",
+      "open": 772.469970703125,
+      "high": 772.6099853515625,
+      "low": 772.4600219726562,
+      "close": 772.489990234375,
+      "volume": 34094,
+      "missing": false
+    },
+    {
+      "minute": 238,
+      "timestamp_et": "2026-09-03T13:28:00-04:00",
+      "open": 772.4500122070312,
+      "high": 772.6400146484375,
+      "low": 772.4500122070312,
+      "close": 772.5700073242188,
+      "volume": 30383,
+      "missing": false
+    },
+    {
+      "minute": 239,
+      "timestamp_et": "2026-09-03T13:29:00-04:00",
+      "open": 772.5700073242188,
+      "high": 772.6799926757812,
+      "low": 772.5,
+      "close": 772.668701171875,
+      "volume": 30206,
+      "missing": false
+    },
+    {
+      "minute": 240,
+      "timestamp_et": "2026-09-03T13:30:00-04:00",
+      "open": 772.6500244140625,
+      "high": 772.780029296875,
+      "low": 772.6475219726562,
+      "close": 772.77001953125,
+      "volume": 39791,
+      "missing": false
+    },
+    {
+      "minute": 241,
+      "timestamp_et": "2026-09-03T13:31:00-04:00",
+      "open": 772.77001953125,
+      "high": 772.8300170898438,
+      "low": 772.719970703125,
+      "close": 772.7999877929688,
+      "volume": 36180,
+      "missing": false
+    },
+    {
+      "minute": 242,
+      "timestamp_et": "2026-09-03T13:32:00-04:00",
+      "open": 772.8150024414062,
+      "high": 772.864990234375,
+      "low": 772.77001953125,
+      "close": 772.8250122070312,
+      "volume": 27263,
+      "missing": false
+    },
+    {
+      "minute": 243,
+      "timestamp_et": "2026-09-03T13:33:00-04:00",
+      "open": 772.8250122070312,
+      "high": 772.8800048828125,
+      "low": 772.780029296875,
+      "close": 772.8800048828125,
+      "volume": 33753,
+      "missing": false
+    },
+    {
+      "minute": 244,
+      "timestamp_et": "2026-09-03T13:34:00-04:00",
+      "open": 772.8599853515625,
+      "high": 772.9400024414062,
+      "low": 772.8300170898438,
+      "close": 772.8599853515625,
+      "volume": 27098,
+      "missing": false
+    },
+    {
+      "minute": 245,
+      "timestamp_et": "2026-09-03T13:35:00-04:00",
+      "open": 772.8400268554688,
+      "high": 772.969970703125,
+      "low": 772.8300170898438,
+      "close": 772.969970703125,
+      "volume": 27524,
+      "missing": false
+    },
+    {
+      "minute": 246,
+      "timestamp_et": "2026-09-03T13:36:00-04:00",
+      "open": 772.989990234375,
+      "high": 773.1400146484375,
+      "low": 772.969970703125,
+      "close": 773.0399780273438,
+      "volume": 40564,
+      "missing": false
+    },
+    {
+      "minute": 247,
+      "timestamp_et": "2026-09-03T13:37:00-04:00",
+      "open": 773.0399780273438,
+      "high": 773.0700073242188,
+      "low": 772.9000244140625,
+      "close": 772.9000244140625,
+      "volume": 42636,
+      "missing": false
+    },
+    {
+      "minute": 248,
+      "timestamp_et": "2026-09-03T13:38:00-04:00",
+      "open": 772.8900146484375,
+      "high": 773.0499877929688,
+      "low": 772.885009765625,
+      "close": 772.9749755859375,
+      "volume": 145743,
+      "missing": false
+    },
+    {
+      "minute": 249,
+      "timestamp_et": "2026-09-03T13:39:00-04:00",
+      "open": 772.9600219726562,
+      "high": 773.0399780273438,
+      "low": 772.8699951171875,
+      "close": 773.010009765625,
+      "volume": 50846,
+      "missing": false
+    },
+    {
+      "minute": 250,
+      "timestamp_et": "2026-09-03T13:40:00-04:00",
+      "open": 773.0399780273438,
+      "high": 773.1799926757812,
+      "low": 773.010009765625,
+      "close": 773.0900268554688,
+      "volume": 32374,
+      "missing": false
+    },
+    {
+      "minute": 251,
+      "timestamp_et": "2026-09-03T13:41:00-04:00",
+      "open": 773.1063232421875,
+      "high": 773.1799926757812,
+      "low": 773.0700073242188,
+      "close": 773.1300048828125,
+      "volume": 24842,
+      "missing": false
+    },
+    {
+      "minute": 252,
+      "timestamp_et": "2026-09-03T13:42:00-04:00",
+      "open": 773.1300048828125,
+      "high": 773.1900024414062,
+      "low": 773.0800170898438,
+      "close": 773.1300048828125,
+      "volume": 31326,
+      "missing": false
+    },
+    {
+      "minute": 253,
+      "timestamp_et": "2026-09-03T13:43:00-04:00",
+      "open": 773.1300048828125,
+      "high": 773.1500244140625,
+      "low": 773.02001953125,
+      "close": 773.0700073242188,
+      "volume": 30569,
+      "missing": false
+    },
+    {
+      "minute": 254,
+      "timestamp_et": "2026-09-03T13:44:00-04:00",
+      "open": 773.0700073242188,
+      "high": 773.0900268554688,
+      "low": 773.010009765625,
+      "close": 773.0599975585938,
+      "volume": 39906,
+      "missing": false
+    },
+    {
+      "minute": 255,
+      "timestamp_et": "2026-09-03T13:45:00-04:00",
+      "open": 773.0599975585938,
+      "high": 773.1900024414062,
+      "low": 773.0499877929688,
+      "close": 773.1300048828125,
+      "volume": 51987,
+      "missing": false
+    },
+    {
+      "minute": 256,
+      "timestamp_et": "2026-09-03T13:46:00-04:00",
+      "open": 773.1300048828125,
+      "high": 773.1400146484375,
+      "low": 772.9801025390625,
+      "close": 773.0700073242188,
+      "volume": 29089,
+      "missing": false
+    },
+    {
+      "minute": 257,
+      "timestamp_et": "2026-09-03T13:47:00-04:00",
+      "open": 773.0650024414062,
+      "high": 773.0650024414062,
+      "low": 772.9503173828125,
+      "close": 773.030029296875,
+      "volume": 36785,
+      "missing": false
+    },
+    {
+      "minute": 258,
+      "timestamp_et": "2026-09-03T13:48:00-04:00",
+      "open": 773.030029296875,
+      "high": 773.030029296875,
+      "low": 772.9199829101562,
+      "close": 772.9500122070312,
+      "volume": 34692,
+      "missing": false
+    },
+    {
+      "minute": 259,
+      "timestamp_et": "2026-09-03T13:49:00-04:00",
+      "open": 772.9500122070312,
+      "high": 772.97998046875,
+      "low": 772.9199829101562,
+      "close": 772.97998046875,
+      "volume": 18596,
+      "missing": false
+    },
+    {
+      "minute": 260,
+      "timestamp_et": "2026-09-03T13:50:00-04:00",
+      "open": 773.02001953125,
+      "high": 773.0494995117188,
+      "low": 773.0,
+      "close": 773.0494995117188,
+      "volume": 54332,
+      "missing": false
+    },
+    {
+      "minute": 261,
+      "timestamp_et": "2026-09-03T13:51:00-04:00",
+      "open": 773.0399780273438,
+      "high": 773.280029296875,
+      "low": 773.0200805664062,
+      "close": 773.260009765625,
+      "volume": 39812,
+      "missing": false
+    },
+    {
+      "minute": 262,
+      "timestamp_et": "2026-09-03T13:52:00-04:00",
+      "open": 773.27001953125,
+      "high": 773.4500122070312,
+      "low": 773.260009765625,
+      "close": 773.4299926757812,
+      "volume": 131751,
+      "missing": false
+    },
+    {
+      "minute": 263,
+      "timestamp_et": "2026-09-03T13:53:00-04:00",
+      "open": 773.4299926757812,
+      "high": 773.4550170898438,
+      "low": 773.4000244140625,
+      "close": 773.4400024414062,
+      "volume": 4790,
+      "missing": false
+    },
+    {
+      "minute": 264,
+      "timestamp_et": "2026-09-03T13:54:00-04:00",
+      "open": null,
+      "high": null,
+      "low": null,
+      "close": null,
+      "volume": null,
+      "missing": true
+    },
+    {
+      "minute": 265,
+      "timestamp_et": "2026-09-03T13:55:00-04:00",
+      "open": 773.403076171875,
+      "high": 773.4600219726562,
+      "low": 773.3699951171875,
+      "close": 773.4500122070312,
+      "volume": 130027,
+      "missing": false
+    },
+    {
+      "minute": 266,
+      "timestamp_et": "2026-09-03T13:56:00-04:00",
+      "open": 773.4299926757812,
+      "high": 773.47998046875,
+      "low": 773.3900146484375,
+      "close": 773.469970703125,
+      "volume": 25292,
+      "missing": false
+    },
+    {
+      "minute": 267,
+      "timestamp_et": "2026-09-03T13:57:00-04:00",
+      "open": 773.3900146484375,
+      "high": 773.3900146484375,
+      "low": 773.2999877929688,
+      "close": 773.2999877929688,
+      "volume": 41683,
+      "missing": false
+    },
+    {
+      "minute": 268,
+      "timestamp_et": "2026-09-03T13:58:00-04:00",
+      "open": 773.260009765625,
+      "high": 773.3400268554688,
+      "low": 773.25,
+      "close": 773.260009765625,
+      "volume": 16135,
+      "missing": false
+    },
+    {
+      "minute": 269,
+      "timestamp_et": "2026-09-03T13:59:00-04:00",
+      "open": 773.25,
+      "high": 773.2899780273438,
+      "low": 773.219970703125,
+      "close": 773.2750244140625,
+      "volume": 26137,
+      "missing": false
+    },
+    {
+      "minute": 270,
+      "timestamp_et": "2026-09-03T14:00:00-04:00",
+      "open": 773.260009765625,
+      "high": 773.7769165039062,
+      "low": 773.260009765625,
+      "close": 773.719970703125,
+      "volume": 128362,
+      "missing": false
+    },
+    {
+      "minute": 271,
+      "timestamp_et": "2026-09-03T14:01:00-04:00",
+      "open": 773.739990234375,
+      "high": 773.9400024414062,
+      "low": 773.7100219726562,
+      "close": 773.7949829101562,
+      "volume": 73321,
+      "missing": false
+    },
+    {
+      "minute": 272,
+      "timestamp_et": "2026-09-03T14:02:00-04:00",
+      "open": 773.780029296875,
+      "high": 773.9199829101562,
+      "low": 773.6500854492188,
+      "close": 773.6799926757812,
+      "volume": 95363,
+      "missing": false
+    },
+    {
+      "minute": 273,
+      "timestamp_et": "2026-09-03T14:03:00-04:00",
+      "open": 773.6699829101562,
+      "high": 773.8400268554688,
+      "low": 773.6599731445312,
+      "close": 773.77001953125,
+      "volume": 43741,
+      "missing": false
+    },
+    {
+      "minute": 274,
+      "timestamp_et": "2026-09-03T14:04:00-04:00",
+      "open": 773.77001953125,
+      "high": 773.780029296875,
+      "low": 773.6799926757812,
+      "close": 773.77001953125,
+      "volume": 31969,
+      "missing": false
+    },
+    {
+      "minute": 275,
+      "timestamp_et": "2026-09-03T14:05:00-04:00",
+      "open": 773.760009765625,
+      "high": 773.8599853515625,
+      "low": 773.75,
+      "close": 773.7750244140625,
+      "volume": 79113,
+      "missing": false
+    },
+    {
+      "minute": 276,
+      "timestamp_et": "2026-09-03T14:06:00-04:00",
+      "open": 773.7899780273438,
+      "high": 773.9099731445312,
+      "low": 773.77001953125,
+      "close": 773.77001953125,
+      "volume": 56809,
+      "missing": false
+    },
+    {
+      "minute": 277,
+      "timestamp_et": "2026-09-03T14:07:00-04:00",
+      "open": 773.7760009765625,
+      "high": 773.8599853515625,
+      "low": 773.6699829101562,
+      "close": 773.719970703125,
+      "volume": 56291,
+      "missing": false
+    },
+    {
+      "minute": 278,
+      "timestamp_et": "2026-09-03T14:08:00-04:00",
+      "open": 773.7200927734375,
+      "high": 773.780029296875,
+      "low": 773.6599731445312,
+      "close": 773.7111206054688,
+      "volume": 65679,
+      "missing": false
+    },
+    {
+      "minute": 279,
+      "timestamp_et": "2026-09-03T14:09:00-04:00",
+      "open": 773.72998046875,
+      "high": 773.8499755859375,
+      "low": 773.6799926757812,
+      "close": 773.7949829101562,
+      "volume": 128409,
+      "missing": false
+    },
+    {
+      "minute": 280,
+      "timestamp_et": "2026-09-03T14:10:00-04:00",
+      "open": 773.7949829101562,
+      "high": 773.8699951171875,
+      "low": 773.760009765625,
+      "close": 773.8109741210938,
+      "volume": 41636,
+      "missing": false
+    },
+    {
+      "minute": 281,
+      "timestamp_et": "2026-09-03T14:11:00-04:00",
+      "open": 773.8099975585938,
+      "high": 773.9099731445312,
+      "low": 773.72998046875,
+      "close": 773.8099975585938,
+      "volume": 40358,
+      "missing": false
+    },
+    {
+      "minute": 282,
+      "timestamp_et": "2026-09-03T14:12:00-04:00",
+      "open": 773.8049926757812,
+      "high": 773.8400268554688,
+      "low": 773.739990234375,
+      "close": 773.739990234375,
+      "volume": 29049,
+      "missing": false
+    },
+    {
+      "minute": 283,
+      "timestamp_et": "2026-09-03T14:13:00-04:00",
+      "open": 773.75,
+      "high": 773.9000244140625,
+      "low": 773.719970703125,
+      "close": 773.8800048828125,
+      "volume": 38311,
+      "missing": false
+    },
+    {
+      "minute": 284,
+      "timestamp_et": "2026-09-03T14:14:00-04:00",
+      "open": 773.8699951171875,
+      "high": 773.9199829101562,
+      "low": 773.7999877929688,
+      "close": 773.8150024414062,
+      "volume": 37864,
+      "missing": false
+    },
+    {
+      "minute": 285,
+      "timestamp_et": "2026-09-03T14:15:00-04:00",
+      "open": 773.8300170898438,
+      "high": 774.02001953125,
+      "low": 773.8200073242188,
+      "close": 774.02001953125,
+      "volume": 53209,
+      "missing": false
+    },
+    {
+      "minute": 286,
+      "timestamp_et": "2026-09-03T14:16:00-04:00",
+      "open": 774.030029296875,
+      "high": 774.030029296875,
+      "low": 773.9000244140625,
+      "close": 773.9299926757812,
+      "volume": 44264,
+      "missing": false
+    },
+    {
+      "minute": 287,
+      "timestamp_et": "2026-09-03T14:17:00-04:00",
+      "open": 773.9202270507812,
+      "high": 774.0,
+      "low": 773.9099731445312,
+      "close": 773.9550170898438,
+      "volume": 40992,
+      "missing": false
+    },
+    {
+      "minute": 288,
+      "timestamp_et": "2026-09-03T14:18:00-04:00",
+      "open": 773.9550170898438,
+      "high": 773.9600219726562,
+      "low": 773.7999877929688,
+      "close": 773.7999877929688,
+      "volume": 177958,
+      "missing": false
+    },
+    {
+      "minute": 289,
+      "timestamp_et": "2026-09-03T14:19:00-04:00",
+      "open": 773.8099975585938,
+      "high": 773.8099975585938,
+      "low": 773.6594848632812,
+      "close": 773.719970703125,
+      "volume": 74289,
+      "missing": false
+    },
+    {
+      "minute": 290,
+      "timestamp_et": "2026-09-03T14:20:00-04:00",
+      "open": 773.72998046875,
+      "high": 773.8200073242188,
+      "low": 773.7000122070312,
+      "close": 773.75,
+      "volume": 36372,
+      "missing": false
+    },
+    {
+      "minute": 291,
+      "timestamp_et": "2026-09-03T14:21:00-04:00",
+      "open": 773.739990234375,
+      "high": 773.7899780273438,
+      "low": 773.7100219726562,
+      "close": 773.72998046875,
+      "volume": 40569,
+      "missing": false
+    },
+    {
+      "minute": 292,
+      "timestamp_et": "2026-09-03T14:22:00-04:00",
+      "open": 773.72998046875,
+      "high": 773.7501220703125,
+      "low": 773.6799926757812,
+      "close": 773.7050170898438,
+      "volume": 33888,
+      "missing": false
+    },
+    {
+      "minute": 293,
+      "timestamp_et": "2026-09-03T14:23:00-04:00",
+      "open": 773.7000122070312,
+      "high": 773.72998046875,
+      "low": 773.5701293945312,
+      "close": 773.5800170898438,
+      "volume": 53524,
+      "missing": false
+    },
+    {
+      "minute": 294,
+      "timestamp_et": "2026-09-03T14:24:00-04:00",
+      "open": 773.5800170898438,
+      "high": 773.75,
+      "low": 773.5599975585938,
+      "close": 773.75,
+      "volume": 44512,
+      "missing": false
+    },
+    {
+      "minute": 295,
+      "timestamp_et": "2026-09-03T14:25:00-04:00",
+      "open": 773.75,
+      "high": 773.780029296875,
+      "low": 773.6900024414062,
+      "close": 773.7650146484375,
+      "volume": 27930,
+      "missing": false
+    },
+    {
+      "minute": 296,
+      "timestamp_et": "2026-09-03T14:26:00-04:00",
+      "open": 773.760009765625,
+      "high": 773.8599853515625,
+      "low": 773.7249755859375,
+      "close": 773.7249755859375,
+      "volume": 32752,
+      "missing": false
+    },
+    {
+      "minute": 297,
+      "timestamp_et": "2026-09-03T14:27:00-04:00",
+      "open": 773.7249755859375,
+      "high": 773.72998046875,
+      "low": 773.6400146484375,
+      "close": 773.6900024414062,
+      "volume": 42442,
+      "missing": false
+    },
+    {
+      "minute": 298,
+      "timestamp_et": "2026-09-03T14:28:00-04:00",
+      "open": 773.7000122070312,
+      "high": 773.7899780273438,
+      "low": 773.6799926757812,
+      "close": 773.780029296875,
+      "volume": 29556,
+      "missing": false
+    },
+    {
+      "minute": 299,
+      "timestamp_et": "2026-09-03T14:29:00-04:00",
+      "open": 773.780029296875,
+      "high": 773.8099975585938,
+      "low": 773.7000122070312,
+      "close": 773.72998046875,
+      "volume": 30498,
+      "missing": false
+    },
+    {
+      "minute": 300,
+      "timestamp_et": "2026-09-03T14:30:00-04:00",
+      "open": 773.7589721679688,
+      "high": 773.780029296875,
+      "low": 773.623779296875,
+      "close": 773.72998046875,
+      "volume": 30714,
+      "missing": false
+    },
+    {
+      "minute": 301,
+      "timestamp_et": "2026-09-03T14:31:00-04:00",
+      "open": 773.72998046875,
+      "high": 773.72998046875,
+      "low": 773.5499877929688,
+      "close": 773.6300048828125,
+      "volume": 43084,
+      "missing": false
+    },
+    {
+      "minute": 302,
+      "timestamp_et": "2026-09-03T14:32:00-04:00",
+      "open": 773.6300048828125,
+      "high": 773.739990234375,
+      "low": 773.614990234375,
+      "close": 773.6749877929688,
+      "volume": 47032,
+      "missing": false
+    },
+    {
+      "minute": 303,
+      "timestamp_et": "2026-09-03T14:33:00-04:00",
+      "open": 773.6799926757812,
+      "high": 773.8400268554688,
+      "low": 773.6699829101562,
+      "close": 773.8400268554688,
+      "volume": 41277,
+      "missing": false
+    },
+    {
+      "minute": 304,
+      "timestamp_et": "2026-09-03T14:34:00-04:00",
+      "open": 773.8400268554688,
+      "high": 773.8800048828125,
+      "low": 773.7899780273438,
+      "close": 773.8599853515625,
+      "volume": 38328,
+      "missing": false
+    },
+    {
+      "minute": 305,
+      "timestamp_et": "2026-09-03T14:35:00-04:00",
+      "open": 773.8599243164062,
+      "high": 773.9000244140625,
+      "low": 773.760009765625,
+      "close": 773.8201293945312,
+      "volume": 46464,
+      "missing": false
+    },
+    {
+      "minute": 306,
+      "timestamp_et": "2026-09-03T14:36:00-04:00",
+      "open": 773.8300170898438,
+      "high": 773.844970703125,
+      "low": 773.77001953125,
+      "close": 773.8400268554688,
+      "volume": 42846,
+      "missing": false
+    },
+    {
+      "minute": 307,
+      "timestamp_et": "2026-09-03T14:37:00-04:00",
+      "open": 773.8400268554688,
+      "high": 773.8800048828125,
+      "low": 773.7899780273438,
+      "close": 773.8200073242188,
+      "volume": 71460,
+      "missing": false
+    },
+    {
+      "minute": 308,
+      "timestamp_et": "2026-09-03T14:38:00-04:00",
+      "open": 773.8200073242188,
+      "high": 773.8699951171875,
+      "low": 773.780029296875,
+      "close": 773.8099975585938,
+      "volume": 45455,
+      "missing": false
+    },
+    {
+      "minute": 309,
+      "timestamp_et": "2026-09-03T14:39:00-04:00",
+      "open": 773.780029296875,
+      "high": 773.8800048828125,
+      "low": 773.780029296875,
+      "close": 773.8200073242188,
+      "volume": 35598,
+      "missing": false
+    },
+    {
+      "minute": 310,
+      "timestamp_et": "2026-09-03T14:40:00-04:00",
+      "open": 773.8200073242188,
+      "high": 773.8200073242188,
+      "low": 773.6699829101562,
+      "close": 773.719970703125,
+      "volume": 35538,
+      "missing": false
+    },
+    {
+      "minute": 311,
+      "timestamp_et": "2026-09-03T14:41:00-04:00",
+      "open": 773.719970703125,
+      "high": 773.760009765625,
+      "low": 773.6630249023438,
+      "close": 773.6630249023438,
+      "volume": 37256,
+      "missing": false
+    },
+    {
+      "minute": 312,
+      "timestamp_et": "2026-09-03T14:42:00-04:00",
+      "open": 773.6799926757812,
+      "high": 773.6900024414062,
+      "low": 773.5599975585938,
+      "close": 773.5800170898438,
+      "volume": 48664,
+      "missing": false
+    },
+    {
+      "minute": 313,
+      "timestamp_et": "2026-09-03T14:43:00-04:00",
+      "open": 773.5800170898438,
+      "high": 773.5900268554688,
+      "low": 773.5097045898438,
+      "close": 773.5599975585938,
+      "volume": 61861,
+      "missing": false
+    },
+    {
+      "minute": 314,
+      "timestamp_et": "2026-09-03T14:44:00-04:00",
+      "open": 773.5750122070312,
+      "high": 773.6300048828125,
+      "low": 773.5599975585938,
+      "close": 773.5999755859375,
+      "volume": 33877,
+      "missing": false
+    },
+    {
+      "minute": 315,
+      "timestamp_et": "2026-09-03T14:45:00-04:00",
+      "open": 773.5999145507812,
+      "high": 773.6799926757812,
+      "low": 773.5900268554688,
+      "close": 773.6599731445312,
+      "volume": 38710,
+      "missing": false
+    },
+    {
+      "minute": 316,
+      "timestamp_et": "2026-09-03T14:46:00-04:00",
+      "open": 773.6400146484375,
+      "high": 773.72998046875,
+      "low": 773.6400146484375,
+      "close": 773.6699829101562,
+      "volume": 35903,
+      "missing": false
+    },
+    {
+      "minute": 317,
+      "timestamp_et": "2026-09-03T14:47:00-04:00",
+      "open": 773.6599731445312,
+      "high": 773.739990234375,
+      "low": 773.6199951171875,
+      "close": 773.739990234375,
+      "volume": 55409,
+      "missing": false
+    },
+    {
+      "minute": 318,
+      "timestamp_et": "2026-09-03T14:48:00-04:00",
+      "open": 773.739013671875,
+      "high": 773.7999877929688,
+      "low": 773.6900024414062,
+      "close": 773.6900024414062,
+      "volume": 50420,
+      "missing": false
+    },
+    {
+      "minute": 319,
+      "timestamp_et": "2026-09-03T14:49:00-04:00",
+      "open": 773.6992797851562,
+      "high": 773.7650146484375,
+      "low": 773.6199951171875,
+      "close": 773.7550048828125,
+      "volume": 45295,
+      "missing": false
+    },
+    {
+      "minute": 320,
+      "timestamp_et": "2026-09-03T14:50:00-04:00",
+      "open": 773.77001953125,
+      "high": 773.8499755859375,
+      "low": 773.6699829101562,
+      "close": 773.6699829101562,
+      "volume": 86406,
+      "missing": false
+    },
+    {
+      "minute": 321,
+      "timestamp_et": "2026-09-03T14:51:00-04:00",
+      "open": 773.6787109375,
+      "high": 773.719970703125,
+      "low": 773.5900268554688,
+      "close": 773.594970703125,
+      "volume": 72824,
+      "missing": false
+    },
+    {
+      "minute": 322,
+      "timestamp_et": "2026-09-03T14:52:00-04:00",
+      "open": 773.6099853515625,
+      "high": 773.6199951171875,
+      "low": 773.5499877929688,
+      "close": 773.5700073242188,
+      "volume": 38088,
+      "missing": false
+    },
+    {
+      "minute": 323,
+      "timestamp_et": "2026-09-03T14:53:00-04:00",
+      "open": 773.5650024414062,
+      "high": 773.6500244140625,
+      "low": 773.5650024414062,
+      "close": 773.6400146484375,
+      "volume": 37235,
+      "missing": false
+    },
+    {
+      "minute": 324,
+      "timestamp_et": "2026-09-03T14:54:00-04:00",
+      "open": 773.64501953125,
+      "high": 773.6500244140625,
+      "low": 773.560302734375,
+      "close": 773.6199951171875,
+      "volume": 40431,
+      "missing": false
+    },
+    {
+      "minute": 325,
+      "timestamp_et": "2026-09-03T14:55:00-04:00",
+      "open": 773.6199951171875,
+      "high": 773.6199951171875,
+      "low": 773.4600219726562,
+      "close": 773.489990234375,
+      "volume": 58050,
+      "missing": false
+    },
+    {
+      "minute": 326,
+      "timestamp_et": "2026-09-03T14:56:00-04:00",
+      "open": 773.4949951171875,
+      "high": 773.52001953125,
+      "low": 773.4580078125,
+      "close": 773.5,
+      "volume": 43775,
+      "missing": false
+    },
+    {
+      "minute": 327,
+      "timestamp_et": "2026-09-03T14:57:00-04:00",
+      "open": 773.489990234375,
+      "high": 773.5,
+      "low": 773.4000244140625,
+      "close": 773.4550170898438,
+      "volume": 56951,
+      "missing": false
+    },
+    {
+      "minute": 328,
+      "timestamp_et": "2026-09-03T14:58:00-04:00",
+      "open": 773.4550170898438,
+      "high": 773.5700073242188,
+      "low": 773.4299926757812,
+      "close": 773.5549926757812,
+      "volume": 125184,
+      "missing": false
+    },
+    {
+      "minute": 329,
+      "timestamp_et": "2026-09-03T14:59:00-04:00",
+      "open": 773.5549926757812,
+      "high": 773.6699829101562,
+      "low": 773.5549926757812,
+      "close": 773.6699829101562,
+      "volume": 48074,
+      "missing": false
+    },
+    {
+      "minute": 330,
+      "timestamp_et": "2026-09-03T15:00:00-04:00",
+      "open": 773.6649780273438,
+      "high": 773.7050170898438,
+      "low": 773.4400024414062,
+      "close": 773.47998046875,
+      "volume": 221824,
+      "missing": false
+    },
+    {
+      "minute": 331,
+      "timestamp_et": "2026-09-03T15:01:00-04:00",
+      "open": 773.4749755859375,
+      "high": 773.5999755859375,
+      "low": 773.4500122070312,
+      "close": 773.581298828125,
+      "volume": 99014,
+      "missing": false
+    },
+    {
+      "minute": 332,
+      "timestamp_et": "2026-09-03T15:02:00-04:00",
+      "open": 773.5850219726562,
+      "high": 773.5999755859375,
+      "low": 773.4799194335938,
+      "close": 773.510009765625,
+      "volume": 36593,
+      "missing": false
+    },
+    {
+      "minute": 333,
+      "timestamp_et": "2026-09-03T15:03:00-04:00",
+      "open": 773.510009765625,
+      "high": 773.5700073242188,
+      "low": 773.5,
+      "close": 773.530029296875,
+      "volume": 166305,
+      "missing": false
+    },
+    {
+      "minute": 334,
+      "timestamp_et": "2026-09-03T15:04:00-04:00",
+      "open": 773.5280151367188,
+      "high": 773.5900268554688,
+      "low": 773.5,
+      "close": 773.5599975585938,
+      "volume": 45505,
+      "missing": false
+    },
+    {
+      "minute": 335,
+      "timestamp_et": "2026-09-03T15:05:00-04:00",
+      "open": 773.5900268554688,
+      "high": 773.6699829101562,
+      "low": 773.530029296875,
+      "close": 773.6099853515625,
+      "volume": 98074,
+      "missing": false
+    },
+    {
+      "minute": 336,
+      "timestamp_et": "2026-09-03T15:06:00-04:00",
+      "open": 773.6099853515625,
+      "high": 773.6589965820312,
+      "low": 773.5700073242188,
+      "close": 773.6325073242188,
+      "volume": 158448,
+      "missing": false
+    },
+    {
+      "minute": 337,
+      "timestamp_et": "2026-09-03T15:07:00-04:00",
+      "open": 773.6400146484375,
+      "high": 773.6900024414062,
+      "low": 773.5800170898438,
+      "close": 773.5999755859375,
+      "volume": 46038,
+      "missing": false
+    },
+    {
+      "minute": 338,
+      "timestamp_et": "2026-09-03T15:08:00-04:00",
+      "open": 773.5800170898438,
+      "high": 773.5900268554688,
+      "low": 773.47900390625,
+      "close": 773.5599975585938,
+      "volume": 39436,
+      "missing": false
+    },
+    {
+      "minute": 339,
+      "timestamp_et": "2026-09-03T15:09:00-04:00",
+      "open": 773.5599975585938,
+      "high": 773.5800170898438,
+      "low": 773.510009765625,
+      "close": 773.5599975585938,
+      "volume": 41701,
+      "missing": false
+    },
+    {
+      "minute": 340,
+      "timestamp_et": "2026-09-03T15:10:00-04:00",
+      "open": 773.5800170898438,
+      "high": 773.6300048828125,
+      "low": 773.5800170898438,
+      "close": 773.6099243164062,
+      "volume": 41293,
+      "missing": false
+    },
+    {
+      "minute": 341,
+      "timestamp_et": "2026-09-03T15:11:00-04:00",
+      "open": 773.6099853515625,
+      "high": 773.6099853515625,
+      "low": 773.4600219726562,
+      "close": 773.510009765625,
+      "volume": 55945,
+      "missing": false
+    },
+    {
+      "minute": 342,
+      "timestamp_et": "2026-09-03T15:12:00-04:00",
+      "open": 773.510009765625,
+      "high": 773.5750122070312,
+      "low": 773.47998046875,
+      "close": 773.5399780273438,
+      "volume": 43352,
+      "missing": false
+    },
+    {
+      "minute": 343,
+      "timestamp_et": "2026-09-03T15:13:00-04:00",
+      "open": 773.5399780273438,
+      "high": 773.5599975585938,
+      "low": 773.4400024414062,
+      "close": 773.4500122070312,
+      "volume": 52408,
+      "missing": false
+    },
+    {
+      "minute": 344,
+      "timestamp_et": "2026-09-03T15:14:00-04:00",
+      "open": 773.4400024414062,
+      "high": 773.4500122070312,
+      "low": 773.3104248046875,
+      "close": 773.3800048828125,
+      "volume": 53637,
+      "missing": false
+    },
+    {
+      "minute": 345,
+      "timestamp_et": "2026-09-03T15:15:00-04:00",
+      "open": 773.375,
+      "high": 773.4349975585938,
+      "low": 773.2999877929688,
+      "close": 773.4000244140625,
+      "volume": 76974,
+      "missing": false
+    },
+    {
+      "minute": 346,
+      "timestamp_et": "2026-09-03T15:16:00-04:00",
+      "open": 773.4000244140625,
+      "high": 773.469970703125,
+      "low": 773.3300170898438,
+      "close": 773.4000244140625,
+      "volume": 54951,
+      "missing": false
+    },
+    {
+      "minute": 347,
+      "timestamp_et": "2026-09-03T15:17:00-04:00",
+      "open": 773.4000244140625,
+      "high": 773.469970703125,
+      "low": 773.3400268554688,
+      "close": 773.4199829101562,
+      "volume": 44840,
+      "missing": false
+    },
+    {
+      "minute": 348,
+      "timestamp_et": "2026-09-03T15:18:00-04:00",
+      "open": 773.4149780273438,
+      "high": 773.47998046875,
+      "low": 773.3400268554688,
+      "close": 773.47998046875,
+      "volume": 90177,
+      "missing": false
+    },
+    {
+      "minute": 349,
+      "timestamp_et": "2026-09-03T15:19:00-04:00",
+      "open": 773.469970703125,
+      "high": 773.5999755859375,
+      "low": 773.4349975585938,
+      "close": 773.5999755859375,
+      "volume": 67186,
+      "missing": false
+    },
+    {
+      "minute": 350,
+      "timestamp_et": "2026-09-03T15:20:00-04:00",
+      "open": 773.5999755859375,
+      "high": 773.5999755859375,
+      "low": 773.3400268554688,
+      "close": 773.4299926757812,
+      "volume": 63566,
+      "missing": false
+    },
+    {
+      "minute": 351,
+      "timestamp_et": "2026-09-03T15:21:00-04:00",
+      "open": 773.4299926757812,
+      "high": 773.530029296875,
+      "low": 773.3699951171875,
+      "close": 773.4304809570312,
+      "volume": 146174,
+      "missing": false
+    },
+    {
+      "minute": 352,
+      "timestamp_et": "2026-09-03T15:22:00-04:00",
+      "open": 773.4299926757812,
+      "high": 773.4500122070312,
+      "low": 773.3599853515625,
+      "close": 773.3599853515625,
+      "volume": 62319,
+      "missing": false
+    },
+    {
+      "minute": 353,
+      "timestamp_et": "2026-09-03T15:23:00-04:00",
+      "open": 773.3599853515625,
+      "high": 773.4500122070312,
+      "low": 773.2949829101562,
+      "close": 773.3200073242188,
+      "volume": 374193,
+      "missing": false
+    },
+    {
+      "minute": 354,
+      "timestamp_et": "2026-09-03T15:24:00-04:00",
+      "open": 773.3270263671875,
+      "high": 773.3300170898438,
+      "low": 773.1300048828125,
+      "close": 773.1799926757812,
+      "volume": 147273,
+      "missing": false
+    },
+    {
+      "minute": 355,
+      "timestamp_et": "2026-09-03T15:25:00-04:00",
+      "open": 773.1849975585938,
+      "high": 773.239990234375,
+      "low": 773.1400146484375,
+      "close": 773.2100219726562,
+      "volume": 110296,
+      "missing": false
+    },
+    {
+      "minute": 356,
+      "timestamp_et": "2026-09-03T15:26:00-04:00",
+      "open": 773.2150268554688,
+      "high": 773.3400268554688,
+      "low": 773.1500244140625,
+      "close": 773.3300170898438,
+      "volume": 52836,
+      "missing": false
+    },
+    {
+      "minute": 357,
+      "timestamp_et": "2026-09-03T15:27:00-04:00",
+      "open": 773.3400268554688,
+      "high": 773.3699951171875,
+      "low": 773.260009765625,
+      "close": 773.3001098632812,
+      "volume": 89167,
+      "missing": false
+    },
+    {
+      "minute": 358,
+      "timestamp_et": "2026-09-03T15:28:00-04:00",
+      "open": 773.2999877929688,
+      "high": 773.3900146484375,
+      "low": 773.25,
+      "close": 773.3800048828125,
+      "volume": 132279,
+      "missing": false
+    },
+    {
+      "minute": 359,
+      "timestamp_et": "2026-09-03T15:29:00-04:00",
+      "open": 773.3800048828125,
+      "high": 773.4199829101562,
+      "low": 773.3400268554688,
+      "close": 773.4099731445312,
+      "volume": 62181,
+      "missing": false
+    },
+    {
+      "minute": 360,
+      "timestamp_et": "2026-09-03T15:30:00-04:00",
+      "open": 773.4149780273438,
+      "high": 773.52001953125,
+      "low": 773.3800048828125,
+      "close": 773.4000244140625,
+      "volume": 119074,
+      "missing": false
+    },
+    {
+      "minute": 361,
+      "timestamp_et": "2026-09-03T15:31:00-04:00",
+      "open": 773.39501953125,
+      "high": 773.5349731445312,
+      "low": 773.39501953125,
+      "close": 773.5,
+      "volume": 102587,
+      "missing": false
+    },
+    {
+      "minute": 362,
+      "timestamp_et": "2026-09-03T15:32:00-04:00",
+      "open": 773.4849853515625,
+      "high": 773.510009765625,
+      "low": 773.4249877929688,
+      "close": 773.47998046875,
+      "volume": 186166,
+      "missing": false
+    },
+    {
+      "minute": 363,
+      "timestamp_et": "2026-09-03T15:33:00-04:00",
+      "open": 773.47998046875,
+      "high": 773.5,
+      "low": 773.3400268554688,
+      "close": 773.375,
+      "volume": 269246,
+      "missing": false
+    },
+    {
+      "minute": 364,
+      "timestamp_et": "2026-09-03T15:34:00-04:00",
+      "open": 773.375,
+      "high": 773.385009765625,
+      "low": 773.27001953125,
+      "close": 773.3099975585938,
+      "volume": 88213,
+      "missing": false
+    },
+    {
+      "minute": 365,
+      "timestamp_et": "2026-09-03T15:35:00-04:00",
+      "open": 773.3049926757812,
+      "high": 773.4000244140625,
+      "low": 773.2999877929688,
+      "close": 773.3599853515625,
+      "volume": 83125,
+      "missing": false
+    },
+    {
+      "minute": 366,
+      "timestamp_et": "2026-09-03T15:36:00-04:00",
+      "open": 773.3699951171875,
+      "high": 773.4400024414062,
+      "low": 773.3250122070312,
+      "close": 773.4149780273438,
+      "volume": 72683,
+      "missing": false
+    },
+    {
+      "minute": 367,
+      "timestamp_et": "2026-09-03T15:37:00-04:00",
+      "open": 773.4199829101562,
+      "high": 773.5499877929688,
+      "low": 773.3900146484375,
+      "close": 773.530029296875,
+      "volume": 81355,
+      "missing": false
+    },
+    {
+      "minute": 368,
+      "timestamp_et": "2026-09-03T15:38:00-04:00",
+      "open": 773.5399780273438,
+      "high": 773.5399780273438,
+      "low": 773.4400024414062,
+      "close": 773.469970703125,
+      "volume": 97423,
+      "missing": false
+    },
+    {
+      "minute": 369,
+      "timestamp_et": "2026-09-03T15:39:00-04:00",
+      "open": 773.4650268554688,
+      "high": 773.510009765625,
+      "low": 773.4099731445312,
+      "close": 773.4390258789062,
+      "volume": 89882,
+      "missing": false
+    },
+    {
+      "minute": 370,
+      "timestamp_et": "2026-09-03T15:40:00-04:00",
+      "open": 773.4500122070312,
+      "high": 773.530029296875,
+      "low": 773.4249877929688,
+      "close": 773.4500122070312,
+      "volume": 111356,
+      "missing": false
+    },
+    {
+      "minute": 371,
+      "timestamp_et": "2026-09-03T15:41:00-04:00",
+      "open": 773.4500122070312,
+      "high": 773.4600219726562,
+      "low": 773.280029296875,
+      "close": 773.2999877929688,
+      "volume": 133118,
+      "missing": false
+    },
+    {
+      "minute": 372,
+      "timestamp_et": "2026-09-03T15:42:00-04:00",
+      "open": 773.2949829101562,
+      "high": 773.3800048828125,
+      "low": 773.2050170898438,
+      "close": 773.3200073242188,
+      "volume": 107277,
+      "missing": false
+    },
+    {
+      "minute": 373,
+      "timestamp_et": "2026-09-03T15:43:00-04:00",
+      "open": 773.3150024414062,
+      "high": 773.3300170898438,
+      "low": 773.22998046875,
+      "close": 773.280029296875,
+      "volume": 293427,
+      "missing": false
+    },
+    {
+      "minute": 374,
+      "timestamp_et": "2026-09-03T15:44:00-04:00",
+      "open": 773.2849731445312,
+      "high": 773.3400268554688,
+      "low": 773.22998046875,
+      "close": 773.22998046875,
+      "volume": 127640,
+      "missing": false
+    },
+    {
+      "minute": 375,
+      "timestamp_et": "2026-09-03T15:45:00-04:00",
+      "open": 773.219970703125,
+      "high": 773.4000244140625,
+      "low": 773.2000122070312,
+      "close": 773.4000244140625,
+      "volume": 200111,
+      "missing": false
+    },
+    {
+      "minute": 376,
+      "timestamp_et": "2026-09-03T15:46:00-04:00",
+      "open": 773.39501953125,
+      "high": 773.4199829101562,
+      "low": 773.22998046875,
+      "close": 773.239990234375,
+      "volume": 114451,
+      "missing": false
+    },
+    {
+      "minute": 377,
+      "timestamp_et": "2026-09-03T15:47:00-04:00",
+      "open": 773.239990234375,
+      "high": 773.280029296875,
+      "low": 773.2000122070312,
+      "close": 773.239990234375,
+      "volume": 99656,
+      "missing": false
+    },
+    {
+      "minute": 378,
+      "timestamp_et": "2026-09-03T15:48:00-04:00",
+      "open": 773.22998046875,
+      "high": 773.280029296875,
+      "low": 773.1400146484375,
+      "close": 773.2650146484375,
+      "volume": 124743,
+      "missing": false
+    },
+    {
+      "minute": 379,
+      "timestamp_et": "2026-09-03T15:49:00-04:00",
+      "open": 773.2650146484375,
+      "high": 773.3099975585938,
+      "low": 773.2000122070312,
+      "close": 773.239990234375,
+      "volume": 254730,
+      "missing": false
+    },
+    {
+      "minute": 380,
+      "timestamp_et": "2026-09-03T15:50:00-04:00",
+      "open": 773.260009765625,
+      "high": 773.3699951171875,
+      "low": 773.1500244140625,
+      "close": 773.2249755859375,
+      "volume": 134217,
+      "missing": false
+    },
+    {
+      "minute": 381,
+      "timestamp_et": "2026-09-03T15:51:00-04:00",
+      "open": 773.219970703125,
+      "high": 773.260009765625,
+      "low": 773.10498046875,
+      "close": 773.22998046875,
+      "volume": 244991,
+      "missing": false
+    },
+    {
+      "minute": 382,
+      "timestamp_et": "2026-09-03T15:52:00-04:00",
+      "open": 773.219970703125,
+      "high": 773.3400268554688,
+      "low": 773.1599731445312,
+      "close": 773.1699829101562,
+      "volume": 281495,
+      "missing": false
+    },
+    {
+      "minute": 383,
+      "timestamp_et": "2026-09-03T15:53:00-04:00",
+      "open": 773.1799926757812,
+      "high": 773.22998046875,
+      "low": 773.0800170898438,
+      "close": 773.0999755859375,
+      "volume": 110479,
+      "missing": false
+    },
+    {
+      "minute": 384,
+      "timestamp_et": "2026-09-03T15:54:00-04:00",
+      "open": 773.0900268554688,
+      "high": 773.27001953125,
+      "low": 773.0800170898438,
+      "close": 773.22998046875,
+      "volume": 171693,
+      "missing": false
+    },
+    {
+      "minute": 385,
+      "timestamp_et": "2026-09-03T15:55:00-04:00",
+      "open": 773.239990234375,
+      "high": 773.25,
+      "low": 772.8599853515625,
+      "close": 772.9349975585938,
+      "volume": 289274,
+      "missing": false
+    },
+    {
+      "minute": 386,
+      "timestamp_et": "2026-09-03T15:56:00-04:00",
+      "open": 772.9349975585938,
+      "high": 772.97998046875,
+      "low": 772.85498046875,
+      "close": 772.905029296875,
+      "volume": 567757,
+      "missing": false
+    },
+    {
+      "minute": 387,
+      "timestamp_et": "2026-09-03T15:57:00-04:00",
+      "open": 772.9099731445312,
+      "high": 773.0399780273438,
+      "low": 772.8800048828125,
+      "close": 773.010009765625,
+      "volume": 417922,
+      "missing": false
+    },
+    {
+      "minute": 388,
+      "timestamp_et": "2026-09-03T15:58:00-04:00",
+      "open": 773.02001953125,
+      "high": 773.0399780273438,
+      "low": 772.72998046875,
+      "close": 772.8699951171875,
+      "volume": 826300,
+      "missing": false
+    },
+    {
+      "minute": 389,
+      "timestamp_et": "2026-09-03T15:59:00-04:00",
+      "open": 772.8699951171875,
+      "high": 773.22998046875,
+      "low": 772.7000122070312,
+      "close": 773.1099853515625,
+      "volume": 1612955,
+      "missing": false
+    }
+  ]
+}

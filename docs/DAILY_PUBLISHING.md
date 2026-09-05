@@ -10,6 +10,37 @@ One task heartbeat contains both weekday recurrence rules. Its current id is
 `malosound-morning-website-8-30-et`; name: MaloSound morning and close — weekdays.
 Do not create another overlapping publishing schedule.
 
+## Calendar and entry format
+
+The journal starts September 3, 2026. Preserve the black, gold and electric-blue
+guitar artwork throughout the calendar and dated pages. Each clickable date
+opens one entry in this order: **Before the open → The line the day drew →
+The day, in another key**. Keep all three parts on their own date. Unpublished
+dates stay disabled; do not fabricate archive entries.
+
+The morning fields are `preOpen` (when adding an attributed historical note) or
+`morning` for new daily publications. Preserve original preparation/as-of times.
+A Claude briefing can supply context when the user provides it or a current
+dated source file is available; check the claims and source dates. Do not assume
+Claude has run or authenticated an earlier timestamp. The supplied September 4
+briefing is approximately 08:50 ET, checked on later import. September 3 is
+explicitly reconstructed. Calendar corrections retain their correction label.
+
+`tools/build_website.py` runs `tools/journal_pages.py` to build a plain SVG
+price line and complete static dated page for every original song with source
+data. It updates `lineChart` and the public asset list. Review and commit these
+generated files with the content. The line uses actual minute-close boundaries,
+no axes or grid, gold flowing to electric blue. It must preserve missing-data
+breaks and disclose relative scaling; it is not an exact intraminute tick path.
+
+September 3 has an explicit, reviewed historical exception: 389 observed bars,
+one null bar at 13:54, a line break and 0.5-second audio silence at 2:12. Its
+vendor daily close is an attributed terminal anchor, and its minute/daily opens
+disagree. Keep these disclosures. Reproduction files and validation live under
+`C:\MaloSound\Sessions\market-journal\2026-09-03`. This exception does not
+authorize filling gaps in later sessions. The earlier September 3 reference
+track remains under `closing`; its original composition is under `originalSong`.
+
 ## Source and destinations
 
 - Site checkout: `C:\MaloSound\Workspace\market-journal-site`.

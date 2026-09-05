@@ -6,6 +6,9 @@ from pathlib import Path
 import json
 import shutil
 from urllib.parse import unquote, urlsplit
+from journal_pages import refresh
+
+refresh()
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
@@ -42,7 +45,11 @@ def validate_journal(data):
         require(day not in dates, f'{day}: duplicate session date.')
         dates.add(day)
         require(session.get('morning') or session.get('closing'), f'{day}: add at least one edition.')
-        for kind in ('morning', 'closing'):
+        if session.get('lineChart'):
+            for field in ('url', 'dataUrl'):
+                require(session['lineChart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: missing line asset')
+            require(session['lineChart'].get('alt') and session['lineChart'].get('caption'), f'{day}: line needs context')
+        for kind in ('preOpen', 'morning', 'closing', 'originalSong'):
             entry = session.get(kind)
             if entry is None:
                 continue
@@ -64,7 +71,7 @@ def validate_journal(data):
             if entry.get('song'):
                 require(urlsplit(entry['song']['url']).scheme == 'https', f'{day}: HTTPS listening link required')
                 require(all(entry['song'].get(k) for k in ('title','artist','reason')), f'{day}: song metadata required')
-            if kind == 'closing' and entry.get('audioUrl'):
+            if kind in ('closing', 'originalSong') and entry.get('audioUrl'):
                 require(duration is not None, 'Choose songDurationSeconds before publishing a song.')
                 require(type(entry.get('durationSeconds')) is int and entry['durationSeconds'] == duration,
                         f'{day}: every song must have the series duration of {duration} seconds.')
@@ -73,7 +80,7 @@ def validate_journal(data):
                 require(audio.scheme == 'https' and audio.hostname and not audio.username and not audio.password,
                         f'{day}: use a public HTTPS audio URL without embedded credentials.')
 
-            if kind == 'closing':
+            if kind in ('closing', 'originalSong'):
                 require(entry.get('audioUrl') or entry.get('song') or entry.get('marketClosed') is True or entry.get('songPending') is True,
                         f'{day}: recording, reference song, marketClosed, or explicit songPending required')
 

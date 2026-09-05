@@ -52,6 +52,111 @@
           "alt": "SPY minute closing prices for 2026-09-04, 09:30–16:00 New York, including the opening and separate closing print.",
           "caption": "Observed minute closes, session open and separate 16:00 print. Vertical axis is a focused USD price scale. Source: Yahoo Finance."
         }
+      },
+      "preOpen": {
+        "date": "2026-09-04",
+        "information_cutoff": "2026-09-04T08:50:00-04:00",
+        "information_cutoff_precision": "Approximate minute supplied by the user; not an independently authenticated capture time.",
+        "prepared_at": "2026-09-04T23:49:51-04:00",
+        "imported_at": "2026-09-04T23:49:51-04:00",
+        "title": "Jobs surprise. Watch the response.",
+        "label": "User-supplied morning briefing · approximately 08:50 ET",
+        "summary": "August hiring exceeded the forecast cited by Yahoo, while unemployment held steady. The morning question was how equities and rates would absorb the report.",
+        "provenance": {
+          "origin": "Claude briefing supplied by the user in this conversation",
+          "reported_briefing_at": "2026-09-04T08:50:00-04:00",
+          "reported_time_precision": "approximate",
+          "independent_morning_capture_verified": false,
+          "import_verification_scope": "Official payroll, unemployment, wage and calendar facts; attributed Yahoo consensus comparison. The supplied political/headline list is omitted."
+        },
+        "paragraphs": [
+          "The user supplied Claude's approximately 08:50 ET morning briefing. It was imported and checked afterward; the stated morning time is not independently authenticated.",
+          "BLS released August payrolls at 08:30 ET: employment increased 162,000, unemployment held at 4.1%, and average hourly earnings rose 0.3% over the month and 3.1% over the year.",
+          "Yahoo's 08:50 report cited a 55,000-job forecast. That comparison is attributed to Yahoo; it is not a BLS forecast.",
+          "Calendar correction on import: University of Michigan sentiment was next scheduled for September 11 at 10:00 ET, not September 4.",
+          "What to watch: whether Treasury yields and SPY treat stronger hiring as growth support or rate pressure, and whether sector participation confirms the initial response. No subsequent session outcome is used to rewrite this morning question."
+        ],
+        "paragraph_sources": [
+          [],
+          [
+            "bls-sept4-employment"
+          ],
+          [
+            "yahoo-sept4-jobs"
+          ],
+          [
+            "umich-release-calendar"
+          ],
+          []
+        ],
+        "verified_metrics": {
+          "nonfarm_payroll_change": 162000,
+          "unemployment_rate_pct": 4.1,
+          "average_hourly_earnings_mom_pct": 0.3,
+          "average_hourly_earnings_yoy_pct": 3.1,
+          "yahoo_reported_payroll_forecast": 55000,
+          "consensus_note": "Forecasts are publisher/survey dependent. Reuters' September 4 08:39 ET article cites 56,000; Yahoo's 08:50 ET item cites 55,000. Neither is a BLS estimate of the forthcoming release.",
+          "combined_june_july_payroll_revision": 55000,
+          "revision_note": "The BLS +55,000 combined revision is a separate statistic from Yahoo's 55,000 forecast."
+        },
+        "calendar_verification": {
+          "checked_on_import": true,
+          "employment_situation_at": "2026-09-04T08:30:00-04:00",
+          "umich_sentiment_on_september_4": false,
+          "next_umich_preliminary_at": "2026-09-11T10:00:00-04:00",
+          "umich_final_date": "2026-09-25",
+          "official_annual_schedule_url": "https://data.sca.isr.umich.edu/fetchdoc.php?docid=79628",
+          "official_bls_month_schedule_url": "https://www.bls.gov/schedule/2026/09_sched.htm",
+          "scope": "Verifies the requested BLS and Michigan releases; not a complete all-agency economic calendar."
+        },
+        "sources": [
+          {
+            "id": "bls-sept4-employment",
+            "label": "BLS — August Employment Situation, released September 4 at 08:30 ET",
+            "url": "https://www.bls.gov/news.release/archives/empsit_09042026.htm",
+            "published_at": "2026-09-04T08:30:00-04:00",
+            "updated_at": null,
+            "publication_time_basis": "Official embargo/release time printed in the archived release.",
+            "supports": "162,000 payroll increase, 4.1% unemployment, 0.3% monthly and 3.1% annual average hourly earnings growth, and +55,000 combined June/July revisions.",
+            "evidence_role": "Morning facts verified on later import",
+            "primary_source": true
+          },
+          {
+            "id": "yahoo-sept4-jobs",
+            "label": "Yahoo Finance — payroll comparison, published September 4 at 08:50 ET",
+            "url": "https://finance.yahoo.com/video/august-jobs-report-blows-economists-125018455.html",
+            "published_at": "2026-09-04T08:50:00-04:00",
+            "publication_time_precision": "minute",
+            "updated_at": null,
+            "supports": "Yahoo reports a 55,000-job economist forecast alongside the 162,000 actual result. Attribution avoids treating varying survey estimates as an official BLS forecast.",
+            "evidence_role": "Attributed comparison verified on later import",
+            "primary_source": false
+          },
+          {
+            "id": "umich-release-calendar",
+            "label": "University of Michigan — official next sentiment release: September 11 at 10:00 ET",
+            "url": "https://www.sca.isr.umich.edu/",
+            "published_at": null,
+            "updated_at": null,
+            "publication_time_basis": "Unknown. This is a calendar correction checked at import, not a claimed contemporaneous source capture.",
+            "supports": "The official homepage lists September 11 preliminary sentiment at 10:00 ET. The linked official 2026 schedule lists September 11 preliminary and September 25 final, with no September 4 release.",
+            "calendar_url": "https://data.sca.isr.umich.edu/fetchdoc.php?docid=79628",
+            "evidence_role": "Calendar correction verified on later import",
+            "primary_source": true
+          }
+        ],
+        "preparedAt": "2026-09-04T23:49:51-04:00"
+      },
+      "lineChart": {
+        "url": "/assets/charts/2026-09-04-line.svg",
+        "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
+        "alt": "SPY’s September 4 price line from 09:30 to 16:00 ET.",
+        "caption": "SPY · Observed minute-close shape · September 4, 2026",
+        "notes": [
+          "Open at minute 0; minute closes at boundaries 1..389; separate closing print at 390.",
+          "The line joins observed boundaries without smoothing. It is not the exact intraminute tick path. Height is scaled to this session’s observed high and low; shapes across dates do not compare absolute price ranges.",
+          "Observed minute volume totals 28,204,051 shares, 82.92% of the provider's daily total. Dynamics use those observed volumes; no missing volume is invented."
+        ]
       }
     },
     {
@@ -104,7 +209,107 @@
             "url": "https://www.youtube.com/watch?v=bEeaS6fuUoA"
           }
         ]
+      },
+      "preOpen": {
+        "date": "2026-09-03",
+        "information_cutoff": "2026-09-03T08:29:00-04:00",
+        "title": "Quiet futures, a high bar.",
+        "label": "Reconstructed afterward · 08:29 ET source cutoff",
+        "summary": "Mixed earnings and renewed oil pressure framed a quiet futures market. Friday's jobs report remained ahead.",
+        "paragraphs": [
+          "Reconstructed afterward using information available by September 3, 08:29 ET. No contemporaneous MaloSound forecast exists for this morning.",
+          "At 07:04 ET, S&P 500 futures were down 0.02% and Nasdaq 100 futures were down 0.17%. Reuters' 07:47 update described mixed earnings, renewed Middle East tensions and rising oil; Broadcom's forecast weighed on technology sentiment.",
+          "What to watch: whether SPY's early move gains support across sectors, and whether oil and Treasury yields reinforce or contradict that move. These are reconstructed observation questions, not predictions.",
+          "The August jobs report was scheduled for Friday, September 4, at 08:30 ET. Payrolls, unemployment, wages and revisions were still ahead; no later result is used here."
+        ],
+        "paragraph_sources": [
+          [],
+          [
+            "reuters-sept3-premarket"
+          ],
+          [],
+          [
+            "bls-aug7-schedule"
+          ]
+        ],
+        "sources": [
+          {
+            "id": "reuters-sept3-premarket",
+            "label": "Reuters / MarketScreener — September 3 premarket report",
+            "url": "https://www.marketscreener.com/news/wall-st-futures-tepid-as-middle-east-tensions-keep-investors-wary-ce7858d3d181f627",
+            "published_at": "2026-09-03T07:46:00-04:00",
+            "updated_at": "2026-09-03T07:47:00-04:00",
+            "observation_at": "2026-09-03T07:04:00-04:00",
+            "supports": "The cited futures changes, mixed earnings, Middle East and oil backdrop, and Broadcom context.",
+            "primary_source": false
+          },
+          {
+            "id": "bls-aug7-schedule",
+            "label": "BLS — archived August 7 release announcing the September 4 jobs schedule",
+            "url": "https://www.bls.gov/news.release/archives/empsit_08072026.htm",
+            "published_at": "2026-08-07T08:30:00-04:00",
+            "updated_at": null,
+            "publication_time_basis": "Official embargo/release time printed in the archived release.",
+            "supports": "The release explicitly schedules the August Employment Situation for September 4 at 08:30 ET. No later jobs result is used.",
+            "primary_source": true
+          }
+        ],
+        "preparedAt": "2026-09-04T23:44:34-04:00"
+      },
+      "originalSong": {
+        "title": "After the Low",
+        "label": "Original instrumental · retrospective session with a source gap",
+        "summary": "SPY's observed minute-price path moves from an unsettled morning into a strong late-morning climb, then settles above its observed opening price. The session becomes a 3:15 instrumental, with an explicit space for the missing source minute.",
+        "thesis": "An early lift breaks down, the morning stays unsettled, and a much larger late-morning climb changes the day's register. A quiet midday drift gives way to an afternoon high, then a pullback that still finishes well above the observed opening boundary.",
+        "paragraphs": [
+          "Session: September 3, 2026, 09:30–16:00 ET. Original song prepared afterward at 2026-09-04T23:53:04-04:00.",
+          "The first observed minute opens at $768.43; the vendor daily open is $767.90. The observed low is $767.47 in the 10:56 minute, compared with a daily low of $767.45. These differences remain unresolved.",
+          "The observed high is $774.03 in the 14:16 minute. The vendor daily close of $773.17 supplies the final boundary; the final minute close is $773.11. No separate 16:00 intraday quote was available.",
+          "There are 389 observed bars and one wholly null bar at 13:54 ET. The chart leaves a break and every audio stem is silent from 2:12.000 to2:12.500. This represents missing source data, not a trading halt or a quiet market.",
+          "Price shapes the melodic contour. Observed volume shapes rhythmic activity; minute range shapes texture. A warm plucked lead, low bass, open pads and electronic percussion follow seven sections. Key, tempo, harmony, instruments and arrangement are artistic choices authored with LLM assistance.",
+          "Observed minute volume totals 36,127,884 shares, 82.99% of the vendor daily total. No missing volume is invented; musical dynamics use observed volumes only.",
+          "The original WAV lasts exactly 195 seconds at 80 BPM. All melodic MIDI notes were checked against the sourced boundary mapping. The render is deterministic and contains no clipped samples.",
+          "September 3’s morning section was reconstructed afterward; no original pre-open prediction is scored. Full-day normalization is retrospective and music does not establish predictive trading performance."
+        ],
+        "reportUrl": "/reports/2026-09-03-spy-song.html",
+        "audioUrl": "https://github.com/marcelozap/malosound/releases/download/spy-song-2026-09-03/spy-2026-09-03.mp3",
+        "midiUrl": "https://github.com/marcelozap/malosound/releases/download/spy-song-2026-09-03/spy-2026-09-03.mid",
+        "durationSeconds": 195,
+        "tempoBpm": 80,
+        "preparedAt": "2026-09-04T23:53:04-04:00",
+        "sourceHash": "4672cae650a0fe435e7f7fcfbfd9a79ed3ec94ee206824c16faae1fb782ad299",
+        "sources": [
+          {
+            "label": "Yahoo Finance — minute source snapshot",
+            "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1m&includePrePost=false"
+          },
+          {
+            "label": "Yahoo Finance — daily source comparison",
+            "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1d&includePrePost=false"
+          }
+        ],
+        "chart": {
+          "url": "/assets/charts/2026-09-03-line.svg",
+          "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
+          "alt": "Observed SPY minute-close shape with a break for the missing13:54 minute.",
+          "caption": "Observed minute source; incomplete coverage and daily-open discrepancy are disclosed."
+        }
+      },
+      "lineChart": {
+        "url": "/assets/charts/2026-09-03-line.svg",
+        "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
+        "alt": "SPY’s September 3 price line from 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET.",
+        "caption": "SPY · Observed minute-close shape · September 3, 2026",
+        "notes": [
+          "Observed first-minute open at boundary 0; minute closes at end boundaries. Gap 13:54–13:55 is not joined. The 13:55 boundary uses the genuinely observed next bar open. Boundary 390 uses the attributed vendor daily close, not a separate 16:00 print.",
+          "The line joins observed boundaries without smoothing. It is not the exact intraminute tick path. Height is scaled to this session’s observed high and low; shapes across dates do not compare absolute price ranges.",
+          "Observed minute volume totals 36,127,884 shares, 82.99% of the vendor daily total. No missing volume is invented; musical dynamics use observed volumes only.",
+          "Observed minute open: $768.43; vendor daily open: $767.90. Observed minute low: $767.47; daily low: $767.45. These source discrepancies remain unresolved.",
+          "The final anchor is the vendor daily close of $773.17, not a separate 16:00 intraday print; the last minute closes at $773.11."
+        ],
+        "gapNote": "Missing source data: 13:54–13:55 ET. The line breaks there; the song leaves space at 2:12.0–2:12.5. No price or volume was filled in."
       }
     }
-  ]
+  ],
+  "seriesStartDate": "2026-09-03"
 }

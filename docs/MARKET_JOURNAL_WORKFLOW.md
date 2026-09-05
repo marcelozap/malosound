@@ -13,3 +13,7 @@ Run `python3 tools/build_website.py`, Node syntax checks for journal.js and mark
 Notify the user with the MaloSound journal link and key changes; closing includes a chart link and listening selection. No social-network posts, messages to other people, trades or other destinations are authorized by this workflow. Do not duplicate a completed edition; if publication failed, retry that exact edition's publication.
 
 Presentation preference: maintain the futuristic, artistic, visual-first homepage. Publish long analysis in the existing collapsed notes and full research pages. Do not add explanatory paragraphs to the hero or expand every source on the homepage. Keep actual session dates, retrospective labels, chart evidence and original/reference-track distinctions visible where relevant.
+
+## Calendar publication format
+
+Follow `DAILY_PUBLISHING.md` for the current calendar and three-part day entry. The archive begins September 3, 2026, and retains the black/gold/electric-blue guitar theme. Each date groups its own before-open note, plain SPY line and original 3:15 instrumental. Preserve source timestamps, historical reconstructions, corrections, and explicit gaps. The build generates the plain line and standalone entry from the preserved public data.
