@@ -12,6 +12,7 @@ OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
     'index.html', 'journal.css', 'journal.js', 'content/editions.json',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
+    'assets/brand/malosound-square.png',
     'studio.html', 'latin-house-lab.html', 'latin-house-lab.css', 'latin-house-lab.js',
     'gateway/sample-01.audioanalysis.v1.json', 'gateway/sample-02.audioanalysis.v1.json',
 )

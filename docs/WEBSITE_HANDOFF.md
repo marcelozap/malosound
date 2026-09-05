@@ -20,6 +20,7 @@ close: the song inspired by price action, with a written reflection.
 - `journal.js`: dated morning/closing editions and playable external audio.
 - `content/editions.json`: the daily publishing source.
 - `assets/brand/market-into-music.png`: the user's supplied chart/guitar artwork.
+- `assets/brand/malosound-square.png`: the 1254 × 1254 LinkedIn/link-preview artwork.
 - `studio.html`: the existing interactive sound/signal experiment.
 - `latin-house-lab.html`: the existing Rhythm Lab.
 
@@ -85,7 +86,7 @@ python3 -m http.server 4173 --bind 127.0.0.1 --directory build
 
 The build validates metadata, local links and anchors, edition fields, unique
 weekday dates, external audio links, and equal song lengths. It stages an
-explicit list of 12 public files into ignored `build/`; it never copies
+explicit list of 13 public files into ignored `build/`; it never copies
 private studio files, keys, receipts, unrelated drafts, or the source tree.
 
 ## Hosting
@@ -96,8 +97,11 @@ The legacy `CNAME` file is retained; GitHub reports Pages is not enabled.
 
 `.openai/hosting.json` records the Sites preview project and its static output
 directory. Publishing that preview does not change the custom domain, DNS,
-Vercel project, or the public site's audience. Use the existing Vercel publishing
-route when the new version is ready to replace the live custom-domain site.
+Vercel project, or the public site's audience. The user confirmed that the
+GitHub repository is connected to Vercel. Publishing the public site uses
+the existing `origin/master` deployment path. The homepage's canonical URL
+and link-preview metadata point to `https://malosound.ai/` and the square
+artwork, while the original wide artwork remains on the homepage.
 
 ## Audio boundary
 
