@@ -1,0 +1,157 @@
+{
+  "schema": "malosound.research-packet.v1",
+  "template_only": true,
+  "run_id": null,
+  "session_date": null,
+  "edition": null,
+  "timezone": "America/New_York",
+  "information_cutoff": null,
+  "prepared_at": null,
+  "published_at": null,
+  "source_briefing_reported_at": null,
+  "source_briefing_imported_at": null,
+  "provenance": null,
+  "prior_packet": null,
+  "previous_sessions_reviewed": [],
+  "exchange_session": {
+    "status": null,
+    "start": null,
+    "end": null,
+    "calendar_source_id": null
+  },
+  "story": {
+    "headline": null,
+    "question": null,
+    "human_or_place_connection": null,
+    "connection_source_ids": [],
+    "connection_limitations": null,
+    "leading_interpretation": null,
+    "alternative_interpretation": null,
+    "evidence_that_would_weaken_each": [],
+    "carry_forward_question": null
+  },
+  "sources": [],
+  "source_record_fields": [
+    "id",
+    "url",
+    "title",
+    "publisher",
+    "original_source_identity",
+    "published_at",
+    "updated_at",
+    "observation_period",
+    "retrieved_at",
+    "units",
+    "revision_status",
+    "supported_claim_ids",
+    "limitations"
+  ],
+  "claims": [],
+  "claim_record_fields": [
+    "id",
+    "text",
+    "kind",
+    "source_ids",
+    "time_scope",
+    "verification_status",
+    "conflict_or_uncertainty",
+    "public_safe"
+  ],
+  "claim_kind_options": [
+    "measured_fact",
+    "attributed_report",
+    "interpretation",
+    "artistic_choice"
+  ],
+  "watch_questions": [],
+  "watch_question_fields": [
+    "id",
+    "question",
+    "morning_evidence",
+    "confirming_observation",
+    "weakening_observation",
+    "closing_observation",
+    "closing_source_ids",
+    "assessment",
+    "assessment_limitations"
+  ],
+  "assessment_options": [
+    "supported",
+    "weakened",
+    "unresolved",
+    "not_assessable"
+  ],
+  "session_evidence": {
+    "symbol": "SPY",
+    "source_snapshot_sha256": null,
+    "analysis_path_local_only": null,
+    "expected_minutes": null,
+    "observed_minutes": null,
+    "missing_intervals": [],
+    "terminal_price_provenance": null,
+    "provider_discrepancies": [],
+    "measured_shape": null
+  },
+  "music": {
+    "duration_seconds": 195,
+    "tempo_bpm": 80,
+    "title": null,
+    "artistic_interpretation": null,
+    "source_to_sound_mapping": null,
+    "section_evidence_checked": false,
+    "render_validation": null
+  },
+  "review": {
+    "factual_timing": {
+      "reviewer": null,
+      "result": "not_run",
+      "issues": []
+    },
+    "editorial_music": {
+      "reviewer": null,
+      "result": "not_run",
+      "issues": []
+    },
+    "claude_contribution": {
+      "status": "not_requested",
+      "reviewed_at": null,
+      "adopted_suggestions": []
+    },
+    "targeted_revision_rounds": 0,
+    "remaining_limitations": []
+  },
+  "publication": {
+    "status": "not_started",
+    "public_edition_date": null,
+    "commit": null,
+    "deployment_verified_at": null,
+    "verified_public_urls": [],
+    "next_action": null
+  },
+  "corrections": [],
+  "frozen_morning": {
+    "snapshot_path_local_only": null,
+    "sha256": null,
+    "frozen_at": null,
+    "information_cutoff": null,
+    "provenance": null,
+    "published_commit": null,
+    "publication_verified_at": null,
+    "hash_verified_at_close": false,
+    "verified_pre_open_publication": false,
+    "timing_limitations": null
+  },
+  "question_threads": [],
+  "question_thread_fields": [
+    "id",
+    "date_raised",
+    "question",
+    "interpretation_a",
+    "interpretation_b",
+    "weakening_conditions",
+    "status",
+    "last_reviewed_at",
+    "related_session_dates",
+    "resolution_reason"
+  ]
+}

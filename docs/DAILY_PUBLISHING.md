@@ -10,6 +10,14 @@ One task heartbeat contains both weekday recurrence rules. Its current id is
 `malosound-morning-website-8-30-et`; name: MaloSound morning and close — weekdays.
 Do not create another overlapping publishing schedule.
 
+At the start of either run, follow `docs/EDITORIAL_PLAYBOOK.md`: prepare a sourced field
+note about the day's question and human stakes, record competing explanations,
+freeze morning evidence, and revisit it after the close. Save a private packet
+from `docs/templates/RESEARCH_PACKET.json`. Complete factual/timing and
+editorial/music checks before publishing. Deeper preparation belongs behind the
+visual page, not in longer default copy. Claude is an optional reviewer; the
+stopped Claude loop stays stopped and unavailable credits do not block Codex.
+
 ## Calendar and entry format
 
 The journal starts September 3, 2026. Preserve the black, gold and electric-blue
