@@ -1,5 +1,15 @@
 # MaloSound field notes: deep preparation, a light page
 
+## Latest direction takes priority
+
+Music, artwork and the observed line lead. Preparation should be complete before
+performance; the interface should not demand more analysis or personal opinions
+from Marcelo while he is trading. Keep research under closed notes and avoid
+explaining the format repeatedly. Human-interest angles, commentary and personal
+reflection are optional; do not require them to complete an edition. The source
+checks below still apply. Current recordings are historical session replays,
+not forecasts or already-built prospective rehearsal tracks.
+
 ## Purpose and voice
 
 Marcelo describes the ambition as the "Anthony Bourdain of trading." Interpret

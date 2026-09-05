@@ -39,7 +39,7 @@
       cleanups.push(() => node.removeEventListener(event, callback));
     };
     const stop = () => { if (frame) cancelAnimationFrame(frame); frame = 0; };
-    const cleanup = () => { disposed = true; abort.abort(); stop(); cleanups.splice(0).forEach(f => f()); };
+    const cleanup = () => { disposed = true; abort.abort(); stop(); cleanups.splice(0).forEach(f => f()); article.classList.remove('is-playing'); };
     const url = new URL(figure.dataset.timelineSrc, location.href);
     if (url.origin !== location.origin) return cleanup;
 
@@ -61,14 +61,14 @@
       const dot = shape('circle', { r: 4.5, class: 'playhead-dot' });
       stage.append(svg);
       const controls = make('div', 'line-controls');
-      const toggle = make('button', 'line-toggle', 'Play'); toggle.type = 'button';
+      const toggle = make('button', 'line-toggle', '▶'); toggle.type = 'button';
       const slider = make('input', 'line-seek'); slider.type = 'range'; slider.min = '0'; slider.max = String(data.durationSeconds); slider.step = '0.1';
       slider.setAttribute('aria-label', 'Song position');
       const time = make('span', 'line-song-clock'); time.setAttribute('aria-hidden', 'true');
       controls.append(toggle, slider, time);
       const readout = make('p', 'line-readout');
       const clock = make('span', 'line-market-clock');
-      const note = make('span', '', 'Follow the line as you listen.');
+      const note = make('span', 'line-gap-label');
       readout.append(clock, note);
       const feedback = make('p', 'line-feedback'); feedback.hidden = true; feedback.setAttribute('role', 'status');
       figure.append(controls, readout, feedback);
@@ -81,6 +81,7 @@
         const seconds = clamp(Number.isFinite(audio.currentTime) ? audio.currentTime : 0, 0, data.durationSeconds);
         const p = position(data, seconds);
         const ready = validDuration() && !invalid && !audio.error;
+        article.classList.toggle('is-playing', ready && !audio.paused && !audio.ended && audio.readyState >= 3);
         toggle.disabled = invalid || !!audio.error;
         slider.disabled = !ready;
         svg.style.visibility = ready ? 'visible' : 'hidden';
@@ -95,10 +96,10 @@
         time.textContent = `${songClock(seconds)} / ${songClock(data.durationSeconds)}`;
         clock.textContent = marketClock(data.marketStartMinutes + p.minute);
         if (Math.floor(seconds) !== lastSecond || p.gap !== lastGap) {
-          note.textContent = p.gap ? 'Missing source minute · a space in the music.' : 'Follow the line as you listen.';
+          note.textContent = p.gap ? 'Source gap' : '';
           lastSecond = Math.floor(seconds); lastGap = p.gap;
         }
-        toggle.textContent = audio.paused || audio.ended ? 'Play' : 'Pause';
+        toggle.textContent = audio.paused || audio.ended ? '▶' : 'Ⅱ';
         toggle.setAttribute('aria-label', `${audio.paused || audio.ended ? 'Play' : 'Pause'} this session’s song`);
       }
       function tick() {

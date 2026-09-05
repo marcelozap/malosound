@@ -18,6 +18,15 @@ editorial/music checks before publishing. Deeper preparation belongs behind the
 visual page, not in longer default copy. Claude is an optional reviewer; the
 stopped Claude loop stays stopped and unavailable credits do not block Codex.
 
+Latest presentation direction: show the art, actual line, song and motion.
+Research is preparation, not a performance-time reading assignment. Keep
+morning commentary folded, chapter labels visually quiet, and playback obvious.
+Do not ask Marcelo to manufacture a personal view or require a reflection to
+publish. A new opinion or human-interest narrative is optional, never a daily
+quota. Preserve facts and source limitations without long visible explanations.
+Current songs remain labeled session replays. Prospective musical rehearsal
+is not implemented by restyling a historical song; never imply otherwise.
+
 ## Calendar and entry format
 
 The journal starts September 3, 2026. Preserve the black, gold and electric-blue

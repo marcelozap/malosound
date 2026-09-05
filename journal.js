@@ -53,25 +53,32 @@
   function renderEntry(session, index, duration) {
     const article = el('article', 'day-entry');
     article.id = `session-${session.date}`;
-    const header = el('header', 'day-heading');
-    header.append(el('span', 'eyebrow gold', `Journal / ${String(index + 1).padStart(3, '0')}`));
-    const h = el('h2', '', shortDate(session.date)); h.id = 'selected-day-heading';
+    const song = session.originalSong || session.closing;
+    const header = el('header', 'day-heading session-cover');
+    const aura = el('div', 'cover-aura'); aura.setAttribute('aria-hidden', 'true');
+    const orbit = el('div', 'cover-orbit'); orbit.setAttribute('aria-hidden', 'true');
+    const copy = el('div', 'cover-copy');
+    copy.append(el('span', 'eyebrow gold', `${shortDate(session.date)} · ${session.date.slice(0, 4)}`));
+    const h = el('h2', '', song?.audioUrl ? song.title : shortDate(session.date)); h.id = 'selected-day-heading';
     article.setAttribute('aria-labelledby', h.id);
-    header.append(h, el('p', 'day-subtitle', `${format(session.date, { weekday: 'long', year: 'numeric' })} · SPY · New York`));
+    copy.append(h, el('p', 'day-subtitle', `SPY · ${song?.audioUrl ? 'SESSION REPLAY · 03:15' : 'SESSION JOURNAL'}`));
+    header.append(aura, orbit, copy);
     article.append(header);
     const morning = session.preOpen || session.morning;
     const pre = section('01', 'Before the open');
+    const morningFold = el('details', 'morning-fold');
+    morningFold.append(el('summary', '', 'Morning notes'));
     if (morning) {
-      pre.append(el('p', 'entry-status', morning.label), el('h4', '', morning.title));
+      morningFold.append(el('p', 'entry-status', morning.label), el('h4', '', morning.title));
       const refs = sources(morning);
       refs.append(el('p', 'chapter-deck', morning.summary));
       (morning.paragraphs || []).forEach(p => refs.append(el('p', '', p)));
       if (morning.reportUrl) refs.append(link('Read the full morning research ↗', morning.reportUrl));
       if (morning.mapUrl) refs.append(link('Explore the market map ↗', morning.mapUrl));
-      pre.append(refs);
-    } else pre.append(el('h4', '', 'An open page.'), el('p', '', 'No before-open note was published for this date. The space stays open in the record.'));
+      morningFold.append(refs);
+    } else morningFold.append(el('p', '', 'No morning note for this date.'));
+    pre.append(morningFold);
     article.append(pre);
-    const song = session.originalSong || session.closing;
     const chart = session.lineChart;
     const drawing = section('02', 'The line the day drew');
     if (chart) {
@@ -92,7 +99,7 @@
     article.append(drawing);
     const music = section('03', 'The day, in another key', 'blue');
     if (song?.audioUrl) {
-      music.append(el('p', 'eyebrow blue', 'Original · Retrospective'), el('h4', 'song-title', song.title));
+      music.append(el('p', 'eyebrow blue', 'Original instrumental'));
       const sessionHours = chart?.sessionHours || '9:30 a.m.–4:00 p.m. ET';
       music.append(player(song, duration));
       const meta = el('div', 'song-specs');
@@ -166,7 +173,7 @@
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);
       }
-      const legend = el('div', 'calendar-legend'); legend.append(el('span','legend-dot'),el('span','','Pick a day. Press play.'));
+      const legend = el('div', 'calendar-legend'); legend.append(el('span','legend-dot'),el('span','','Sessions'));
       calendar.replaceChildren(el('span','eyebrow gold','Choose a session'),head,grid,legend);
     }
     window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(),false); });
