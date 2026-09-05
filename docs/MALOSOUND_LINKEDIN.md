@@ -27,13 +27,14 @@ not confirm that the saved LinkedIn card has changed.
 
 ## Artwork provenance
 
-September 5 update: both website assets now use the owner's blue-and-gold guitar
-reference, preserving the black/gold/blue composition. The original wide and
-square PNGs, the new versions, the reference photo, and prompts are preserved
-separately in the owner's Desktop/MaloSound folder. All images retain their
-original output dimensions. The photo crops the headstock; that part of the
-render remains an interpretation. No change to existing saved LinkedIn media
-was made or verified. The provenance and prompt below describe the prior square.
+September 5 clarification: the owner's guitar reference supplies colors only.
+Both current assets preserve the original transparent guitar emerging from
+flowing lines, with blue/teal and fine gold accents. The solid-guitar experiment
+is superseded. Original PNGs, every new version, the reference photo, and exact
+edit prompts are preserved in the owner's Desktop/MaloSound folder; current
+versions are under Artwork/Flowing Lines 2026-09-05. All images retain their
+original output dimensions. No change to existing saved LinkedIn media was made
+or verified. The provenance and prompt below describe the original square.
 
 Created with the built-in imagegen tool in one edit request from the user's
 original `Codex Image Sep 4, 2026, 07_37_21 PM.png`. The original wide image

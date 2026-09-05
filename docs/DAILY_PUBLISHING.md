@@ -29,6 +29,10 @@ is not implemented by restyling a historical song; never imply otherwise.
 
 ## Calendar and entry format
 
+Artwork direction, clarified September 5: the real guitar reference supplies
+colors only. Preserve the transparent guitar emerging from fine flowing lines,
+in blue/teal and gold. Do not replace it with a solid or photographic guitar.
+
 The journal starts September 3, 2026. Preserve the black, gold and electric-blue
 guitar artwork throughout the calendar and dated pages. Each clickable date
 opens one entry in this order: **Before the open → The line the day drew →
