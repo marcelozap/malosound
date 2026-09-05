@@ -36,12 +36,11 @@
       return card;
     }
 
-    card.append(el('p', '', entry.summary));
+    const notes = el('details', 'session-notes');
+    notes.append(el('summary', '', 'Behind the session +'), el('p', '', entry.summary));
+    card.append(notes);
     if (entry.paragraphs?.length) {
-      const details = el('details');
-      details.append(el('summary', '', morning ? 'Read the morning entry' : 'Read the song notes'));
-      entry.paragraphs.forEach(paragraph => details.append(el('p', '', paragraph)));
-      card.append(details);
+      entry.paragraphs.forEach(paragraph => notes.append(el('p', '', paragraph)));
     }
 
     function link(text, url) {
@@ -54,18 +53,21 @@
     if (entry.chart) {
       const figure = el('figure', 'market-chart'); const img = el('img');
       img.src = entry.chart.url; img.alt = entry.chart.alt; img.loading = 'lazy';
-      figure.append(img, el('figcaption', '', entry.chart.caption));
-      card.append(figure, link('Open chart image ↗', entry.chart.url), link('View source data ↗', entry.chart.dataUrl));
+      figure.append(img);
+      notes.append(el('p','',entry.chart.caption));
+      card.insertBefore(figure, notes);
+      notes.append(link('Open chart image ↗', entry.chart.url), link('View source data ↗', entry.chart.dataUrl));
     }
     if (entry.song) {
       const music = el('div', 'reference-song');
-      music.append(el('span', 'eyebrow blue', 'Listening selection · existing recording'),el('h4','',`${entry.song.title} — ${entry.song.artist}`),el('p','',entry.song.reason),link('Listen on the official channel ↗',entry.song.url));
-      card.append(music);
+      music.append(el('span', 'eyebrow blue', 'Selected track'),el('h4','',`${entry.song.title} — ${entry.song.artist}`),link('Listen on the official channel ↗',entry.song.url));
+      card.insertBefore(music,notes);
+      notes.append(el('p','',entry.song.reason));
     }
     if (entry.sources?.length) {
       const sources = el('details'); sources.append(el('summary','','Sources'));
       entry.sources.forEach(source=>sources.append(link(source.label,source.url)));
-      card.append(sources);
+      notes.append(sources);
     }
     if (!morning && entry.audioUrl) {
       const audioUrl = new URL(entry.audioUrl);
@@ -120,9 +122,15 @@
       if (!Array.isArray(data.sessions)) throw new Error('Invalid journal');
       if (!data.sessions.length) return;
       const sessions = [...data.sessions].sort((a, b) => b.date.localeCompare(a.date));
-      const featured = sessionCards(sessions[0], data.songDurationSeconds);
+      const featured = el('div','editions');
+      for(const kind of ['morning','closing']) {
+        const session=sessions.find(s=>s[kind]);
+        const card=editionCard(kind,session?.[kind],data.songDurationSeconds);
+        if(session)card.prepend(el('p','edition-date',dateLabel(session.date)));
+        featured.append(card);
+      }
       const archive = document.createDocumentFragment();
-      sessions.slice(1).forEach(session => {
+      sessions.forEach(session => {
         const item = el('details', 'past-session');
         item.id = 'session-' + session.date;
         if(location.hash === '#' + item.id) item.open = true;
@@ -132,7 +140,7 @@
       current.replaceChildren(...featured.children);
       const date = document.getElementById('session-date');
       date.textContent = dateLabel(sessions[0].date);
-      date.hidden = false;
+      date.hidden = true;
       document.getElementById('session-archive').replaceChildren(archive);
       document.getElementById('past-sessions').hidden = sessions.length < 2;
     })

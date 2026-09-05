@@ -105,3 +105,6 @@ artwork, while the original wide artwork remains on the homepage.
 Audio bytes never go in Git. Put public recordings in deliberate external
 storage and reference their URLs in the journal. The existing ignored studio
 paths and release policies still apply. Do not force-add audio files.
+
+## Visual-first homepage
+The homepage now uses a full-height blue/gold art stage, subtle reduced-motion-aware animation, sparse navigation and compact session cards. Latest research and latest closing are shown independently, each with its own actual date. All dated sessions remain in the archive. Long summaries, paragraphs, chart captions, song rationale and sources remain available in collapsed “Behind the session” panels; never expand them by default during daily imports. Keep the chart and listening link visible, and keep complete research on its dedicated page. Original-song vs selected-recording labels remain explicit. Shared styles for essays and map pages remain intact; homepage styling is scoped to art-home.
