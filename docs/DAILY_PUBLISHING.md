@@ -33,6 +33,12 @@ generated files with the content. The line uses actual minute-close boundaries,
 no axes or grid, gold flowing to electric blue. It must preserve missing-data
 breaks and disclose relative scaling; it is not an exact intraminute tick path.
 
+The same build generates a compact `*-timeline.json` from the exact SVG
+coordinates. `session-playhead.js` synchronizes its marker to the native audio
+clock on both the calendar and standalone pages. Keep duration, source gaps
+and terminal boundaries aligned; markers disappear inside missing source
+intervals. Calendar changes must detach the prior player's animation/listeners.
+
 September 3 has an explicit, reviewed historical exception: 389 observed bars,
 one null bar at 13:54, a line break and 0.5-second audio silence at 2:12. Its
 vendor daily close is an attributed terminal anchor, and its minute/daily opens

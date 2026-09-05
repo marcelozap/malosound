@@ -150,6 +150,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-04-line.svg",
         "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
+        "playheadUrl": "/assets/charts/2026-09-04-timeline.json",
         "alt": "SPY’s September 4 price line from 09:30 to 16:00 ET.",
         "caption": "SPY · Observed minute-close shape · September 4, 2026",
         "notes": [
@@ -298,6 +299,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-03-line.svg",
         "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
+        "playheadUrl": "/assets/charts/2026-09-03-timeline.json",
         "alt": "SPY’s September 3 price line from 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET.",
         "caption": "SPY · Observed minute-close shape · September 3, 2026",
         "notes": [

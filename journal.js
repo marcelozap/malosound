@@ -76,10 +76,12 @@
     drawing.append(el('h4', '', 'One session. One gesture.'));
     if (chart) {
       const figure = el('figure', 'session-drawing');
+      if (chart.playheadUrl) figure.dataset.timelineSrc = chart.playheadUrl;
+      const stage = el('div', 'drawing-stage');
       const img = el('img'); img.src = chart.url; img.alt = chart.alt; img.width = 1000; img.height = 340;
       const caption = el('figcaption', 'drawing-times');
       caption.append(el('span', '', chart.startLabel || '09:30 ET'), el('span', '', chart.endLabel || '16:00 ET'));
-      figure.append(img, caption); drawing.append(figure, el('p', 'drawing-caption', chart.caption));
+      stage.append(img); figure.append(stage, caption); drawing.append(figure, el('p', 'drawing-caption', chart.caption));
       if (chart.gapNote) drawing.append(el('p', 'data-gap', chart.gapNote));
       const method = el('details', 'journal-details'); method.append(el('summary', '', 'Behind the line'));
       (chart.notes || []).forEach(p => method.append(el('p', '', p)));
@@ -124,10 +126,13 @@
     const calendar = el('div', 'calendar'); const stage = el('div', 'selected-session');
     const announced = el('p', 'sr-only'); announced.setAttribute('role', 'status'); announced.setAttribute('aria-live', 'polite');
     sidebar.append(art, calendar); root.replaceChildren(sidebar, stage, announced);
+    let detachPlayhead = () => {};
     function choose(day, updateHash) {
       if (!byDate.has(day)) return;
+      detachPlayhead();
       stage.querySelectorAll('audio').forEach(a => a.pause()); selected = day; month = day.slice(0,7);
       stage.replaceChildren(renderEntry(byDate.get(day), sessions.findIndex(s => s.date === day), data.songDurationSeconds));
+      detachPlayhead = window.MaloSoundPlayhead?.mount(stage.querySelector('.day-entry')) || (() => {});
       drawCalendar();
       if (updateHash) history.replaceState(null, '', `#session-${day}`);
       announced.textContent = `Journal entry for ${fullDate(day)} selected.`;

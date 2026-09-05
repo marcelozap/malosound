@@ -13,7 +13,7 @@ refresh()
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
-    'index.html', 'journal.css', 'journal.js', 'content/editions.json',
+    'index.html', 'journal.css', 'journal.js', 'session-playhead.js', 'content/editions.json',
     'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
     'assets/brand/malosound-square.png',
@@ -49,6 +49,8 @@ def validate_journal(data):
             for field in ('url', 'dataUrl'):
                 require(session['lineChart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: missing line asset')
             require(session['lineChart'].get('alt') and session['lineChart'].get('caption'), f'{day}: line needs context')
+            if session['lineChart'].get('playheadUrl'):
+                require(session['lineChart']['playheadUrl'].lstrip('/') in PUBLIC_FILES, f'{day}: missing timeline')
         for kind in ('preOpen', 'morning', 'closing', 'originalSong'):
             entry = session.get(kind)
             if entry is None:
