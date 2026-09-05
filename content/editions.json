@@ -1,5 +1,5 @@
 {
-  "songDurationSeconds": null,
+  "songDurationSeconds": 195,
   "sessions": [
     {
       "date": "2026-09-04",
@@ -15,6 +15,43 @@
         ],
         "reportUrl": "/reports/2026-09-04.html",
         "mapUrl": "/market-map.html?date=2026-09-04"
+      },
+      "closing": {
+        "title": "An Unfinished Return",
+        "summary": "SPY opened at $772.01, reached its low in the 11:31 ET minute, and ended at $770.19. A midday recovery gave way to a second dip and a partial return. The full 9:30–4:00 session becomes a 3:15 original instrumental.",
+        "label": "Original instrumental · retrospective session",
+        "paragraphs": [
+          "Session: 2026-09-04, 09:30–16:00 America/New_York. Prepared: 2026-09-04T23:34:52-04:00. This first rendering is retrospective.",
+          "No genuine pre-open entry exists for this date in this journal, so no morning forecast is scored.",
+          "A brief opening lift gives way to a long descent, a gentler midday recovery, a second dip, and a partial recovery that closes below the open. The song should return with more activity but without a full emotional resolution.",
+          "Price controls melodic contour. Observed volume shapes rhythmic activity; volatility shapes texture. The key, tempo, instruments and seven-part arrangement are artistic choices, with LLM assistance and a procedural audio render.",
+          "The session high was $772.87 in the 09:36 bar; the low was $769.00 in the 11:31 bar. The separate 16:00 print is $770.19; the final minute bar close is $770.24.",
+          "Observed minute volume totals 28,204,051 shares, 82.92% of the provider's daily total. Dynamics use those observed volumes; no missing volume is invented.",
+          "Full-day normalization is retrospective. Minute bars do not reveal the exact intraminute path, and musical expression is not evidence of trading performance."
+        ],
+        "reportUrl": "/reports/2026-09-04-spy-song.html",
+        "audioUrl": "https://github.com/marcelozap/malosound/releases/download/spy-song-2026-09-04/spy-2026-09-04.mp3",
+        "midiUrl": "https://github.com/marcelozap/malosound/releases/download/spy-song-2026-09-04/spy-2026-09-04.mid",
+        "durationSeconds": 195,
+        "tempoBpm": 80,
+        "preparedAt": "2026-09-04T23:34:52-04:00",
+        "sourceHash": "4672cae650a0fe435e7f7fcfbfd9a79ed3ec94ee206824c16faae1fb782ad299",
+        "sources": [
+          {
+            "label": "Yahoo Finance — source minute chart",
+            "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1m&includePrePost=false"
+          },
+          {
+            "label": "Yahoo Finance — daily consistency check",
+            "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?range=5d&interval=1d&includePrePost=false"
+          }
+        ],
+        "chart": {
+          "url": "/assets/charts/2026-09-04-spy.svg",
+          "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
+          "alt": "SPY minute closing prices for 2026-09-04, 09:30–16:00 New York, including the opening and separate closing print.",
+          "caption": "Observed minute closes, session open and separate 16:00 print. Vertical axis is a focused USD price scale. Source: Yahoo Finance."
+        }
       }
     },
     {

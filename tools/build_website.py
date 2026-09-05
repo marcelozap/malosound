@@ -74,7 +74,8 @@ def validate_journal(data):
                         f'{day}: use a public HTTPS audio URL without embedded credentials.')
 
             if kind == 'closing':
-                require(entry.get('audioUrl') or entry.get('song'), f'{day}: recording or reference song required')
+                require(entry.get('audioUrl') or entry.get('song') or entry.get('marketClosed') is True or entry.get('songPending') is True,
+                        f'{day}: recording, reference song, marketClosed, or explicit songPending required')
 
 
 class Page(HTMLParser):
@@ -133,6 +134,7 @@ def main():
     validate_links()
     marker = OUTPUT / '.malosound-website-build'
     if OUTPUT.exists():
+        require(OUTPUT.resolve() == ROOT.resolve() / 'build', 'Refuse deletion outside the intended build directory.')
         require(marker.exists() or not any(OUTPUT.iterdir()),
                 'build/ contains other work; preserve it before choosing a website output directory.')
         shutil.rmtree(OUTPUT)

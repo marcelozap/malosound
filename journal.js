@@ -48,7 +48,7 @@
       if (url.startsWith('https:')) { a.target = '_blank'; a.rel = 'noreferrer'; }
       return a;
     }
-    if (entry.reportUrl) card.append(link('Read the complete research ↗', entry.reportUrl));
+    if (entry.reportUrl) card.append(link(entry.audioUrl ? 'Read the session & song analysis ↗' : 'Read the complete research ↗', entry.reportUrl));
     if (entry.mapUrl) card.append(link('Explore the interactive market map ↗', entry.mapUrl));
     if (entry.chart) {
       const figure = el('figure', 'market-chart'); const img = el('img');
@@ -97,12 +97,15 @@
           if (other !== audio) other.pause();
         });
       });
-      card.append(audio, feedback);
+      const player = el('div', 'original-song');
+      player.append(el('span', 'eyebrow blue', 'Original MaloSound instrumental'), audio, feedback);
+      card.insertBefore(player, notes);
       const minutes = Math.floor(duration / 60);
       const seconds = String(duration % 60).padStart(2, '0');
-      card.append(el('div', 'edition-footer', `${minutes}:${seconds} · One session, one song`));
+      player.append(el('p', 'song-meta', `${minutes}:${seconds} · ${entry.tempoBpm || 80} BPM · A session translated into sound`));
+      if (entry.midiUrl) notes.append(link('Download editable MIDI ↗', entry.midiUrl));
     } else {
-      card.append(el('div', 'edition-footer', morning ? 'The research edition' : 'Closing reflection · reference track'));
+      card.append(el('div', 'edition-footer', morning ? 'The research edition' : entry.marketClosed ? 'Market closed' : entry.songPending ? 'Original song pending' : 'Closing reflection · reference track'));
     }
     return card;
   }

@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 SOURCE=Path('/Users/a14/Documents/xiv/market-journal')
 data=json.loads((ROOT/'content/editions.json').read_text())
 sessions={s['date']:s for s in data['sessions']}
-assets=[]
+assets=json.loads((ROOT/'content/market-assets.json').read_text())
 def copy(src,dest):
  p=ROOT/dest;p.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(src,p);assets.append(dest)
 def put(day,kind,entry):
@@ -31,5 +31,5 @@ for e in json.loads((SOURCE/'data/closings.json').read_text()):
 data['sessions']=sorted(sessions.values(),key=lambda e:e['date'],reverse=True)
 (ROOT/'content/editions.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 (ROOT/'content/market-map.json').write_text(json.dumps(entries,ensure_ascii=False,indent=2)+'\n')
-(ROOT/'content/market-assets.json').write_text(json.dumps(sorted(assets),indent=2)+'\n')
+(ROOT/'content/market-assets.json').write_text(json.dumps(sorted(set(assets)),indent=2)+'\n')
 print(f'Imported {len(sessions)} session dates with {len(assets)} evidence files.')
