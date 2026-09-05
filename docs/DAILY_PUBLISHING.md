@@ -139,7 +139,8 @@ track remains under `closing`; its original composition is under `originalSong`.
    publication. Existing assets are immutable; mismatches require a versioned
    correction, not deletion or replacement. Verify HTTPS media responses.
 7. Stage the edition with `python -X utf8 tools/publish_session.py --analysis
-   PATH --audio-url VERIFIED_HTTPS_URL --midi-url VERIFIED_HTTPS_URL`.
+   PATH --audio-url VERIFIED_HTTPS_URL --audio-sha256 MP3_SHA256 --midi-url VERIFIED_HTTPS_URL`.
+   Use the SHA-256 of the published MP3 (the release asset's digest), not the WAV.
    This preserves existing mornings and archives and exports selected public
    data. It refuses conflicting closing entries. Read all generated prose to
    ensure it fits that day's actual shape, source quality, and LLM interpretation.

@@ -1,10 +1,11 @@
 """Stage a validated original session in the public journal; does not push/deploy.
 
-python -X utf8 tools/publish_session.py --analysis PATH --audio-url HTTPS_URL --midi-url HTTPS_URL
+python -X utf8 tools/publish_session.py --analysis PATH --audio-url HTTPS_URL --audio-sha256 SHA256 --midi-url HTTPS_URL
 """
 import argparse
 import html
 import json
+import re
 from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -25,7 +26,8 @@ def safe_url(url):
     return url
 
 
-def stage(analysis_path,audio_url,midi_url):
+def stage(analysis_path,audio_url,midi_url,audio_sha256):
+    require(re.fullmatch(r'[a-f0-9]{64}',audio_sha256),'Release MP3 SHA-256 required')
     a=json.loads(analysis_path.read_text(encoding='utf-8'))
     require(a['symbol']=='SPY' and len(a['minutes'])==390,'Requires a complete 390-minute SPY session')
     require(a['duration_seconds']==195 and a['tempo_bpm']==80,'Series requires 195 seconds at 80 BPM')
@@ -38,7 +40,7 @@ def stage(analysis_path,audio_url,midi_url):
     session=next((x for x in data['sessions'] if x['date']==day),None)
     if session and session.get('closing'):
         old=session['closing']
-        if old.get('sourceHash')==a['source_sha256'] and old.get('audioUrl')==audio_url:
+        if old.get('sourceHash')==a['source_sha256'] and old.get('audioUrl')==audio_url and old.get('audioSha256')==audio_sha256:
             print('Already staged this exact session; no history changed.');return
         raise ValueError('A closing edition already exists. Preserve it and prepare an explicit dated revision.')
     require(data['songDurationSeconds'] in (None,195),'Existing series uses another duration')
@@ -66,7 +68,7 @@ def stage(analysis_path,audio_url,midi_url):
     sources=[{'label':'Yahoo Finance — source minute chart','url':a['source_url']}]
     if recon: sources.append({'label':'Yahoo Finance — daily consistency check','url':recon['source_url']})
     entry=dict(title=c['title'],summary=summary,label='Original instrumental · retrospective session',paragraphs=paragraphs,
-        reportUrl='/'+report,audioUrl=audio_url,midiUrl=midi_url,durationSeconds=195,tempoBpm=80,
+        reportUrl='/'+report,audioUrl=audio_url,audioSha256=audio_sha256,midiUrl=midi_url,durationSeconds=195,tempoBpm=80,
         preparedAt=prepared,sourceHash=a['source_sha256'],sources=sources,
         chart=dict(url='/'+chart,dataUrl='/'+audit,alt=f'SPY minute closing prices for {day}, 09:30–16:00 New York, including the opening and separate closing print.',
             caption='Observed minute closes, session open and separate 16:00 print. Vertical axis is a focused USD price scale. Source: Yahoo Finance.'))
@@ -108,4 +110,5 @@ def stage(analysis_path,audio_url,midi_url):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--analysis',type=Path,required=True);p.add_argument('--audio-url',required=True);p.add_argument('--midi-url',required=True)
-    args=p.parse_args();stage(args.analysis,args.audio_url,args.midi_url)
+    p.add_argument('--audio-sha256',required=True,help='SHA-256 of the published MP3 release asset')
+    args=p.parse_args();stage(args.analysis,args.audio_url,args.midi_url,args.audio_sha256)

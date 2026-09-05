@@ -51,7 +51,8 @@
           "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
           "alt": "SPY minute closing prices for 2026-09-04, 09:30–16:00 New York, including the opening and separate closing print.",
           "caption": "Observed minute closes, session open and separate 16:00 print. Vertical axis is a focused USD price scale. Source: Yahoo Finance."
-        }
+        },
+        "audioSha256": "225165cf5b78a5e447685b4f18736844c9c93f2ad68f2bbc98cdce9134cee5f5"
       },
       "preOpen": {
         "date": "2026-09-04",
@@ -294,7 +295,8 @@
           "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
           "alt": "Observed SPY minute-close shape with a break for the missing13:54 minute.",
           "caption": "Observed minute source; incomplete coverage and daily-open discrepancy are disclosed."
-        }
+        },
+        "audioSha256": "d022e97ea9171f000c5b02926125da69df06b8e6e56a01aca13060ab71db5338"
       },
       "lineChart": {
         "url": "/assets/charts/2026-09-03-line.svg",

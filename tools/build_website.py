@@ -2,11 +2,13 @@
 """Validate the journal and stage only public website files for static hosting."""
 from datetime import date
 from html.parser import HTMLParser
+from html import escape
 from pathlib import Path
 import json
 import shutil
 from urllib.parse import unquote, urlsplit
 from journal_pages import refresh
+from website_audio import stage_audio
 
 refresh()
 
@@ -139,7 +141,8 @@ def validate_links():
 
 
 def main():
-    validate_journal(json.loads((ROOT / 'content/editions.json').read_text()))
+    data = json.loads((ROOT / 'content/editions.json').read_text())
+    validate_journal(data)
     validate_links()
     marker = OUTPUT / '.malosound-website-build'
     if OUTPUT.exists():
@@ -152,7 +155,17 @@ def main():
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / name, destination)
     marker.touch()
+    replacements = stage_audio(data, OUTPUT)
+    (OUTPUT / 'content/editions.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    for name in PUBLIC_FILES:
+        if name.endswith('.html'):
+            page = OUTPUT / name
+            text = page.read_text(encoding='utf-8')
+            for source, local in replacements.items():
+                text = text.replace(f'src="{escape(source, quote=True)}"', f'src="{local}"')
+            page.write_text(text, encoding='utf-8')
     print(f'Website ready: {len(PUBLIC_FILES)} public files; journal and local links validated.')
+    print(f'{len(replacements)} verified MP3 recordings staged for same-origin playback.')
 
 
 if __name__ == '__main__':

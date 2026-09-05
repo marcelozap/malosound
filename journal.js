@@ -37,17 +37,20 @@
   function player(entry, duration) {
     const wrap = el('div', 'journal-player');
     const audio = el('audio'); audio.controls = true; audio.preload = 'metadata';
-    const url = new URL(entry.audioUrl);
-    if (url.protocol !== 'https:' || url.username || url.password) throw new Error('Invalid audio URL');
+    const url = new URL(entry.audioUrl, location.href);
+    const localAudio = url.origin === location.origin && /^\/assets\/audio\/[a-f0-9]{64}\.mp3$/.test(url.pathname);
+    if ((!localAudio && url.protocol !== 'https:') || url.username || url.password) throw new Error('Invalid audio URL');
     audio.src = url.href; audio.setAttribute('aria-label', `Listen to ${entry.title}`);
     const status = el('p', 'song-status'); status.hidden = true; status.setAttribute('role', 'status');
-    function unavailable(message) { audio.pause(); audio.hidden = true; status.hidden = false; status.textContent = message; }
-    audio.addEventListener('error', () => unavailable('The recording is temporarily unavailable. Please try again later.'));
+    const retry = el('button', 'text-link', 'Retry recording'); retry.type = 'button'; retry.hidden = true;
+    function unavailable(message) { audio.pause(); audio.hidden = true; status.hidden = false; status.textContent = message; retry.hidden = false; }
+    retry.addEventListener('click', () => { audio.hidden = false; status.hidden = true; retry.hidden = true; audio.load(); });
+    audio.addEventListener('error', () => unavailable('The recording could not load. Try loading it again.'));
     audio.addEventListener('loadedmetadata', () => {
       if (!Number.isFinite(audio.duration) || Math.abs(audio.duration - duration) > 1) unavailable('This recording is being checked. Please try again later.');
     });
     audio.addEventListener('play', () => document.querySelectorAll('audio').forEach(a => { if (a !== audio) a.pause(); }));
-    wrap.append(audio, status);
+    wrap.append(audio, status, retry);
     return wrap;
   }
   function renderEntry(session, index, duration) {

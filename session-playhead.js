@@ -126,6 +126,7 @@
       listen(audio, 'play', update); listen(audio, 'playing', start);
       ['pause','ended','waiting','stalled','emptied'].forEach(event => listen(audio, event, () => { stop(); update(); }));
       ['loadedmetadata','durationchange'].forEach(event => listen(audio, event, checkDuration));
+      listen(audio, 'loadstart', () => { invalid = false; feedback.hidden = true; update(); });
       listen(audio, 'error', () => { invalid = true; stop(); update(); feedback.textContent = 'The recording is temporarily unavailable. Please try again later.'; feedback.hidden = false; });
       listen(document, 'visibilitychange', start);
       listen(motion, 'change', start);
