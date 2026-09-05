@@ -1,0 +1,646 @@
+[
+  {
+    "id": "2026-09-04",
+    "date": "September 4, 2026",
+    "edition": "Founding entry · after close",
+    "cutoff": "2026-09-04T22:19:00-04:00",
+    "cutoffLabel": "September 4 · 10:19 p.m. ET",
+    "title": "Growth meets a cost shock.",
+    "summary": "The economy is still expanding. The next test is whether energy, inflation, and borrowing costs erode that resilience.",
+    "marketStatus": "U.S. closed Monday · next regular open Tue, Sept 8, 9:30 a.m. ET",
+    "reportUrl": "/reports/2026-09-04.html",
+    "changes": [
+      {
+        "title": "Start of the record",
+        "body": "This is the first entry. Daily changes will compare with a real prior snapshot; no historical entries are fabricated."
+      },
+      {
+        "title": "Consumer data needs context",
+        "body": "Card delinquency flows remain roughly stable. The fall in total debt partly reflects a mortgage-reporting gap."
+      },
+      {
+        "title": "Prepare for inflation week",
+        "body": "August PPI and CPI precede the September 15–16 Fed meeting."
+      }
+    ],
+    "topics": [
+      {
+        "id": "energy",
+        "title": "Energy & conflict",
+        "metric": "Brent crude",
+        "value": "$92.68",
+        "observation": "per barrel · Sept 4 settlement",
+        "status": "Supply pressure",
+        "headline": "War reaches markets through fuel, freight, and household purchasing power.",
+        "mechanism": "Reported supply disruptions and rising fuel prices increase costs before the full effect appears in company earnings.",
+        "falsifier": "Physical supply recovery would weaken this risk; diplomatic headlines alone are insufficient.",
+        "sourceIds": [
+          "oil",
+          "iea"
+        ],
+        "sectionIds": [
+          "energy",
+          "war-status",
+          "gas",
+          "supply",
+          "tariffs"
+        ]
+      },
+      {
+        "id": "rates",
+        "title": "Rates & liquidity",
+        "metric": "10-year Treasury",
+        "value": "4.77%",
+        "observation": "Sept 3 observation",
+        "status": "Financing pressure",
+        "headline": "Positive growth does not guarantee falling interest rates.",
+        "mechanism": "Higher real yields raise the hurdle for long-duration earnings, debt refinancing and investment.",
+        "falsifier": "Sustained disinflation and improved bond demand would ease pressure.",
+        "sourceIds": [
+          "rates",
+          "fed"
+        ],
+        "sectionIds": [
+          "rates",
+          "priced",
+          "fiscal"
+        ]
+      },
+      {
+        "id": "consumer",
+        "title": "Consumer & credit",
+        "metric": "Card delinquency flow",
+        "value": "6.97%",
+        "observation": "Q2 2026 · annualized balances",
+        "status": "Uneven resilience",
+        "headline": "New missed payments are roughly stable, while some households remain strained.",
+        "mechanism": "The flow into serious delinquency differs from the stock of overdue debt. Mortgage-reporting gaps distort total debt.",
+        "falsifier": "Worsening new delinquencies alongside weaker real spending would change the view.",
+        "sourceIds": [
+          "flows",
+          "method"
+        ],
+        "sectionIds": [
+          "debt",
+          "delinq-method",
+          "housing",
+          "banking"
+        ]
+      },
+      {
+        "id": "inflation",
+        "title": "Inflation & jobs",
+        "metric": "Headline CPI",
+        "value": "3.4%",
+        "observation": "July 2026 · year over year",
+        "status": "Cost pressure",
+        "headline": "A cooler monthly inflation print does not restore old price levels.",
+        "mechanism": "Energy and financing compete with discretionary spending even as payrolls grow.",
+        "falsifier": "Look for broad, sustained cooling and stronger real incomes.",
+        "sourceIds": [
+          "cpi",
+          "jobs"
+        ],
+        "sectionIds": [
+          "growth",
+          "labor",
+          "inflation"
+        ]
+      },
+      {
+        "id": "earnings",
+        "title": "Earnings & AI",
+        "metric": "Q3 EPS revision",
+        "value": "+1.2%",
+        "observation": "June 30–August 31 · estimate",
+        "status": "Selective strength",
+        "headline": "Aggregate earnings expectations improved, but not across every sector.",
+        "mechanism": "Investment-accounting gains and heavy AI spending require a cash-flow check.",
+        "falsifier": "Broader operating growth and cash conversion would strengthen confidence.",
+        "sourceIds": [
+          "eps",
+          "quality",
+          "msft"
+        ],
+        "sectionIds": [
+          "earnings",
+          "quality",
+          "ai"
+        ]
+      },
+      {
+        "id": "global",
+        "title": "International",
+        "metric": "Euro-area inflation",
+        "value": "3.3%",
+        "observation": "August flash · year over year",
+        "status": "Divergent paths",
+        "headline": "Europe, China, and Japan transmit different demand and financing risks.",
+        "mechanism": "Energy costs, manufacturing orders and exchange rates affect U.S. multinational margins.",
+        "falsifier": "Verify stronger final demand and actual supply recovery before assuming normalization.",
+        "sourceIds": [
+          "euro",
+          "china",
+          "boj"
+        ],
+        "sectionIds": [
+          "international"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "holiday",
+        "label": "Nasdaq — U.S. holiday schedule 2026",
+        "href": "https://www.nasdaq.com/market-activity/stock-market-holiday-schedule",
+        "query": {
+          "description": "Nasdaq — U.S. holiday schedule 2026"
+        }
+      },
+      {
+        "id": "stocks",
+        "label": "AP — September 4, 2026 closing index recap",
+        "href": "https://apnews.com/article/ebc11cfa2cf8baf4491bf3d4199c1d74",
+        "query": {
+          "description": "AP September 4, 2026 closing index recap. Four published index observations manually transcribed and selected with this executed SQL. No external database used.",
+          "sql": "WITH reviewed(\"index\", close, day, ytd) AS (VALUES ('S&P 500','7,718.60','−0.4%','+12.8%'),('Dow Jones','53,414.25','−0.5%','+11.1%'),('Nasdaq Composite','26,506.99','−0.3%','+14.0%'),('Russell 2000','2,975.65','+0.2%','+19.9%')) SELECT * FROM reviewed",
+          "engine": "SQLite",
+          "language": "sql",
+          "metric_definitions": [
+            "Closing index points; rounded daily and year-to-date price returns."
+          ],
+          "filters": [
+            "September 4, 2026 closing observations."
+          ]
+        }
+      },
+      {
+        "id": "rates",
+        "label": "Federal Reserve — H.15, September 4 release",
+        "href": "https://www.federalreserve.gov/releases/h15/",
+        "query": {
+          "description": "Observations through September 3, 2026. Constant maturity yields; percentages per annum. This page updates."
+        }
+      },
+      {
+        "id": "fed",
+        "label": "Federal Reserve — July 29, 2026 policy statement",
+        "href": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+        "query": {
+          "description": "Federal Reserve — July 29, 2026 policy statement"
+        }
+      },
+      {
+        "id": "vix",
+        "label": "Cboe — VIX, September 3 observation",
+        "href": "https://www.cboe.com/tradable-products/vix/",
+        "query": {
+          "description": "Retrieved display explicitly dated September 3, 2026; index points, not dollars. Not September 4 close."
+        }
+      },
+      {
+        "id": "hy",
+        "label": "ICE BofA via FRED — US High Yield OAS",
+        "href": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2",
+        "query": {
+          "description": "September 3 close 2.65 percentage points, published September 4; BAMLH0A0HYM2. Public below-investment-grade bonds, not private credit."
+        }
+      },
+      {
+        "id": "jobs",
+        "label": "BLS — August 2026 Employment Situation",
+        "href": "https://www.bls.gov/news.release/archives/empsit_09042026.htm",
+        "query": {
+          "description": "Released September 4, 2026. Payrolls establishment survey; unemployment household survey. Revised June/July observations."
+        }
+      },
+      {
+        "id": "gdp",
+        "label": "BEA — Q2 2026 GDP second estimate",
+        "href": "https://www.bea.gov/news/2026/gdp-second-estimate-and-corporate-profits-2nd-quarter-2026",
+        "query": {
+          "description": "Released August 26. Real quarterly growth rates are seasonally adjusted annual rates, not year-over-year."
+        }
+      },
+      {
+        "id": "pce",
+        "label": "BEA — July 2026 Personal Income and Outlays",
+        "href": "https://www.bea.gov/news/2026/personal-income-and-outlays-july-2026",
+        "query": {
+          "description": "Released August 26. Monthly and year-over-year price changes kept separate."
+        }
+      },
+      {
+        "id": "cpi",
+        "label": "BLS — July 2026 CPI",
+        "href": "https://www.bls.gov/news.release/archives/cpi_08122026.htm",
+        "query": {
+          "description": "Released August 12. Monthly changes seasonally adjusted; annual changes not seasonally adjusted."
+        }
+      },
+      {
+        "id": "wages",
+        "label": "BLS — July 2026 real earnings",
+        "href": "https://www.bls.gov/news.release/archives/realer_08122026.htm",
+        "query": {
+          "description": "BLS — July 2026 real earnings"
+        }
+      },
+      {
+        "id": "jolts",
+        "label": "BLS — July 2026 JOLTS",
+        "href": "https://www.bls.gov/news.release/archives/jolts_09012026.htm",
+        "query": {
+          "description": "BLS — July 2026 JOLTS"
+        }
+      },
+      {
+        "id": "debt",
+        "label": "New York Fed — Q2 2026 household debt overview",
+        "href": "https://www.newyorkfed.org/householdcredit/hhdc-iframe",
+        "query": {
+          "description": "June-end observation, August 11 publication; mortgage servicing transfer causes reporting gap."
+        }
+      },
+      {
+        "id": "flows",
+        "label": "New York Fed — Q2 2026 serious delinquency transitions",
+        "href": "https://www.newyorkfed.org/newsevents/news/research/2026/20260811",
+        "query": {
+          "description": "Source: New York Fed August 11, 2026 press release, Flow into Serious Delinquency table. Values manually transcribed and reshaped using the executed SQL. No external database table used.",
+          "sql": "WITH reviewed(category, period, rate) AS (VALUES ('Credit cards','Q2 2025',6.93),('Credit cards','Q2 2026',6.97),('Auto loans','Q2 2025',2.93),('Auto loans','Q2 2026',3.0),('Mortgages','Q2 2025',1.29),('Mortgages','Q2 2026',1.52),('HELOCs','Q2 2025',1.15),('HELOCs','Q2 2026',1.15),('Student loans','Q2 2025',12.88),('Student loans','Q2 2026',7.83)) SELECT category, period, rate, 'Annualized balance flow into 90+ days delinquent; percent' AS definition FROM reviewed",
+          "engine": "SQLite",
+          "language": "sql",
+          "metric_definitions": [
+            "Annualized balance flow into 90+ days delinquent; numeric values are percentage points, e.g. 6.97 means 6.97%."
+          ],
+          "filters": [
+            "Five debt categories; Q2 2025 and Q2 2026. Student-loan reporting distorts comparisons."
+          ]
+        }
+      },
+      {
+        "id": "method",
+        "label": "New York Fed — Reconciling credit-card delinquency measures",
+        "href": "https://libertystreeteconomics.newyorkfed.org/2026/08/how-distressed-are-consumers-reconciling-diverging-credit-card-delinquency-measures/",
+        "query": {
+          "description": "New York Fed — Reconciling credit-card delinquency measures"
+        }
+      },
+      {
+        "id": "housing",
+        "label": "Census/HUD — July 2026 new residential construction",
+        "href": "https://www.census.gov/construction/nrc/current/",
+        "query": {
+          "description": "July data released August 18. Starts and permits in seasonally adjusted annual units. Live source page may update."
+        }
+      },
+      {
+        "id": "mortgages",
+        "label": "Freddie Mac — PMMS September 3, 2026",
+        "href": "https://www.freddiemac.com/pmms/archive",
+        "query": {
+          "description": "Freddie Mac — PMMS September 3, 2026"
+        }
+      },
+      {
+        "id": "sloos",
+        "label": "Federal Reserve — July 2026 bank lending survey",
+        "href": "https://www.federalreserve.gov/data/sloos/sloos-202607.htm",
+        "query": {
+          "description": "Federal Reserve — July 2026 bank lending survey"
+        }
+      },
+      {
+        "id": "fdic",
+        "label": "FDIC — Q2 2026 banking results, August 25",
+        "href": "https://content.govdelivery.com/accounts/USFDIC/bulletins/426aa10",
+        "query": {
+          "description": "FDIC — Q2 2026 banking results, August 25"
+        }
+      },
+      {
+        "id": "private",
+        "label": "Bank of Canada — Private-credit vulnerabilities, 2026 Financial Stability Report",
+        "href": "https://www.bankofcanada.ca/publications/financial-stability-report/financial-stability-report-2026/rapid-growth-in-private-credit-has-created-vulnerabilities/",
+        "query": {
+          "description": "Bank of Canada — Private-credit vulnerabilities, 2026 Financial Stability Report"
+        }
+      },
+      {
+        "id": "fiscal",
+        "label": "CBO — Monthly Budget Review July 2026, August 10",
+        "href": "https://www.cbo.gov/system/files/2026-08/61983-2026-07-MBR.pdf",
+        "query": {
+          "description": "CBO — Monthly Budget Review July 2026, August 10"
+        }
+      },
+      {
+        "id": "borrowing",
+        "label": "US Treasury — August 2026 sources and uses reconciliation",
+        "href": "https://home.treasury.gov/system/files/136/Sources-Uses-Public-Table-August-2026.pdf",
+        "query": {
+          "description": "Forecast as of August 3; marketable borrowing distinct from financing need and budget deficit."
+        }
+      },
+      {
+        "id": "oil",
+        "label": "Reuters — September 4 oil settlements and supply disruptions",
+        "href": "https://www.investing.com/news/commodities-news/oil-prices-set-for-weekly-gain-as-usiran-hostilities-intensify-4888883",
+        "query": {
+          "description": "September 4 report, updated 4:30 p.m.; benchmark futures settlements. Contract months not independently established; not a tradable contract quote."
+        }
+      },
+      {
+        "id": "iea",
+        "label": "IEA — August 2026 Oil Market Report",
+        "href": "https://www.iea.org/reports/oil-market-report-august-2026",
+        "query": {
+          "description": "August 12 publication; principally July observations, Q3 and annual forecasts."
+        }
+      },
+      {
+        "id": "gas",
+        "label": "IEA — Q3 2026 Gas Market Report",
+        "href": "https://www.iea.org/reports/gas-market-report-q3-2026/executive-summary",
+        "query": {
+          "description": "July 7 publication; Q2 prices are averages, not September spot prices."
+        }
+      },
+      {
+        "id": "freight",
+        "label": "Drewry — World Container Index, September 3",
+        "href": "https://www.drewry.co.uk/supply-chain-advisors/supply-chain-expertise/world-container-index-assessed-by-drewry",
+        "query": {
+          "description": "Composite spot price per 40-foot container, not all routes or contract prices."
+        }
+      },
+      {
+        "id": "ports",
+        "label": "Hapag-Lloyd — Middle East operating update, week 36",
+        "href": "https://www.hapag-lloyd.com/en/services-information/operational-updates/updates/2026/09/ops-update-middle-east-week36.html",
+        "query": {
+          "description": "Hapag-Lloyd — Middle East operating update, week 36"
+        }
+      },
+      {
+        "id": "war",
+        "label": "AP — Russia–Ukraine air war, September 4",
+        "href": "https://apnews.com/article/553d4ed8204070be97b1671db0c5cd53",
+        "query": {
+          "description": "AP — Russia–Ukraine air war, September 4"
+        }
+      },
+      {
+        "id": "talks",
+        "label": "Axios — Proposed weekend Moscow/Kyiv talks, September 4",
+        "href": "https://www.axios.com/2026/09/04/trump-witkoff-kushner-moscow-kyiv",
+        "query": {
+          "description": "Axios — Proposed weekend Moscow/Kyiv talks, September 4"
+        }
+      },
+      {
+        "id": "tariffs",
+        "label": "USTR — July 2026 Section 301 action",
+        "href": "https://www.ustr.gov/about/policy-offices/press-office/press-releases/2026/july/ustr-takes-action-forced-labor-section-301-investigations",
+        "query": {
+          "description": "USTR — July 2026 Section 301 action"
+        }
+      },
+      {
+        "id": "customs",
+        "label": "CBP — Section 301 implementation guidance",
+        "href": "https://content.govdelivery.com/accounts/USDHSCBP/bulletins/421d887",
+        "query": {
+          "description": "CBP — Section 301 implementation guidance"
+        }
+      },
+      {
+        "id": "euro",
+        "label": "Eurostat — August 2026 flash inflation, September 1",
+        "href": "https://ec.europa.eu/eurostat/web/products-euro-indicators/w/2-01092026-ap",
+        "query": {
+          "description": "Eurostat — August 2026 flash inflation, September 1"
+        }
+      },
+      {
+        "id": "ecb",
+        "label": "ECB — July 23, 2026 decision",
+        "href": "https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260723~29f24d99bc.en.html",
+        "query": {
+          "description": "ECB — July 23, 2026 decision"
+        }
+      },
+      {
+        "id": "china",
+        "label": "China NBS — August 2026 purchasing managers indexes",
+        "href": "https://www.stats.gov.cn/english/PressRelease/202609/t20260901_1965170.html",
+        "query": {
+          "description": "China NBS — August 2026 purchasing managers indexes"
+        }
+      },
+      {
+        "id": "china2",
+        "label": "Reuters — August private China manufacturing PMI",
+        "href": "https://uk.marketscreener.com/news/china-s-august-factory-activity-picks-up-as-demand-improves-pmi-shows-ce7858ddda8ef121",
+        "query": {
+          "description": "Reuters — August private China manufacturing PMI"
+        }
+      },
+      {
+        "id": "boj",
+        "label": "Bank of Japan — July 31, 2026 policy statement",
+        "href": "https://www.boj.or.jp/en/mopo/mpmdeci/mpr_2026/k260731a.pdf",
+        "query": {
+          "description": "Bank of Japan — July 31, 2026 policy statement"
+        }
+      },
+      {
+        "id": "eps",
+        "label": "FactSet — September 4, 2026 EPS estimate revisions",
+        "href": "https://insight.factset.com/analysts-increasing-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter",
+        "query": {
+          "description": "June 30–August 31 estimate changes. Consensus forecasts, not actual results."
+        }
+      },
+      {
+        "id": "quality",
+        "label": "FactSet — August 28, 2026 earnings-quality analysis",
+        "href": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+        "query": {
+          "description": "FactSet — August 28, 2026 earnings-quality analysis"
+        }
+      },
+      {
+        "id": "msft",
+        "label": "Microsoft — Q4 FY2026 earnings call, July 29",
+        "href": "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4",
+        "query": {
+          "description": "Microsoft — Q4 FY2026 earnings call, July 29"
+        }
+      },
+      {
+        "id": "meta",
+        "label": "Meta — Q2 2026 results",
+        "href": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Second-Quarter-2026-Results/default.aspx",
+        "query": {
+          "description": "Meta — Q2 2026 results"
+        }
+      },
+      {
+        "id": "blssep",
+        "label": "BLS — September 2026 release calendar",
+        "href": "https://www.bls.gov/schedule/2026/09_sched.htm",
+        "query": {
+          "description": "BLS — September 2026 release calendar"
+        }
+      },
+      {
+        "id": "blsoct",
+        "label": "BLS — October 2026 release calendar",
+        "href": "https://www.bls.gov/schedule/2026/10_sched.htm",
+        "query": {
+          "description": "BLS — October 2026 release calendar"
+        }
+      },
+      {
+        "id": "beacal",
+        "label": "BEA — Release schedule",
+        "href": "https://www.bea.gov/news/schedule/full",
+        "query": {
+          "description": "BEA — Release schedule"
+        }
+      },
+      {
+        "id": "fedcal",
+        "label": "Federal Reserve — FOMC calendar",
+        "href": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+        "query": {
+          "description": "Federal Reserve — FOMC calendar"
+        }
+      },
+      {
+        "id": "ecbcal",
+        "label": "ECB — Official calendar",
+        "href": "https://www.ecb.europa.eu/press/calendars/weekly/html/index.pl.html",
+        "query": {
+          "description": "ECB — Official calendar"
+        }
+      },
+      {
+        "id": "ieacal",
+        "label": "IEA — September 11, 2026 Oil Market Report",
+        "href": "https://www.iea.org/events/oil-market-report-september-2026",
+        "query": {
+          "description": "IEA — September 11, 2026 Oil Market Report"
+        }
+      },
+      {
+        "id": "oracle",
+        "label": "Oracle — Q1 FY2027 earnings date announcement",
+        "href": "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Sets-the-Date-for-its-First-Quarter-Fiscal-Year-2027-Earnings-Announcement/default.aspx",
+        "query": {
+          "description": "Oracle — Q1 FY2027 earnings date announcement"
+        }
+      },
+      {
+        "id": "adobe",
+        "label": "Adobe — Investor relations upcoming events",
+        "href": "https://www.adobe.com/investor-relations.html",
+        "query": {
+          "description": "Adobe — Investor relations upcoming events"
+        }
+      },
+      {
+        "id": "costco",
+        "label": "Costco — Q4 2026 earnings call",
+        "href": "https://investor.costco.com/events-and-presentations/events/event-details/2026/Q4-2026-Earnings-Call/default.aspx",
+        "query": {
+          "description": "Costco — Q4 2026 earnings call"
+        }
+      },
+      {
+        "id": "micron",
+        "label": "Micron — September 30 earnings announcement",
+        "href": "https://investors.micron.com/news/press-release/2026/Micron-Technology-to-Report-Fiscal-Fourth-Quarter-Results-on-September-30-2026/default.aspx",
+        "query": {
+          "description": "Micron — September 30 earnings announcement"
+        }
+      },
+      {
+        "id": "jpm",
+        "label": "JPMorgan Chase — 2026 earnings calendar",
+        "href": "https://www.jpmorganchase.com/ir/news/2025/jpmc-announces-conference-calls-to-review-first-quarter-second-quarter-third-quarter-and-fourth-quarter-2026-earnings",
+        "query": {
+          "description": "JPMorgan Chase — 2026 earnings calendar"
+        }
+      },
+      {
+        "id": "fedex",
+        "label": "FedEx — October 28, 2026 earnings event",
+        "href": "https://investors.fedex.com/news-and-events/upcoming-events/upcoming-events-details/2026/FedEx-Earnings-Call/default.aspx",
+        "query": {
+          "description": "FedEx — October 28, 2026 earnings event"
+        }
+      }
+    ],
+    "events": [
+      {
+        "date": "2026-09-07",
+        "label": "U.S. Labor Day",
+        "time": "Regular stock markets closed",
+        "type": "Market",
+        "sourceId": "holiday"
+      },
+      {
+        "date": "2026-09-10",
+        "label": "August PPI",
+        "time": "8:30 a.m. ET",
+        "type": "Economy",
+        "sourceId": "blssep"
+      },
+      {
+        "date": "2026-09-10",
+        "label": "Oracle earnings call",
+        "time": "5:00 p.m. ET · call times",
+        "type": "Earnings",
+        "sourceId": "oracle"
+      },
+      {
+        "date": "2026-09-10",
+        "label": "Adobe earnings call",
+        "time": "5:00 p.m. ET · call time",
+        "type": "Earnings",
+        "sourceId": "adobe"
+      },
+      {
+        "date": "2026-09-11",
+        "label": "August CPI & real earnings",
+        "time": "8:30 a.m. ET",
+        "type": "Economy",
+        "sourceId": "blssep"
+      },
+      {
+        "date": "2026-09-15",
+        "label": "FOMC meeting, September 15–16",
+        "time": "Decision time: verify official schedule",
+        "type": "Policy",
+        "sourceId": "fedcal"
+      },
+      {
+        "date": "2026-09-24",
+        "label": "Costco earnings call",
+        "time": "5:00 p.m. ET",
+        "type": "Earnings",
+        "sourceId": "costco"
+      },
+      {
+        "date": "2026-09-30",
+        "label": "GDP revision & August PCE",
+        "time": "8:30 a.m. ET",
+        "type": "Economy",
+        "sourceId": "beacal"
+      }
+    ]
+  }
+]

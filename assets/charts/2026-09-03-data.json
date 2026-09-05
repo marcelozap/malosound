@@ -1,0 +1,26 @@
+{
+  "session_date": "2026-09-03",
+  "observation": "U.S. regular-session close, 4:00 p.m. America/New_York",
+  "metric": "Daily index price return versus September 2 close, percent; excludes dividends",
+  "source_url": "https://investrade.com/market-review-september-03-2026/",
+  "retrieved_at": "2026-09-04T23:13:34-04:00",
+  "rows": [
+    {
+      "index": "Nasdaq Composite",
+      "return_pct": 1.4
+    },
+    {
+      "index": "Dow Jones Industrial Average",
+      "return_pct": 1.18
+    },
+    {
+      "index": "S&P 500",
+      "return_pct": 1.06
+    },
+    {
+      "index": "Russell 2000",
+      "return_pct": 0.51
+    }
+  ],
+  "limitations": "Published closing recap, not licensed exchange feed. No intraday series. Reported percentages retained; rounded closing levels are not used to recalculate returns. AP agrees at one-decimal precision for the three large-cap indexes but reports slightly different closing levels, so levels are omitted."
+}

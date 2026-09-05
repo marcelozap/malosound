@@ -24,9 +24,7 @@ close: the song inspired by price action, with a written reflection.
 - `studio.html`: the existing interactive sound/signal experiment.
 - `latin-house-lab.html`: the existing Rhythm Lab.
 
-The essay is ready. No daily market analysis or song has been supplied yet;
-the journal starts with an empty state. No market prices, track releases,
-publication dates, or song duration have been invented.
+The journal now includes the September 4 founding research and September 3 retrospective closing trial, with chart, evidence and a Bill Withers listening selection. The interactive market map and complete research are public pages. Original-song duration remains undecided; reference tracks do not count as original fixed-duration releases. See MARKET_JOURNAL_WORKFLOW.md for the active daily publication workflow.
 
 ## Publishing the two daily editions
 
@@ -34,14 +32,14 @@ Edit `content/editions.json`. There is one object per session date. Add `morning
 for the first edition, then add `closing` to the same object after the session.
 Keep earlier dates: the homepage displays the newest date and automatically
 places older sessions in the archive. Dates use `YYYY-MM-DD`; their order in
-the file does not matter. The site does not run a scheduler or generate entries.
+the file does not matter. The static site does not generate entries; the Codex daily automation follows MARKET_JOURNAL_WORKFLOW.md to research and publish them.
 
 Each edition needs `title`, `summary`, and optional `paragraphs` (a list of
 plain-text paragraphs). Text is rendered as text, never interpreted as HTML.
 A morning-only session is valid and shows an honest closing-song empty state.
 
 Before the first song, choose one duration in seconds and set the top-level
-`songDurationSeconds`. Every closing entry needs a public HTTPS `audioUrl` and
+`songDurationSeconds`. Every original recorded closing release needs a public HTTPS `audioUrl` and
 `durationSeconds` equal to that series duration. Keep this duration constant
 for future sessions. The browser checks the audio's actual duration within a
 one-second encoding tolerance and shows an unavailable message for an
@@ -74,8 +72,7 @@ This is a schema example only; replace every example value before publication:
 
 The example's four-minute length is illustrative, not the chosen series
 duration. Publish entries on actual market days; the exact exchange calendar
-and holiday/short-session policy have not been chosen. The build checks
-weekdays but cannot determine exchange holidays.
+and holiday/short-session policy have not been chosen. The build accepts calendar dates; the research workflow must verify exchange holidays and label recaps.
 
 ## Preview and validation
 

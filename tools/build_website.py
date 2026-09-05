@@ -11,11 +11,13 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
     'index.html', 'journal.css', 'journal.js', 'content/editions.json',
+    'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
     'assets/brand/malosound-square.png',
     'studio.html', 'latin-house-lab.html', 'latin-house-lab.css', 'latin-house-lab.js',
     'gateway/sample-01.audioanalysis.v1.json', 'gateway/sample-02.audioanalysis.v1.json',
 )
+PUBLIC_FILES += tuple(json.loads((ROOT / 'content/market-assets.json').read_text()))
 
 
 def require(condition, message):
@@ -36,7 +38,7 @@ def validate_journal(data):
         day = session.get('date', '')
         parsed = date.fromisoformat(day)
         require(parsed.isoformat() == day, 'Use YYYY-MM-DD session dates.')
-        require(parsed.weekday() < 5, f'{day}: sessions belong to Monday–Friday.')
+        # Recaps can be dated on weekends and exchange holidays.
         require(day not in dates, f'{day}: duplicate session date.')
         dates.add(day)
         require(session.get('morning') or session.get('closing'), f'{day}: add at least one edition.')
@@ -51,7 +53,18 @@ def validate_journal(data):
             paragraphs = entry.get('paragraphs', [])
             require(isinstance(paragraphs, list) and all(isinstance(p, str) and p.strip() for p in paragraphs),
                     f'{day}: {kind}.paragraphs must contain nonempty strings.')
-            if kind == 'closing':
+            for field in ('reportUrl', 'mapUrl'):
+                if entry.get(field):
+                    require(entry[field].startswith('/') and '..' not in entry[field], f'{day}: safe local {field} required')
+                    require(entry[field].split('?')[0].lstrip('/') in PUBLIC_FILES, f'{day}: missing published {field}')
+            if entry.get('chart'):
+                for field in ('url','dataUrl'):
+                    require(entry['chart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: chart asset missing')
+                require(entry['chart'].get('alt') and entry['chart'].get('caption'), f'{day}: chart description required')
+            if entry.get('song'):
+                require(urlsplit(entry['song']['url']).scheme == 'https', f'{day}: HTTPS listening link required')
+                require(all(entry['song'].get(k) for k in ('title','artist','reason')), f'{day}: song metadata required')
+            if kind == 'closing' and entry.get('audioUrl'):
                 require(duration is not None, 'Choose songDurationSeconds before publishing a song.')
                 require(type(entry.get('durationSeconds')) is int and entry['durationSeconds'] == duration,
                         f'{day}: every song must have the series duration of {duration} seconds.')
@@ -59,6 +72,9 @@ def validate_journal(data):
                 audio = urlsplit(entry['audioUrl'])
                 require(audio.scheme == 'https' and audio.hostname and not audio.username and not audio.password,
                         f'{day}: use a public HTTPS audio URL without embedded credentials.')
+
+            if kind == 'closing':
+                require(entry.get('audioUrl') or entry.get('song'), f'{day}: recording or reference song required')
 
 
 class Page(HTMLParser):
