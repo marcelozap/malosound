@@ -20,7 +20,7 @@
     if (u.origin !== location.origin) { a.target = '_blank'; a.rel = 'noreferrer'; }
     return a;
   }
-  function sources(entry, label = 'Sources & publication notes') {
+  function sources(entry, label = 'Notes + sources') {
     const details = el('details', 'journal-details');
     details.append(el('summary', '', label));
     if (entry.preparedAt) details.append(el('p', 'publication-time', `Prepared / added: ${entry.preparedAt}`));
@@ -62,9 +62,10 @@
     const morning = session.preOpen || session.morning;
     const pre = section('01', 'Before the open');
     if (morning) {
-      pre.append(el('p', 'entry-status', morning.label), el('h4', '', morning.title), el('p', 'chapter-deck', morning.summary));
-      (morning.paragraphs || []).forEach(p => pre.append(el('p', '', p)));
+      pre.append(el('p', 'entry-status', morning.label), el('h4', '', morning.title));
       const refs = sources(morning);
+      refs.append(el('p', 'chapter-deck', morning.summary));
+      (morning.paragraphs || []).forEach(p => refs.append(el('p', '', p)));
       if (morning.reportUrl) refs.append(link('Read the full morning research ↗', morning.reportUrl));
       if (morning.mapUrl) refs.append(link('Explore the market map ↗', morning.mapUrl));
       pre.append(refs);
@@ -73,7 +74,6 @@
     const song = session.originalSong || session.closing;
     const chart = session.lineChart;
     const drawing = section('02', 'The line the day drew');
-    drawing.append(el('h4', '', 'One session. One gesture.'));
     if (chart) {
       const figure = el('figure', 'session-drawing');
       if (chart.playheadUrl) figure.dataset.timelineSrc = chart.playheadUrl;
@@ -81,9 +81,10 @@
       const img = el('img'); img.src = chart.url; img.alt = chart.alt; img.width = 1000; img.height = 340;
       const caption = el('figcaption', 'drawing-times');
       caption.append(el('span', '', chart.startLabel || '09:30 ET'), el('span', '', chart.endLabel || '16:00 ET'));
-      stage.append(img); figure.append(stage, caption); drawing.append(figure, el('p', 'drawing-caption', chart.caption));
-      if (chart.gapNote) drawing.append(el('p', 'data-gap', chart.gapNote));
-      const method = el('details', 'journal-details'); method.append(el('summary', '', 'Behind the line'));
+      stage.append(img); figure.append(stage, caption); drawing.append(figure);
+      if (chart.gapNote) drawing.append(el('p', 'data-gap', chart.gapShort || chart.gapNote));
+      const method = el('details', 'journal-details'); method.append(el('summary', '', 'Behind the line'), el('p', '', chart.caption));
+      if (chart.gapNote) method.append(el('p', '', chart.gapNote));
       (chart.notes || []).forEach(p => method.append(el('p', '', p)));
       method.append(link('View the source observations ↗', chart.dataUrl));
       drawing.append(method);
@@ -91,15 +92,16 @@
     article.append(drawing);
     const music = section('03', 'The day, in another key', 'blue');
     if (song?.audioUrl) {
-      music.append(el('p', 'eyebrow blue', 'Original MaloSound instrumental'), el('h4', 'song-title', song.title));
+      music.append(el('p', 'eyebrow blue', 'Original · Retrospective'), el('h4', 'song-title', song.title));
       const sessionHours = chart?.sessionHours || '9:30 a.m.–4:00 p.m. ET';
-      music.append(el('p', 'chapter-deck', `SPY’s ${shortDate(session.date)}, ${sessionHours} session, compressed into a 3:15 instrumental.`));
       music.append(player(song, duration));
       const meta = el('div', 'song-specs');
       ['03:15', `${song.tempoBpm || 80} BPM`, 'SPY → SOUND'].forEach(t => meta.append(el('span', '', t)));
       music.append(meta);
-      if (song.thesis) music.append(el('p', '', song.thesis));
-      const notes = sources(song, 'How the day became music'); notes.append(el('p', '', song.summary));
+      const notes = sources(song, 'About the song');
+      notes.append(el('p', '', `SPY’s ${shortDate(session.date)}, ${sessionHours} session, compressed into a 3:15 instrumental.`));
+      if (song.thesis) notes.append(el('p', '', song.thesis));
+      notes.append(el('p', '', song.summary));
       (song.paragraphs || []).forEach(p => notes.append(el('p', '', p)));
       if (song.reportUrl) notes.append(link('Read the complete session ↗', song.reportUrl));
       if (song.midiUrl) notes.append(link('Download the editable MIDI ↗', song.midiUrl));
@@ -108,7 +110,7 @@
     article.append(music);
     const earlier = [session.preOpen && session.morning, session.originalSong && session.closing].filter(Boolean);
     if (earlier.length) {
-      const history = el('details', 'journal-details earlier-notes'); history.append(el('summary', '', 'Earlier notes from this date'));
+      const history = el('details', 'journal-details earlier-notes'); history.append(el('summary', '', 'Earlier notes'));
       earlier.forEach(e => { history.append(el('h4', '', e.title), el('p', '', e.label), el('p', '', e.summary)); if(e.reportUrl) history.append(link('Read the original entry ↗',e.reportUrl)); });
       article.append(history);
     }
@@ -164,9 +166,8 @@
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);
       }
-      const legend = el('div', 'calendar-legend'); legend.append(el('span','legend-dot'),el('span','','A day with a story. Click to open.'));
+      const legend = el('div', 'calendar-legend'); legend.append(el('span','legend-dot'),el('span','','Pick a day. Press play.'));
       calendar.replaceChildren(el('span','eyebrow gold','Choose a session'),head,grid,legend);
-      calendar.append(el('p','calendar-note', 'The journal begins September 3, 2026. Each entry keeps the morning thought, the observed line, and its song together.'));
     }
     window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(),false); });
     choose(selected,false);

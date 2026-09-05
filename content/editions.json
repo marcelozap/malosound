@@ -309,7 +309,8 @@
           "Observed minute open: $768.43; vendor daily open: $767.90. Observed minute low: $767.47; daily low: $767.45. These source discrepancies remain unresolved.",
           "The final anchor is the vendor daily close of $773.17, not a separate 16:00 intraday print; the last minute closes at $773.11."
         ],
-        "gapNote": "Missing source data: 13:54–13:55 ET. The line breaks there; the song leaves space at 2:12.0–2:12.5. No price or volume was filled in."
+        "gapNote": "Missing source data: 13:54–13:55 ET. The line breaks there; the song leaves space at 2:12.0–2:12.5. No price or volume was filled in.",
+        "gapShort": "Source gap · 13:54–13:55 ET · silence 2:12.0–2:12.5"
       }
     }
   ],

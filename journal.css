@@ -2,7 +2,7 @@
 
 /* A calendar of complete artist's journal entries. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.journal-intro{font-size:20px;color:var(--muted);margin:-10px 0 38px;max-width:650px}
+.journal-intro{display:flex;align-items:center;gap:22px;font-size:20px;letter-spacing:1px;color:var(--muted);margin:-10px 0 38px;max-width:650px}
 .journal-layout{display:grid;grid-template-columns:320px minmax(0,1fr);gap:40px;align-items:start;position:relative}
 .calendar-panel{position:sticky;top:28px;background:#081014;border:1px solid #e5b65735;border-radius:20px;overflow:hidden;box-shadow:0 20px 80px #0006}
 .calendar-art{height:190px;position:relative;background:linear-gradient(0deg,#081014,transparent 65%),url('assets/brand/market-into-music.png') 65% 45%/cover;isolation:isolate}
@@ -59,3 +59,6 @@
 @media(max-width:800px){.product-columns{grid-template-columns:1fr;gap:28px}.cadence{white-space:normal}.stage-bottom{gap:18px;align-items:end}.stage-bottom a{max-width:180px;text-align:right}.art-home .nav{gap:17px}.publishing-note{margin-top:0}.product-bridge .section-heading{margin-bottom:8px}}
 
 .standalone-journal{max-width:920px;margin:40px auto 70px}.standalone-art{height:220px;background:linear-gradient(0deg,#070c10,transparent 80%),url(assets/brand/market-into-music.png) 65% 48%/cover;border-radius:22px 22px 0 0}.standalone-journal .day-entry{border-radius:0 0 22px 22px}.day-heading h1{font:500 clamp(40px,5vw,68px)/1.15 var(--heading);letter-spacing:-2px;margin:18px 0 12px}.standalone-journal .journal-chapter>h3{font:500 32px/1.25 var(--heading);letter-spacing:-1px}.standalone-journal .journal-chapter .song-title{font-size:46px}
+
+/* Keep the song in the same guitar world as the cover. */
+.chapter-03{background:linear-gradient(90deg,#071017f2 15%,#07121acd 70%),url(assets/brand/market-into-music.png) 72% 50%/cover}.chapter-01{padding-block:27px}.chapter-01 .journal-details{margin-top:18px}.chapter-02 .session-drawing{margin-top:8px}.chapter-03 .song-title{text-shadow:0 0 34px #50b8f52b}

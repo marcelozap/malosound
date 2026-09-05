@@ -18,6 +18,12 @@ opens one entry in this order: **Before the open → The line the day drew →
 The day, in another key**. Keep all three parts on their own date. Unpublished
 dates stay disabled; do not fabricate archive entries.
 
+Marcelo prefers very little visible text: art, color, the session line and music
+lead the experience. Show a short morning headline, honest provenance label,
+chart, compact source-gap notice when needed, title and player. Keep full
+research, sources, method and musical interpretation under expandable notes.
+Apply this to both the calendar and standalone day pages. Keep replies concise.
+
 The morning fields are `preOpen` (when adding an attributed historical note) or
 `morning` for new daily publications. Preserve original preparation/as-of times.
 A Claude briefing can supply context when the user provides it or a current

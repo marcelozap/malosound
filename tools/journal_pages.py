@@ -76,18 +76,19 @@ def refresh():
         if gaps:
             rests = ', '.join(sound(g['start_minute'])+'–'+sound(g['end_minute']) for g in gaps)
             chart['gapNote']=f'Missing source data: {gap_times}. The line breaks there; the song leaves space at {rests}. No price or volume was filled in.'
+            chart['gapShort']=f'Source gap · {gap_times} · silence {rests}'
         session['lineChart'] = chart
         write(line_path, svg)
         morning = session.get('preOpen') or session.get('morning')
         pre = '<h3>An open page.</h3><p>No before-open note was published for this date.</p>'
         if morning:
-            pre = f'<p class="entry-status">{e(morning["label"])}</p><h3>{e(morning["title"])}</h3><p class="chapter-deck">{e(morning["summary"])}</p>'+paragraphs(morning.get('paragraphs',[]))
-            pre += '<details class="journal-details"><summary>Sources & publication notes</summary>'+paragraphs(['Prepared / added: '+morning.get('preparedAt','Not recorded')])+links(morning.get('sources',[]))+'</details>'
-        drawing = f'<h3>One session. One gesture.</h3><figure class="session-drawing" data-timeline-src="/{timeline_path}"><div class="drawing-stage"><img src="/{line_path}" width="1000" height="340" alt="{e(chart["alt"],quote=True)}"></div><figcaption class="drawing-times"><span>09:30 ET</span><span>16:00 ET</span></figcaption></figure><p class="drawing-caption">{e(chart["caption"])}</p>'
-        if gaps: drawing += '<p class="data-gap">'+e(chart['gapNote'])+'</p>'
-        drawing += '<details class="journal-details"><summary>Behind the line</summary>'+paragraphs(notes)+links([dict(url=source_path,label='View the source observations')])+'</details>'
-        music = f'<h3 class="song-title">{e(song["title"])}</h3><p class="chapter-deck">SPY’s {dt.strftime("%B")} {dt.day}, 9:30 a.m.–4:00 p.m. ET session, compressed into a 3:15 instrumental.</p><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'+paragraphs([song.get('thesis',song['summary'])])
-        music += '<details class="journal-details"><summary>How the day became music</summary>'+paragraphs(song.get('paragraphs',[]))
+            pre = f'<p class="entry-status">{e(morning["label"])}</p><h3>{e(morning["title"])}</h3>'
+            pre += '<details class="journal-details"><summary>Notes + sources</summary>'+paragraphs([morning['summary']]+morning.get('paragraphs',[])+['Prepared / added: '+morning.get('preparedAt','Not recorded')])+links(morning.get('sources',[]))+'</details>'
+        drawing = f'<figure class="session-drawing" data-timeline-src="/{timeline_path}"><div class="drawing-stage"><img src="/{line_path}" width="1000" height="340" alt="{e(chart["alt"],quote=True)}"></div><figcaption class="drawing-times"><span>09:30 ET</span><span>16:00 ET</span></figcaption></figure>'
+        if gaps: drawing += '<p class="data-gap">'+e(chart['gapShort'])+'</p>'
+        drawing += '<details class="journal-details"><summary>Behind the line</summary>'+paragraphs([chart['caption']]+([chart['gapNote']] if gaps else [])+notes)+links([dict(url=source_path,label='View the source observations')])+'</details>'
+        music = f'<p class="eyebrow blue">Original · Retrospective</p><h3 class="song-title">{e(song["title"])}</h3><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'
+        music += '<details class="journal-details"><summary>About the song</summary>'+paragraphs([f'SPY’s {dt.strftime("%B")} {dt.day}, 9:30 a.m.–4:00 p.m. ET session, compressed into a 3:15 instrumental.',song.get('thesis',song['summary'])]+song.get('paragraphs',[]))
         music += '<div class="session-table-wrap"><table class="session-table"><thead><tr><th>Market time ET</th><th>Song time</th><th>Section</th></tr></thead><tbody>'
         for s in source.get('sections',[]):
             clock = lambda m:(datetime(2000,1,1,9,30)+timedelta(minutes=m)).strftime('%H:%M')
