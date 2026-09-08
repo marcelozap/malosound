@@ -11,6 +11,7 @@ import unittest
 from unittest.mock import patch
 
 import journal_pages
+import trade_journal
 from record_trading_day import normalize, stage
 from trade_journal import EXECUTION, execution_summary, presentation, segments, validate
 
@@ -545,6 +546,54 @@ class IntakeOnDiskTests(unittest.TestCase):
         self.log('--replace', outcome='loss')
         self.assertEqual(self.row()['outcome'], 'loss')
         self.assertEqual(json.loads(self.private.read_text(encoding='utf-8'))['outcome'], 'loss')
+
+
+class RendererFieldTests(unittest.TestCase):
+    """The browser must read the same section fields the schema is willing to publish.
+
+    These two halves drifted once already: the schema renamed the publishable text
+    to publicNote and started refusing a plain note, while journal.js kept reading
+    x.note. Nothing broke loudly, because no published day had sections yet. The
+    cost would have landed later and quietly: Marcelo designates a line of public
+    text, the page renders the stretch without it, and nothing anywhere reports a
+    problem. A name is not a contract until something checks it.
+    """
+
+    SCRIPT = Path(__file__).resolve().parents[1] / 'journal.js'
+
+    def script(self):
+        return self.SCRIPT.read_text(encoding='utf-8')
+
+    def test_the_page_reads_the_publishable_text_field(self):
+        line = [x for x in self.script().splitlines() if 'executionSections' in x and 'EXECUTION_LABELS' in x]
+        self.assertEqual(len(line), 1, 'Expected exactly one line rendering the per-stretch record.')
+        self.assertIn('publicNote', line[0])
+
+    def test_the_page_never_reads_the_refused_private_field(self):
+        # `.notes` is a real chart field, so match the property name exactly rather
+        # than as a substring: `.note` followed by anything that could continue it
+        # is a different property and not this mistake.
+        text = self.script()
+        offenders = []
+        for i in range(len(text)):
+            if text.startswith('.note', i):
+                after = text[i + 5] if i + 5 < len(text) else ''
+                if not (after.isalnum() or after == '_'):
+                    offenders.append(text[max(0, i - 30):i + 10])
+        self.assertEqual(offenders, [], f'journal.js reads a plain .note, which the schema refuses: {offenders}')
+
+    def test_every_section_field_the_page_reads_is_one_the_schema_allows(self):
+        allowed = trade_journal.SECTION_FIELDS | trade_journal.SECTION_OPTIONAL
+        line = [x for x in self.script().splitlines() if 'executionSections' in x and 'EXECUTION_LABELS' in x][0]
+        read = set()
+        for i in range(len(line)):
+            if line.startswith('x.', i):
+                j = i + 2
+                while j < len(line) and (line[j].isalnum() or line[j] == '_'):
+                    j += 1
+                read.add(line[i + 2:j])
+        self.assertTrue(read, 'Expected the render line to read at least one section field.')
+        self.assertTrue(read <= allowed, f'journal.js reads fields the schema will never publish: {sorted(read - allowed)}')
 
 
 if __name__ == '__main__': unittest.main()
