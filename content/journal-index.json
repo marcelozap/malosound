@@ -5,6 +5,7 @@
   "songDurationSeconds": 195,
   "months": [
     "2026-06",
+    "2026-08",
     "2026-09"
   ],
   "days": [
@@ -49,6 +50,48 @@
       "executionReviewed": false,
       "executionLabel": "Execution not reviewed",
       "detailUrl": "/content/days/2026-06-05.json"
+    },
+    {
+      "date": "2026-08-31",
+      "title": "SPY · The day’s line",
+      "hasSong": false,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-08-31-minute.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-08-31.json"
+    },
+    {
+      "date": "2026-09-01",
+      "title": "SPY · The day’s line",
+      "hasSong": false,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-09-01-minute.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-09-01.json"
+    },
+    {
+      "date": "2026-09-02",
+      "title": "SPY · The day’s line",
+      "hasSong": false,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-09-02-minute.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-09-02.json"
     },
     {
       "date": "2026-09-03",
