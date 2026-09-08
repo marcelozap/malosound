@@ -13,9 +13,23 @@
   const fullDate = value => format(value, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const shortDate = value => format(value, { month: 'long', day: 'numeric' });
   const miniDate = value => format(value, { month: 'short', day: 'numeric' });
+  const monthOf = value => value.slice(0, 7);
   // Mirrors EXECUTION in tools/trade_journal.py; keep both in step.
   const EXECUTION_COLORS = { good:'#58dfa4', misplayed:'#ff7188', sat_out:'#e5b657', unreviewed:'#50b8f5' };
   const EXECUTION_LABELS = { good:'Played well', misplayed:'Misplayed', sat_out:'Sat out', unreviewed:'Not reviewed' };
+  function normalizeExecutionState(performance = {}) {
+    const sections = Array.isArray(performance.executionSections) ? performance.executionSections : [];
+    const states = new Set(sections.map(s => s?.execution).filter(Boolean));
+    if (states.has('misplayed')) return 'misplayed';
+    if (states.has('sat_out')) return 'sat_out';
+    if (states.has('good')) return 'good';
+    return 'unreviewed';
+  }
+  function mergeSession(entry, detail = null) {
+    const base = entry?.session ? { ...entry.session, ...entry } : { ...entry };
+    if (base) delete base.session;
+    return detail ? { ...base, ...detail } : base;
+  }
   function link(text, url) {
     const a = el('a', 'text-link', text);
     const u = new URL(url, location.href);
@@ -60,11 +74,14 @@
   function renderEntry(session, index, duration) {
     const article = el('article', 'day-entry');
     const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', executionSections: [] };
-    article.dataset.tradeResult = performance.outcome;
-    article.id = `session-${session.date}`;
+    const executionState = normalizeExecutionState(performance);
     const song = session.originalSong || session.closing;
     const chart = session.lineChart;
+    const hasChart = Boolean(chart && chart.url);
+    const hasSong = Boolean(song && song.audioUrl);
     const sessionHours = chart?.sessionHours || '9:30 a.m.–4:00 p.m. ET';
+    article.dataset.tradeResult = executionState;
+    article.id = `session-${session.date}`;
     const header = el('header', 'day-heading session-cover');
     const aura = el('div', 'cover-aura'); aura.setAttribute('aria-hidden', 'true');
     const orbit = el('div', 'cover-orbit'); orbit.setAttribute('aria-hidden', 'true');
@@ -73,7 +90,7 @@
     const h = el('h2', '', song?.audioUrl ? (song.title || shortDate(session.date)) : (session.title || shortDate(session.date)));
     h.id = 'selected-day-heading';
     article.setAttribute('aria-labelledby', h.id);
-    copy.append(h, el('p', 'day-subtitle', `SPY · ${song?.audioUrl ? 'SESSION CHART + RECORDING' : 'SESSION CHART'}`));
+    copy.append(h, el('p', 'day-subtitle', `SPY · ${hasChart ? 'SESSION CHART' : 'CHART UNAVAILABLE'}`));
     header.append(aura, orbit, copy);
     article.append(header);
 
@@ -81,10 +98,11 @@
     const tradeStrip = el('div', 'trade-strip');
     const result = el('span', 'trade-result');
     const glyph = el('span', '', performance.glyph); glyph.setAttribute('aria-hidden', 'true');
-    result.append(glyph, el('span', '', `My day · ${performance.label}`));
+    const stateText = executionState === 'unreviewed' ? 'Execution not reviewed' : `${EXECUTION_LABELS[executionState]}`;
+    result.append(glyph, el('span', '', `Execution · ${stateText}`));
     tradeStrip.append(result);
     drawing.append(tradeStrip);
-    if (chart) {
+    if (hasChart) {
       const figure = el('figure', 'session-drawing');
       if (chart.playheadUrl) figure.dataset.timelineSrc = chart.playheadUrl;
       const stage = el('div', 'drawing-stage');
@@ -100,17 +118,26 @@
       drawing.append(method);
       const exec = performance.executionSections || [];
       const keys = ['unreviewed'].concat(['good','misplayed','sat_out'].filter(k => exec.some(x => x.execution === k)));
-      const legend = el('div', 'exec-legend'); legend.setAttribute('role','img');
-      legend.setAttribute('aria-label','Execution color key');
-      keys.forEach(k => { const key = el('span','exec-key'); const swatch = el('i');
-        swatch.style.background = EXECUTION_COLORS[k]; key.append(swatch, document.createTextNode(EXECUTION_LABELS[k])); legend.append(key); });
+      const legend = el('div', 'exec-legend'); legend.setAttribute('role', 'img');
+      legend.setAttribute('aria-label', 'Execution color key');
+      keys.forEach(k => {
+        const key = el('span', 'exec-key');
+        const swatch = el('i');
+        swatch.style.background = EXECUTION_COLORS[k];
+        key.append(swatch, document.createTextNode(EXECUTION_LABELS[k]));
+        legend.append(key);
+      });
       drawing.append(legend);
     } else {
-      drawing.append(el('p', '', session.closing?.marketClosed ? 'Closed session; no line.' : 'No line available yet.'));
+      const unavailable = session.marketClosed ? 'Market closed; no chart was published.' : 'Chart unavailable for this date.';
+      drawing.append(el('p', 'data-gap', unavailable));
     }
     const recordNotes = el('details', 'journal-details'); recordNotes.append(el('summary', '', 'Execution'));
     if (!(performance.executionSections || []).length) {
-      recordNotes.append(el('p', '', 'No execution review yet.'));
+      recordNotes.append(el('p', '', 'Execution not reviewed yet.'));
+      if (performance.execution && performance.execution.label) {
+        recordNotes.append(el('p', '', performance.execution.label));
+      }
     }
     (performance.executionSections || []).forEach(x => recordNotes.append(el('p', '', `${x.startTime}–${x.endTime} ET · ${EXECUTION_LABELS[x.execution]}${x.note ? ' · ' + x.note : ''}`)));
     if (performance.executionAssessedAt) recordNotes.append(el('p', '', `Execution reviewed at ${performance.executionAssessedAt}, after the close.`));
@@ -118,10 +145,10 @@
     drawing.append(recordNotes);
     article.append(drawing);
 
-    const music = section('02', 'Optional recording', 'blue');
-    if (song?.audioUrl) {
+    const music = section('02', 'Original song', 'blue');
+    if (hasSong) {
       music.append(el('p', 'eyebrow blue', 'Original instrumental'));
-      music.append(player(song, duration));
+      music.append(player(song, Number(song.durationSeconds || duration) || 0));
       const meta = el('div', 'song-specs');
       ['03:15', `${song.tempoBpm || 80} BPM`, 'SPY → SOUND'].forEach(t => meta.append(el('span', '', t)));
       music.append(meta);
@@ -134,7 +161,8 @@
       if (song.midiUrl) notes.append(link('Download the editable MIDI ↗', song.midiUrl));
       music.append(notes);
     } else {
-      music.append(el('p', '', song?.marketClosed ? 'Closed session; chart-only.' : song?.songPending ? 'Recording pending.' : 'Chart-only session.'));
+      const note = song?.songPending ? 'Recording pending.' : (session.marketClosed ? 'Closed session; no recording available.' : 'No recording for this date.');
+      music.append(el('p', 'data-gap', note));
     }
     article.append(music);
 
@@ -160,10 +188,20 @@
   const detailCache = new Map();
   function loadDay(day, entry) {
     if (detailCache.has(day)) return Promise.resolve(detailCache.get(day));
-    if (entry && entry.session) { detailCache.set(day, entry.session); return Promise.resolve(entry.session); }
+    if (!entry) return Promise.reject(new Error('Unavailable'));
+    const shouldFetch = !!(entry.detailUrl && (!entry.lineChart || !entry.performance));
+    if (!shouldFetch) {
+      const merged = mergeSession(entry);
+      detailCache.set(day, merged);
+      return Promise.resolve(merged);
+    }
     return fetch(entry.detailUrl, { cache: 'no-cache' })
       .then(r => { if (!r.ok) throw new Error('Unavailable'); return r.json(); })
-      .then(session => { detailCache.set(day, session); return session; });
+      .then(session => {
+        const merged = mergeSession(entry, session);
+        detailCache.set(day, merged);
+        return merged;
+      });
   }
   fetch('/content/journal-index.json', { cache: 'no-cache' })
     .then(r => { if (!r.ok) throw new Error('Unavailable'); return r.json(); })
@@ -176,10 +214,22 @@
     .then(data => {
     if (!Array.isArray(data.days) || !data.days.length) throw new Error('No entries');
     const sessions = [...data.days].sort((a,b) => a.date.localeCompare(b.date));
-    const byDate = new Map(sessions.map(s => [s.date,s]));
+    const byDate = new Map(sessions.map(s => [s.date, s]));
+    const sessionsByMonth = new Map();
+    sessions.forEach(s => {
+      const key = monthOf(s.date);
+      const bucket = sessionsByMonth.get(key);
+      if (bucket) bucket.push(s);
+      else sessionsByMonth.set(key, [s]);
+    });
+    const months = Array.isArray(data.months) && data.months.length
+      ? [...new Set(data.months)].sort()
+      : [...sessionsByMonth.keys()].sort();
+    const monthIndex = new Map(months.map((value, idx) => [value, idx]));
     const hashDate = () => location.hash.match(/^#session-(\d{4}-\d{2}-\d{2})$/)?.[1];
     let selected = byDate.has(hashDate()) ? hashDate() : sessions.at(-1).date;
-    let month = selected.slice(0,7);
+    let month = monthOf(selected);
+    if (!monthIndex.has(month)) month = months.includes(monthOf(selected)) ? monthOf(selected) : sessions.at(-1).date.slice(0, 7);
     const sidebar = el('aside', 'calendar-panel'); sidebar.setAttribute('aria-label', 'Journal calendar');
     const art = el('div', 'calendar-art'); art.setAttribute('aria-hidden', 'true'); art.append(el('span', '', 'SIGNAL / SOUND'));
     const calendar = el('div', 'calendar'); const stage = el('div', 'selected-session');
@@ -191,16 +241,17 @@
       const entry = byDate.get(day);
       if (!entry) return;
       detachPlayhead();
-      stage.querySelectorAll('audio').forEach(a => a.pause()); selected = day; month = day.slice(0,7);
+      stage.querySelectorAll('audio').forEach(a => a.pause());
+      selected = day;
+      month = day.slice(0, 7);
       drawCalendar();
       if (updateHash) history.replaceState(null, '', `#session-${day}`);
       const token = ++pending;
-      if (!detailCache.has(day)) {
-        stage.replaceChildren(el('p', 'calendar-note', `Opening ${fullDate(day)}…`));
-      }
+      if (!detailCache.has(day)) stage.replaceChildren(el('p', 'calendar-note', `Opening ${fullDate(day)}…`));
       loadDay(day, entry).then(session => {
-        if (token !== pending) return;   // a later click already won
-        stage.replaceChildren(renderEntry(session, sessions.findIndex(s => s.date === day), data.songDurationSeconds));
+        if (token !== pending) return;
+        const trackDuration = session?.originalSong?.durationSeconds || data.songDurationSeconds || 0;
+        stage.replaceChildren(renderEntry(session, sessions.findIndex(s => s.date === day), trackDuration));
         detachPlayhead = window.MaloSoundPlayhead?.mount(stage.querySelector('.day-entry')) || (() => {});
         announced.textContent = `Journal entry for ${fullDate(day)} selected.`;
       }).catch(() => {
@@ -210,57 +261,84 @@
       });
     }
     function moveMonth(amount) {
-      const d = date(`${month}-01`); d.setUTCMonth(d.getUTCMonth() + amount);
-      month = d.toISOString().slice(0,7); drawCalendar();
+      const current = monthIndex.get(month) ?? 0;
+      const next = amount < 0 ? current - 1 : current + 1;
+      if (next < 0 || next >= months.length) return;
+      month = months[next];
+      drawCalendar();
       calendar.querySelector(amount < 0 ? '.month-prev' : '.month-next')?.focus();
     }
     function drawCalendar() {
       const head = el('div', 'calendar-head');
       const prev = el('button', 'month-prev', '←'); prev.type = 'button'; prev.setAttribute('aria-label', 'Previous month');
       const next = el('button', 'month-next', '→'); next.type = 'button'; next.setAttribute('aria-label', 'Next month');
-      // The floor is the earlier of the declared start and the oldest entry, so
-      // a day added before the series officially began is still reachable.
-      const oldest = sessions[0].date.slice(0,7);
-      const declared = (data.seriesStartDate || '').slice(0,7);
-      prev.disabled = month <= (declared && declared < oldest ? declared : oldest);
-      next.disabled = month >= sessions.at(-1).date.slice(0,7);
+      const currentMonthIndex = Math.max(0, monthIndex.get(month) || 0);
+      prev.disabled = currentMonthIndex <= 0;
+      next.disabled = currentMonthIndex >= months.length - 1;
       prev.addEventListener('click', () => moveMonth(-1)); next.addEventListener('click', () => moveMonth(1));
-      const title = el('h3','',format(`${month}-01`,{month:'long',year:'numeric'})); head.append(prev,title,next);
+      const title = el('h3', '', format(`${month}-01`, { month: 'long', year: 'numeric' }));
+      head.append(prev, title, next);
       const grid = el('div', 'calendar-grid'); grid.setAttribute('aria-label', title.textContent);
-      ['M','T','W','T','F','S','S'].forEach(d => grid.append(el('span','weekday',d)));
-      const first = date(`${month}-01`); const blanks = (first.getUTCDay()+6)%7;
-      const count = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth()+1,0)).getUTCDate();
-      for (let i=0;i<blanks;i++) grid.append(el('span','calendar-blank'));
-      for (let day=1;day<=count;day++) {
-        const key = `${month}-${String(day).padStart(2,'0')}`; const available = byDate.has(key);
+      const first = date(`${month}-01`); const blanks = (first.getUTCDay() + 6) % 7;
+      const count = new Date(Date.UTC(first.getUTCFullYear(), first.getUTCMonth() + 1, 0)).getUTCDate();
+      ['M','T','W','T','F','S','S'].forEach(d => grid.append(el('span', 'weekday', d)));
+      for (let i = 0; i < blanks; i++) grid.append(el('span', 'calendar-blank'));
+      for (let day = 1; day <= count; day++) {
+        const key = `${month}-${String(day).padStart(2, '0')}`; const available = byDate.has(key);
         const b = el('button', `calendar-day${available ? ' has-entry' : ''}${key === selected ? ' is-selected' : ''}`, String(day));
         const row = byDate.get(key);
-        const dayResult = row && (row.performance || (row.outcome ? { outcome: row.outcome, label: row.outcomeLabel } : null));
-        if (dayResult) b.dataset.tradeResult = dayResult.outcome;
-        b.type = 'button'; b.disabled = !available;
-        b.setAttribute('aria-label', `${fullDate(key)}${available ? ', open journal entry' : ', no journal entry'}${dayResult ? `, my trading result: ${dayResult.label}` : ''}`);
+        if (row) {
+          const rowState = normalizeExecutionState(row.performance || row);
+          if (rowState) b.dataset.tradeResult = rowState;
+          if (row.hasChart === false) b.classList.add('no-chart');
+          if (row.hasSong === false) b.classList.add('no-song');
+        }
+        b.type = 'button';
+        b.disabled = !available;
+        const status = [];
+        if (row) {
+          if (typeof row.hasChart !== 'undefined') status.push(`chart ${row.hasChart ? 'available' : 'unavailable'}`);
+          status.push(`recording ${row.hasSong ? 'available' : 'not available'}`);
+        }
+        if (row && row.marketClosed) status.push('market-closed');
+        b.setAttribute('aria-label', `${fullDate(key)}${available ? ', open journal entry' : ', no journal entry'}${status.length ? `, ${status.join(', ')}` : ''}`);
         if (available) b.setAttribute('aria-pressed', String(key === selected));
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);
       }
       const history = el('div', 'calendar-history');
       history.append(el('span', 'eyebrow gold', 'All sessions'));
-      const list = el('div', 'calendar-history-list');
-      for (const row of [...sessions].reverse()) {
-        const b = el('button', `calendar-history-item${row.date === selected ? ' is-selected' : ''}${row.hasSong ? ' has-song' : ''}`, miniDate(row.date));
-        b.type = 'button'; b.dataset.date = row.date;
-        b.setAttribute('aria-label', `${fullDate(row.date)}${row.hasSong ? ', has recording' : ', chart-only'}`);
-        b.addEventListener('click', () => { choose(row.date, true); });
-        list.append(b);
+      for (const monthKey of [...months].reverse()) {
+        const title = el('p', 'calendar-month', format(`${monthKey}-01`, { month: 'short', year: 'numeric' }));
+        const list = el('div', 'calendar-history-list');
+        const rows = sessionsByMonth.get(monthKey) || [];
+        for (const row of rows) {
+          const b = el('button', `calendar-history-item${row.date === selected ? ' is-selected' : ''}${row.hasSong ? ' has-song' : ''}${row.hasChart === false ? ' no-chart' : ''}`, miniDate(row.date));
+          b.type = 'button'; b.dataset.date = row.date;
+          const rowStatus = [];
+          if (row.hasChart === false) rowStatus.push('chart unavailable');
+          if (row.hasSong === false) rowStatus.push('no recording');
+          if (row.marketClosed) rowStatus.push('market closed note');
+          b.setAttribute('aria-label', `${fullDate(row.date)}${rowStatus.length ? `, ${rowStatus.join(', ')}` : ', chart and recording available'}`);
+          b.addEventListener('click', () => { choose(row.date, true); });
+          list.append(b);
+        }
+        if (rows.length) {
+          history.append(title, list);
+        }
       }
-      history.append(list);
-      const legend = el('div', 'calendar-legend'); legend.append(el('span','legend-dot'),el('span','','Sessions'));
-      calendar.replaceChildren(el('span','eyebrow gold','Choose a session'),head,grid,history,legend);
+      const legend = el('div', 'calendar-legend'); legend.append(el('span', 'legend-dot'),el('span', '', 'Sessions'));
+      calendar.replaceChildren(el('span', 'eyebrow gold', 'Choose a session'), head, grid, history, legend);
     }
-    window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(),false); });
-    choose(selected,false);
+    window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(), false); });
+    choose(selected, false);
     if (byDate.has(hashDate())) stage.scrollIntoView({ block:'start', behavior:'instant' });
   }).catch(() => {
-    root.replaceChildren(el('p', 'publishing-note', 'The journal could not load. Please refresh to try again.'), link('Read September 3 ↗','/reports/2026-09-03-spy-song.html'), link('Read September 4 ↗','/reports/2026-09-04-spy-song.html'));
+    root.replaceChildren(
+      el('p', 'publishing-note', 'The journal could not load. Please refresh to try again.'),
+      link('Read September 3 ↗', '/reports/2026-09-03-spy-song.html'),
+      link('Read September 4 ↗', '/reports/2026-09-04-spy-song.html')
+    );
   });
 })();
+
