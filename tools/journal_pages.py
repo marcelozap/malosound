@@ -31,8 +31,12 @@ def refresh():
         performance = presentation(trades.get(session['date']))
         session['performance'] = performance
         song = session.get('originalSong') or session.get('closing')
-        if not song or not song.get('audioUrl') or not song.get('chart'):
+        # A day earns a drawn line as soon as it has checked source data. Music is
+        # optional: older archive days can be chart-only, and a standalone page is
+        # written only where a song and its report URL actually exist.
+        if not song or not song.get('chart') or not song['chart'].get('dataUrl'):
             continue
+        has_song = bool(song.get('audioUrl'))
         day = session['date']; dt = date.fromisoformat(day)
         source_path = song['chart']['dataUrl']
         source = json.loads((ROOT/source_path.lstrip('/')).read_text(encoding='utf-8'))
@@ -110,6 +114,12 @@ def refresh():
         if gaps: drawing += '<p class="data-gap">'+e(chart['gapShort'])+'</p>'
         drawing += '<details class="journal-details"><summary>Behind the line</summary>'+paragraphs([chart['caption']]+([chart['gapNote']] if gaps else [])+notes)+links([dict(url=source_path,label='View the source observations')])+'</details>'
         drawing += '<details class="journal-details"><summary>My trading record</summary>'+paragraphs(trade_notes(performance))+'</details>'
+        if not has_song or not song.get('reportUrl'):
+            # Chart-only archive day. The line, timeline and provenance are already
+            # written above; there is simply no player and no standalone page to
+            # build. Music stays optional for older entries.
+            assets.update([line_path, timeline_path, source_path.lstrip('/')])
+            continue
         music = f'<p class="eyebrow blue">Original instrumental</p><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'
         music += '<details class="journal-details"><summary>About the song</summary>'+paragraphs([f'SPY’s {dt.strftime("%B")} {dt.day}, 9:30 a.m.–4:00 p.m. ET session, compressed into a 3:15 instrumental.',song.get('thesis',song['summary'])]+song.get('paragraphs',[]))
         music += '<div class="session-table-wrap"><table class="session-table"><thead><tr><th>Market time ET</th><th>Song time</th><th>Section</th></tr></thead><tbody>'
@@ -127,6 +137,48 @@ def refresh():
         write(report,page)
         assets.update([line_path,timeline_path,report,source_path.lstrip('/')])
     write('content/editions.json',json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+    assets.update(write_archive(data, trades))
     write('content/market-assets.json',json.dumps(sorted(assets),indent=2)+'\n')
+
+
+def write_archive(data, trades):
+    """A small index the calendar can hold, plus one detail file per day.
+
+    The browser loads the index once and fetches only the day it is showing, so
+    a year of entries costs the same first paint as a week. Every field here is
+    derived from editions.json; nothing new is asserted.
+    """
+    sessions = sorted(data['sessions'], key=lambda s: s['date'])
+    written = []
+    index_days = []
+    for session in sessions:
+        day = session['date']
+        song = session.get('originalSong') or session.get('closing')
+        chart = session.get('lineChart')
+        view = presentation(trades.get(day))
+        index_days.append(dict(
+            date=day,
+            title=(song or {}).get('title') or (session.get('morning') or session.get('preOpen') or {}).get('title') or '',
+            hasSong=bool(song and song.get('audioUrl')),
+            hasChart=bool(chart),
+            chartUrl=(chart or {}).get('url'),
+            marketClosed=bool((song or {}).get('marketClosed')),
+            outcome=view['outcome'],
+            outcomeLabel=view['label'],
+            setupRating=view['setupRating'],
+            executionReviewed=view['execution']['reviewed'],
+            executionLabel=view['execution']['label'],
+            detailUrl=f'/content/days/{day}.json'))
+        path = f'content/days/{day}.json'
+        write(path, json.dumps(session, ensure_ascii=False, separators=(',', ':')) + '\n')
+        written.append(path)
+    index = dict(schemaVersion=1,
+                 seriesStartDate=data.get('seriesStartDate') or (sessions[0]['date'] if sessions else None),
+                 songDurationSeconds=data.get('songDurationSeconds'),
+                 months=sorted({s['date'][:7] for s in sessions}),
+                 days=index_days)
+    write('content/journal-index.json', json.dumps(index, ensure_ascii=False, indent=2) + '\n')
+    written.append('content/journal-index.json')
+    return written
 
 if __name__ == '__main__': refresh()

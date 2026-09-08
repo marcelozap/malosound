@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "seriesStartDate": "2026-09-03",
+  "songDurationSeconds": 195,
+  "months": [
+    "2026-09"
+  ],
+  "days": [
+    {
+      "date": "2026-09-03",
+      "title": "After the Low",
+      "hasSong": true,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-09-03-line.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-09-03.json"
+    },
+    {
+      "date": "2026-09-04",
+      "title": "An Unfinished Return",
+      "hasSong": true,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-09-04-line.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-09-04.json"
+    }
+  ]
+}

@@ -159,9 +159,27 @@
     }
     return article;
   }
-  fetch('/content/editions.json', { cache: 'no-cache' }).then(r => { if (!r.ok) throw new Error('Unavailable'); return r.json(); }).then(data => {
-    if (!Array.isArray(data.sessions) || !data.sessions.length) throw new Error('No entries');
-    const sessions = [...data.sessions].sort((a,b) => a.date.localeCompare(b.date));
+  // The calendar holds only a small index; a day's full entry is fetched when it
+  // is opened and then cached, so an archive of many months costs one small file.
+  const detailCache = new Map();
+  function loadDay(day, entry) {
+    if (detailCache.has(day)) return Promise.resolve(detailCache.get(day));
+    if (entry && entry.session) { detailCache.set(day, entry.session); return Promise.resolve(entry.session); }
+    return fetch(entry.detailUrl, { cache: 'no-cache' })
+      .then(r => { if (!r.ok) throw new Error('Unavailable'); return r.json(); })
+      .then(session => { detailCache.set(day, session); return session; });
+  }
+  fetch('/content/journal-index.json', { cache: 'no-cache' })
+    .then(r => { if (!r.ok) throw new Error('Unavailable'); return r.json(); })
+    .catch(() => fetch('/content/editions.json', { cache: 'no-cache' })
+      .then(r => { if (!r.ok) throw new Error('Unavailable'); return r.json(); })
+      .then(full => ({ seriesStartDate: full.seriesStartDate, songDurationSeconds: full.songDurationSeconds,
+                       days: [...(full.sessions || [])].map(s => ({ date: s.date, session: s,
+                         outcome: (s.performance || {}).outcome || 'unrecorded',
+                         outcomeLabel: (s.performance || {}).label || 'Unrecorded' })) })))
+    .then(data => {
+    if (!Array.isArray(data.days) || !data.days.length) throw new Error('No entries');
+    const sessions = [...data.days].sort((a,b) => a.date.localeCompare(b.date));
     const byDate = new Map(sessions.map(s => [s.date,s]));
     const hashDate = () => location.hash.match(/^#session-(\d{4}-\d{2}-\d{2})$/)?.[1];
     let selected = byDate.has(hashDate()) ? hashDate() : sessions.at(-1).date;
@@ -172,15 +190,28 @@
     const announced = el('p', 'sr-only'); announced.setAttribute('role', 'status'); announced.setAttribute('aria-live', 'polite');
     sidebar.append(art, calendar); root.replaceChildren(sidebar, stage, announced);
     let detachPlayhead = () => {};
+    let pending = 0;
     function choose(day, updateHash) {
-      if (!byDate.has(day)) return;
+      const entry = byDate.get(day);
+      if (!entry) return;
       detachPlayhead();
       stage.querySelectorAll('audio').forEach(a => a.pause()); selected = day; month = day.slice(0,7);
-      stage.replaceChildren(renderEntry(byDate.get(day), sessions.findIndex(s => s.date === day), data.songDurationSeconds));
-      detachPlayhead = window.MaloSoundPlayhead?.mount(stage.querySelector('.day-entry')) || (() => {});
       drawCalendar();
       if (updateHash) history.replaceState(null, '', `#session-${day}`);
-      announced.textContent = `Journal entry for ${fullDate(day)} selected.`;
+      const token = ++pending;
+      if (!detailCache.has(day)) {
+        stage.replaceChildren(el('p', 'calendar-note', `Opening ${fullDate(day)}…`));
+      }
+      loadDay(day, entry).then(session => {
+        if (token !== pending) return;   // a later click already won
+        stage.replaceChildren(renderEntry(session, sessions.findIndex(s => s.date === day), data.songDurationSeconds));
+        detachPlayhead = window.MaloSoundPlayhead?.mount(stage.querySelector('.day-entry')) || (() => {});
+        announced.textContent = `Journal entry for ${fullDate(day)} selected.`;
+      }).catch(() => {
+        if (token !== pending) return;
+        stage.replaceChildren(el('p', 'calendar-note', `That entry could not be loaded. Try again, or pick another date.`));
+        announced.textContent = `Journal entry for ${fullDate(day)} could not be loaded.`;
+      });
     }
     function moveMonth(amount) {
       const d = date(`${month}-01`); d.setUTCMonth(d.getUTCMonth() + amount);
@@ -203,7 +234,8 @@
       for (let day=1;day<=count;day++) {
         const key = `${month}-${String(day).padStart(2,'0')}`; const available = byDate.has(key);
         const b = el('button', `calendar-day${available ? ' has-entry' : ''}${key === selected ? ' is-selected' : ''}`, String(day));
-        const dayResult = byDate.get(key)?.performance;
+        const row = byDate.get(key);
+        const dayResult = row && (row.performance || (row.outcome ? { outcome: row.outcome, label: row.outcomeLabel } : null));
         if (dayResult) b.dataset.tradeResult = dayResult.outcome;
         b.type = 'button'; b.disabled = !available;
         b.setAttribute('aria-label', `${fullDate(key)}${available ? ', open journal entry' : ', no journal entry'}${dayResult ? `, my trading result: ${dayResult.label}` : ''}`);
