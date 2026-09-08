@@ -151,12 +151,6 @@
       music.append(el('h4', '', heading), el('p', '', body));
     }
     article.append(music);
-    const earlier = [session.preOpen && session.morning, session.originalSong && session.closing].filter(Boolean);
-    if (earlier.length) {
-      const history = el('details', 'journal-details earlier-notes'); history.append(el('summary', '', 'Earlier notes'));
-      earlier.forEach(e => { history.append(el('h4', '', e.title), el('p', '', e.label), el('p', '', e.summary)); if(e.reportUrl) history.append(link('Read the original entry ↗',e.reportUrl)); });
-      article.append(history);
-    }
     return article;
   }
   // The calendar holds only a small index; a day's full entry is fetched when it
