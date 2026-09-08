@@ -1,4 +1,5 @@
 """Behavior checks for honest daily result publishing; no live records are mutated."""
+import argparse
 import json
 from pathlib import Path
 import re
@@ -272,6 +273,53 @@ class TradeJournalTests(unittest.TestCase):
                     for old, new in zip(editions['sessions'], updated['sessions']):
                         for key in ('morning', 'preOpen', 'closing', 'originalSong'):
                             self.assertEqual(old.get(key), new.get(key))
+
+
+class DailyIntakeTests(unittest.TestCase):
+    """log_day.py is the after-close entry point; it must never widen the allowlist."""
+
+    def build(self, **changes):
+        import log_day
+        args = argparse.Namespace(date='2026-09-04', outcome='profit', setup=None, rated_at=None,
+                                  played=[], misplayed=[], sat_out=[], assessed=AFTER_CLOSE,
+                                  private_note=[], replace=False, show=False)
+        for key, value in changes.items():
+            setattr(args, key, value)
+        return log_day.build(args)
+
+    def test_flags_become_ordered_sections_with_their_classes(self):
+        record = self.build(played=[['09:48', '09:52', 'Took the open cleanly.']],
+                            misplayed=[['12:38', '12:48']],
+                            sat_out=[['09:30', '09:48', 'Waited for the range.']])
+        self.assertEqual([(s['startTime'], s['execution']) for s in record['executionSections']],
+                         [('09:30', 'sat_out'), ('09:48', 'good'), ('12:38', 'misplayed')])
+        self.assertEqual(record['executionSections'][0]['note'], 'Waited for the range.')
+        # 12:38 was given no note, so no note key is invented for it.
+        self.assertNotIn('note', record['executionSections'][2])
+
+    def test_a_day_with_no_named_stretches_carries_no_review(self):
+        record = self.build()
+        self.assertIsNone(record['executionSections'])
+        self.assertIsNone(record['executionAssessedAt'])
+        self.assertEqual(presentation(normalize(record, NOW))['execution']['label'], 'Execution not reviewed')
+
+    def test_review_before_the_close_is_refused(self):
+        with self.assertRaises(SystemExit):
+            self.build(played=[['10:00', '11:00']], assessed='2026-09-04T11:30:00-04:00')
+
+    def test_private_notes_never_reach_the_public_row(self):
+        record = self.build(played=[['09:48', '09:52']])
+        row = normalize(dict(record, privateNotes=['Sized too big.'], netRealizedPnl='420.00',
+                             tradeCount=3, accountNumber='PRIVATE-TEST'), NOW)
+        text = json.dumps(row)
+        for private in ('privateNotes', 'Sized too big', 'PRIVATE-TEST', 'accountNumber', '420.00'):
+            self.assertNotIn(private, text)
+
+    def test_setup_rating_stays_independent_of_execution(self):
+        record = self.build(setup=14, misplayed=[['09:48', '09:52']])
+        row = normalize(record, NOW)
+        self.assertEqual(row['setupRating'], 14)
+        self.assertEqual(row['executionSections'][0]['execution'], 'misplayed')
 
 
 if __name__ == '__main__': unittest.main()

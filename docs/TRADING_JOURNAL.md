@@ -1,12 +1,28 @@
 # Personal trading record
 
-The observed SPY path stays exact. Its color shows Marcelo's own final net
-realized trading result after fees for that New York date: green profit, red
-loss, neutral gray for flat/no trade/unrecorded, with separate text labels.
-Do not infer personal performance from SPY's direction, the song, a simulation,
-account market value, unrealized P&L, or missing data. The line is not an equity
-curve. The calendar marks reported profitable/loss-making days with the same
-colors; playback keeps the matching color and the existing source-gap behavior.
+The observed SPY path stays exact. Its color now shows how Marcelo judges he
+PLAYED each stretch of the session, not what the day paid:
+
+| color | meaning |
+|---|---|
+| blue `#50b8f5` | not reviewed — the default for any stretch he has not assessed |
+| gold `#e5b657` | deliberately sat out |
+| green `#58dfa4` | played well |
+| red `#ff7188` | misplayed |
+
+Whole-day profit/loss coloring is retired. A profitable day can be badly played
+and a losing one played well, so the net result is now a text label only and
+colors nothing. Never grade execution from the sign of the P&L, from SPY's
+direction, from the song, or from hindsight about what price did next. A stretch
+Marcelo has not reviewed stays blue; silence is not a grade.
+
+Sections are HH:MM ET spans inside 09:30–16:00, ordered and non-overlapping,
+each with `good`, `misplayed` or `sat_out` and an optional note in his words.
+`executionAssessedAt` is required with them and must fall after that day's
+16:00 close: execution is reviewed after the fact, not called during the session.
+The drawn geometry never changes — the same observed points are split into
+colored runs, sharing the boundary point so the line stays continuous, and
+source gaps still break it.
 
 Setup quality uses an optional integer 1–14. A 14 is the rarest tier, aiming for
 roughly 14 exceptional opportunities a year. This is a selection goal, not a
@@ -39,8 +55,19 @@ private normalized JSON input with these fields:
 - Optional `setupRating`: integer 1–14 and `ratingAsOf`: the actual timestamp
   including timezone. Omit both when not provided. Never invent an earlier time.
 
-Run `python tools/record_trading_day.py --input <private-json-path>`, then the
-normal website build. The importer publishes only date, outcome, setup rating,
+### The one-command way
+
+    python tools/log_day.py --date 2026-09-04 --outcome profit --setup 9         --sat-out   09:30 09:48 "Waited for the range to set."         --played    09:48 09:52 "Took the open cleanly."         --misplayed 12:38 12:48 "Chased the second push."         --private-note "Sized too big on that entry."
+
+Each flag names one stretch: START END plus an optional note. Repeat for more.
+`--show` prints what is public and private for a date and changes nothing;
+`--replace` corrects a day already published. The command writes a private
+record under `C:\MaloSound\Sessions\market-journal\<date>\day-review.json`,
+outside Git, and stages only the allowlisted public summary. `--private-note`
+never crosses over. `--assessed` defaults to now and is refused before the close.
+
+Run `python tools/record_trading_day.py --input <private-json-path>` for the
+file-based path, then the The importer publishes only date, outcome, setup rating,
 assessment/recording timestamps and source kind. It drops account identifiers,
 positions, amounts, fills, credentials and local source paths. It refuses paper,
 unfinished, contradictory, nonfinite and future-completed results. An identical
