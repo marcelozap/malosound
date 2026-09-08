@@ -98,7 +98,10 @@ def build(args, sections, old_public, old_private):
     if sections and not assessed:
         # An unchanged assessment keeps the time it was actually made, so re-running
         # the same command does not restamp a review that only happened once.
-        same = bool(old_public) and old_public['executionSections'] == public_sections(sections)
+        # Ledger validation materializes absent publicNote as None. Compare
+        # equivalent normalized shapes so a later retry keeps its review time.
+        proposed = [dict(s, publicNote=s.get('publicNote')) for s in public_sections(sections)]
+        same = bool(old_public) and old_public['executionSections'] == proposed
         assessed = old_public['executionAssessedAt'] if same else now_et()
     if sections:
         close = datetime.combine(datetime.strptime(args.date, '%Y-%m-%d').date(), time(16, 0), ET)

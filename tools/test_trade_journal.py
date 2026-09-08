@@ -478,9 +478,11 @@ class IntakeOnDiskTests(unittest.TestCase):
         self.assertIn('Took the open cleanly', self.ledger.read_text(encoding='utf-8'))
 
     def test_repeating_the_same_command_keeps_both_files_byte_identical(self):
-        self.log('--private-note', 'Sized too big.', timestamped=False)
+        with patch('log_day.now_et', return_value=AFTER_CLOSE):
+            self.log('--private-note', 'Sized too big.', timestamped=False)
         public, private = self.ledger.read_bytes(), self.private.read_bytes()
-        self.log(timestamped=False)          # same command, default timestamps, note omitted
+        with patch('log_day.now_et', return_value='2026-09-04T18:00:00-04:00'):
+            self.log(timestamped=False)      # later retry, default timestamps, note omitted
         self.assertEqual(self.ledger.read_bytes(), public)
         self.assertEqual(self.private.read_bytes(), private)
         self.assertEqual(json.loads(private.decode())['privateNotes'], ['Sized too big.'])
