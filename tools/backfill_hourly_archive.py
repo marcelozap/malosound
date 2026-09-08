@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def prepare(source):
+def prepare(source, days):
     raw = source.read_bytes()
     result = json.loads(raw)['chart']['result'][0]
     assert result['meta']['symbol'] == 'SPY'
@@ -21,7 +21,7 @@ def prepare(source):
     stamps = result['timestamp']
     assert all(len(quotes[k]) == len(stamps) for k in ('open','high','low','close'))
     entries = []
-    for day in ('2026-06-03','2026-06-04','2026-06-05'):
+    for day in days:
         bars = []
         for i, stamp in enumerate(stamps):
             local = datetime.fromtimestamp(stamp, ZoneInfo('America/New_York'))
@@ -38,8 +38,11 @@ def prepare(source):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source',type=Path,required=True)
+    parser.add_argument('--dates',nargs='+',required=True)
     args=parser.parse_args()
-    digest, entries=prepare(args.source)
+    if len(set(args.dates)) != len(args.dates):
+        raise ValueError('Duplicate requested dates')
+    digest, entries=prepare(args.source, args.dates)
     data=json.loads((ROOT/'content/editions.json').read_text(encoding='utf-8'))
     assets=set(json.loads((ROOT/'content/market-assets.json').read_text()))
     for day,bars in entries:
@@ -63,6 +66,6 @@ def main():
     data['sessions'].sort(key=lambda s:s['date'],reverse=True)
     (ROOT/'content/editions.json').write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     (ROOT/'content/market-assets.json').write_text(json.dumps(sorted(assets),indent=2)+'\n',encoding='utf-8')
-    print('Added three historical hourly studies, without songs or execution grades.')
+    print(f'Added {len(entries)} historical hourly studies, without songs or execution grades.')
 
 if __name__=='__main__': main()
