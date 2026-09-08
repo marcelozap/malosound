@@ -152,7 +152,7 @@
         "url": "/assets/charts/2026-09-04-line.svg",
         "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
         "playheadUrl": "/assets/charts/2026-09-04-timeline.json",
-        "alt": "SPY’s September 4 price line from 09:30 to 16:00 ET. Marcelo’s trading result: Unrecorded.",
+        "alt": "SPY’s September 4 price line from 09:30 to 16:00 ET. Execution not reviewed.",
         "caption": "SPY · Observed minute-close shape · September 4, 2026",
         "notes": [
           "Open at minute 0; minute closes at boundaries 1..389; separate closing print at 390.",
@@ -168,6 +168,14 @@
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
+        "executionSections": [],
+        "executionAssessedAt": null,
+        "execution": {
+          "reviewed": false,
+          "counts": {},
+          "label": "Execution not reviewed"
+        },
+        "neutralColor": "#50b8f5",
         "sourceLabel": null
       }
     },
@@ -312,7 +320,7 @@
         "url": "/assets/charts/2026-09-03-line.svg",
         "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
         "playheadUrl": "/assets/charts/2026-09-03-timeline.json",
-        "alt": "SPY’s September 3 price line from 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET. Marcelo’s trading result: Unrecorded.",
+        "alt": "SPY’s September 3 price line from 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET. Execution not reviewed.",
         "caption": "SPY · Observed minute-close shape · September 3, 2026",
         "notes": [
           "Observed first-minute open at boundary 0; minute closes at end boundaries. Gap 13:54–13:55 is not joined. The 13:55 boundary uses the genuinely observed next bar open. Boundary 390 uses the attributed vendor daily close, not a separate 16:00 print.",
@@ -332,6 +340,14 @@
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
+        "executionSections": [],
+        "executionAssessedAt": null,
+        "execution": {
+          "reviewed": false,
+          "counts": {},
+          "label": "Execution not reviewed"
+        },
+        "neutralColor": "#50b8f5",
         "sourceLabel": null
       }
     }

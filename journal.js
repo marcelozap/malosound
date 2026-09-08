@@ -12,6 +12,9 @@
   const format = (value, options) => new Intl.DateTimeFormat('en-US', { ...options, timeZone: 'UTC' }).format(date(value));
   const fullDate = value => format(value, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const shortDate = value => format(value, { month: 'long', day: 'numeric' });
+  // Mirrors EXECUTION in tools/trade_journal.py; keep both in step.
+  const EXECUTION_COLORS = { good:'#58dfa4', misplayed:'#ff7188', sat_out:'#e5b657', unreviewed:'#50b8f5' };
+  const EXECUTION_LABELS = { good:'Played well', misplayed:'Misplayed', sat_out:'Sat out', unreviewed:'Not reviewed' };
   function link(text, url) {
     const a = el('a', 'text-link', text);
     const u = new URL(url, location.href);
@@ -55,7 +58,7 @@
   }
   function renderEntry(session, index, duration) {
     const article = el('article', 'day-entry');
-    const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', setupRating: null };
+    const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', setupRating: null, executionSections: [] };
     article.dataset.tradeResult = performance.outcome;
     article.id = `session-${session.date}`;
     const song = session.originalSong || session.closing;
@@ -113,11 +116,21 @@
       (chart.notes || []).forEach(p => method.append(el('p', '', p)));
       method.append(link('View the source observations ↗', chart.dataUrl));
       drawing.append(method);
+      const exec = performance.executionSections || [];
+      const keys = ['unreviewed'].concat(['good','misplayed','sat_out'].filter(k => exec.some(x => x.execution === k)));
+      const legend = el('div', 'exec-legend'); legend.setAttribute('role','img');
+      legend.setAttribute('aria-label','Execution color key');
+      keys.forEach(k => { const key = el('span','exec-key'); const swatch = el('i');
+        swatch.style.background = EXECUTION_COLORS[k]; key.append(swatch, document.createTextNode(EXECUTION_LABELS[k])); legend.append(key); });
+      drawing.append(legend);
     } else drawing.append(el('p', '', session.closing?.marketClosed ? 'The market was closed. No session line was drawn.' : 'The line appears here after the session data is checked.'));
     const recordNotes = el('details', 'journal-details'); recordNotes.append(el('summary', '', 'My trading record'));
-    recordNotes.append(el('p', '', 'SPY draws the shape. Color records my net realized trading result after fees: green for profit, red for loss. This is a market price line, not an account equity curve. Gray means flat, no trade, or unrecorded; the label distinguishes them.'));
+    recordNotes.append(el('p', '', 'SPY draws the shape, exactly as observed. Color marks how I judge I played each stretch: green played well, red misplayed, gold deliberately sat out, blue not reviewed. This is a market price line, not an account equity curve.'));
+    recordNotes.append(el('p', '', 'Execution is my own review after the close, never inferred from profit. A profitable stretch can be badly played and a losing one played well. Anything I have not reviewed stays neutral.'));
     recordNotes.append(el('p', '', 'The 1–14 rating is my setup-quality assessment, separate from profit or loss. 14 is the rarest tier, aiming for roughly 14 exceptional opportunities a year; it is not a quota or a guaranteed count. Ratings are never inferred from a winning day.'));
-    if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Recorded ${performance.recordedAt}`));
+    (performance.executionSections || []).forEach(x => recordNotes.append(el('p', '', `${x.startTime}–${x.endTime} ET · ${EXECUTION_LABELS[x.execution]}${x.note ? ' · ' + x.note : ''}`)));
+    if (performance.executionAssessedAt) recordNotes.append(el('p', '', `Execution reviewed at ${performance.executionAssessedAt}, after the close.`));
+    if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Net result recorded ${performance.recordedAt}. The net result is a label here; it does not color the line.`));
     if (performance.ratingAsOf) recordNotes.append(el('p', '', `Setup assessment time: ${performance.ratingAsOf}. A later assessment is retrospective, not a pre-trade call.`));
     drawing.append(recordNotes); article.append(drawing);
     const music = section('03', 'The day, in another key', 'blue');

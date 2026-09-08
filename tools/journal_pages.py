@@ -3,7 +3,9 @@ from datetime import date, datetime, timedelta
 from html import escape as e
 import json
 from pathlib import Path
-from trade_journal import validate as validate_trades, presentation, strip as trade_strip, notes as trade_notes
+from trade_journal import (validate as validate_trades, presentation, strip as trade_strip,
+                           notes as trade_notes, legend as trade_legend, segments as execution_segments,
+                           EXECUTION)
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -48,16 +50,30 @@ def refresh():
         lo, hi = summary['low'], summary['high']
         span = hi-lo or 1
         # Actual minute-close shape, without axes or curve smoothing.
-        path = []
         points = []
         for i, b in enumerate(bounds):
             if b['price'] is None:
                 continue
-            command = 'M' if i == 0 or b['minute'] in gap_ends else 'L'
             x, y = round(24+b['minute']/390*952, 2), round(30+(hi-b['price'])/span*280, 2)
-            path.append(f'{command}{x:.2f},{y:.2f}')
             points.append(dict(minute=b['minute'], x=x, y=y))
-        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">The line SPY drew on {day}</title><desc id="desc">Observed minute closing prices, opening boundary and attributed terminal price, 09:30 to 16:00 ET. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. Marcelo's trading result: {performance['label']}. Color represents his trading result, not SPY's return or an account equity curve.</desc><path d="{' '.join(path)}" fill="none" stroke="{performance['color']}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>'''
+        # One <path> per reviewed stretch. The coordinates are the same observed
+        # points in the same order; only the stroke color changes at a boundary,
+        # and a boundary point is drawn in both runs so the line stays unbroken.
+        runs = execution_segments(points, gap_ends, performance['executionSections'])
+        drawn = ''.join(
+            '<path d="' + ' '.join(('M' if i == 0 else 'L') + f'{p["x"]:.2f},{p["y"]:.2f}'
+                                   for i, p in enumerate(run['points']))
+            + f'" fill="none" stroke="{EXECUTION[run["execution"]][1]}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'
+            for run in runs)
+        if performance['executionSections']:
+            marks = '; '.join(f'{s["startTime"]}–{s["endTime"]} ET {EXECUTION[s["execution"]][0].lower()}'
+                              for s in performance['executionSections'])
+            colour_note = (f'Color marks Marcelo’s own review of how he played each stretch ({marks}); '
+                           'unreviewed stretches stay neutral. Color is not profit and not SPY’s return.')
+        else:
+            colour_note = ('No stretch of this session has been reviewed for execution, so the whole line '
+                           'is neutral. Color is not profit and not SPY’s return.')
+        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">The line SPY drew on {day}</title><desc id="desc">Observed minute closing prices, opening boundary and attributed terminal price, 09:30 to 16:00 ET. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'
         timeline = dict(durationSeconds=source['duration_seconds'], marketStartMinutes=570,
@@ -74,7 +90,7 @@ def refresh():
         if source.get('terminal_price', {}).get('source_kind') == 'vendor_daily_close':
             notes.append(f"The final anchor is the vendor daily close of ${summary['close']:.2f}, not a separate 16:00 intraday print; the last minute closes at ${summary['last_minute_bar_close']:.2f}.")
         chart = dict(url='/'+line_path, dataUrl=source_path, playheadUrl='/'+timeline_path,
-                     alt=f'SPY’s {dt.strftime("%B")} {dt.day} price line from 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' Marcelo’s trading result: {performance["label"]}.',
+                     alt=f'SPY’s {dt.strftime("%B")} {dt.day} price line from 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
                      caption=f'SPY · Observed minute-close shape · {dt.strftime("%B")} {dt.day}, {dt.year}',
                      notes=notes)
         if gaps:
@@ -90,7 +106,7 @@ def refresh():
             pre += '<details class="journal-details"><summary>Notes + sources</summary>'+paragraphs([morning['summary']]+morning.get('paragraphs',[])+['Prepared / added: '+morning.get('preparedAt','Not recorded')])+links(morning.get('sources',[]))+'</details>'
         pre = '<details class="morning-fold"><summary>Morning notes</summary>'+pre+'</details>'
         drawing = f'<figure class="session-drawing" data-timeline-src="/{timeline_path}"><div class="drawing-stage"><img src="/{line_path}" width="1000" height="340" alt="{e(chart["alt"],quote=True)}"></div><figcaption class="drawing-times"><span>09:30 ET</span><span>16:00 ET</span></figcaption></figure>'
-        drawing = trade_strip(performance) + drawing
+        drawing = trade_strip(performance) + drawing + trade_legend(performance)
         if gaps: drawing += '<p class="data-gap">'+e(chart['gapShort'])+'</p>'
         drawing += '<details class="journal-details"><summary>Behind the line</summary>'+paragraphs([chart['caption']]+([chart['gapNote']] if gaps else [])+notes)+links([dict(url=source_path,label='View the source observations')])+'</details>'
         drawing += '<details class="journal-details"><summary>My trading record</summary>'+paragraphs(trade_notes(performance))+'</details>'

@@ -43,10 +43,19 @@ def normalize(raw, recorded_at=None):
     elif count is not None and ((count == 0 and outcome != 'no_trade') or (count > 0 and outcome == 'no_trade')):
         raise ValueError('The reported outcome conflicts with the trade count.')
     # Allowlist deliberately discards amounts, fills, broker/account identifiers and source paths.
+    # executionSections carry only clock times, a reviewed class and Marcelo's own words.
     row = dict(date=raw['date'], outcome=outcome, setupRating=raw.get('setupRating'),
                ratingAsOf=raw.get('ratingAsOf'), sourceKind=source,
+               executionSections=raw.get('executionSections'),
+               executionAssessedAt=raw.get('executionAssessedAt'),
                recordedAt=recorded_at or datetime.now(timezone.utc).isoformat(timespec='seconds'))
-    validate({'schemaVersion': 1, 'days': [row]})
+    if row['executionSections'] is not None:
+        row['executionSections'] = [
+            {k: v for k, v in dict(startTime=s['startTime'], endTime=s['endTime'],
+                                   execution=s['execution'], note=s.get('note')).items()
+             if k != 'note' or v is not None}
+            for s in row['executionSections'] if isinstance(s, dict) and {'startTime', 'endTime', 'execution'} <= set(s)]
+    validate({'schemaVersion': 2, 'days': [row]})
     return row
 
 

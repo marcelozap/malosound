@@ -88,6 +88,12 @@
 
 /* Personal trading results color the market line; setup quality stays independent. */
 .day-entry{--trade-color:#81929e;--trade-glow:#81929e22}
+/* Execution color key. Blue is the resting state for a stretch Marcelo has not
+   reviewed; gold marks one he deliberately sat out. Green and red are his own
+   reviewed judgements and are never derived from profit. */
+.exec-legend{display:flex;flex-wrap:wrap;gap:16px;margin:14px 20px 0;font-size:11px;letter-spacing:.4px;color:#9db0bd}
+.exec-key{display:inline-flex;align-items:center;gap:7px}
+.exec-key i{display:block;width:14px;height:3px;border-radius:3px;flex:none}
 [data-trade-result="profit"]{--trade-color:#58dfa4;--trade-glow:#58dfa433}
 [data-trade-result="loss"]{--trade-color:#ff7188;--trade-glow:#ff718833}
 [data-trade-result="flat"]{--trade-color:#b8c5d0;--trade-glow:#b8c5d022}
