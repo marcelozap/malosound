@@ -29,23 +29,61 @@ is not implemented by restyling a historical song; never imply otherwise.
 
 ## Calendar and entry format
 
-Read `docs/TRADING_JOURNAL.md` for the personal trading layer. The SPY path's
-color follows Marcelo's supplied final net result, never SPY's direction.
-Publish only the small allowlisted summary; no private trade amounts/accounts.
-Without a dated result, keep the line neutral and label it Unrecorded. Apply
-the optional supplied setup-quality score on the 1–14 scale without inventing
-ratings or imposing a quota of 14 trades. Check for a new approved day result
-at the close and preserve previous result/assessment timestamps on retries.
+Read `docs/TRADING_JOURNAL.md` for the personal trading layer. It is the
+authority on this section; what follows is the short version.
+
+The SPY path's color follows **Marcelo's own review of how he played each
+stretch**, never the day's net result and never SPY's direction. One day can
+carry several colored sections: gold where he deliberately sat out, green where
+he judges he played it well, red where he misplayed it, and blue wherever he
+has not reviewed it. Blue is the default and the honest answer; leave it. A
+profitable stretch can be badly played and a losing one played well, so **never
+derive a color from money**. Section boundaries land on observed minutes only,
+and the drawn geometry is the same path either way.
+
+Three axes stay independent and must not be blended:
+
+| axis | what it is | what it colors |
+|---|---|---|
+| net result | Marcelo's supplied result after fees | nothing; a text label |
+| execution | his after-the-close review, per stretch | the session line |
+| setup rating 1–14 | opportunity quality | nothing; a separate label |
+
+Publish only the small allowlisted summary; no amounts, accounts or fills.
+Without a dated result, label the day Unrecorded. Apply a supplied 1–14 setup
+score without inventing ratings or imposing a quota of 14 trades. Check for a
+new approved day result at the close and preserve previous result and
+assessment timestamps on retries.
+
+Marcelo logs a day himself, after the close, with `tools/log_day.py`. The notes
+he types there are **private by default**: they go to the dated private folder
+and stop there. Text reaches the site only when he designates it with
+`--public-note` for a specific stretch. Do not lift a private note into public
+copy, and do not ask for one in order to publish.
 
 Artwork direction, clarified September 5: the real guitar reference supplies
 colors only. Preserve the transparent guitar emerging from fine flowing lines,
 in blue/teal and gold. Do not replace it with a solid or photographic guitar.
 
-The journal starts September 3, 2026. Preserve the black, gold and electric-blue
-guitar artwork throughout the calendar and dated pages. Each clickable date
-opens one entry in this order: **Before the open → The line the day drew →
-The day, in another key**. Keep all three parts on their own date. Unpublished
-dates stay disabled; do not fabricate archive entries.
+Daily publication starts September 3, 2026, and the archive may reach back
+further than that: an older session can be added as a historical entry, and the
+calendar's back button now stops at the oldest entry rather than at the declared
+start date. Preserve the black, gold and electric-blue guitar artwork throughout
+the calendar and dated pages. Each clickable date opens one entry in this order:
+**Before the open → The line the day drew → The day, in another key**. Keep all
+three parts on their own date. Unpublished dates stay disabled; do not fabricate
+archive entries.
+
+**Music is optional for a historical day.** An older entry may be the line and
+its sources alone. Such a day gets no player and no standalone page, and the
+site says so plainly rather than promising a recording; only `songPending: true`
+means a song is actually on its way. Do not backfill a song to make an old entry
+match a new one.
+
+The calendar loads a small index, `content/journal-index.json`, and fetches one
+day's detail from `content/days/<date>.json` when that date is opened. Both are
+generated; commit them with the content. A year of entries costs the same first
+paint as a week.
 
 Marcelo prefers very little visible text: art, color, the session line and music
 lead the experience. Show a short morning headline, honest provenance label,
@@ -65,8 +103,13 @@ explicitly reconstructed. Calendar corrections retain their correction label.
 price line and complete static dated page for every original song with source
 data. It updates `lineChart` and the public asset list. Review and commit these
 generated files with the content. The line uses actual minute-close boundaries,
-no axes or grid, colored by the recorded personal result. It must preserve missing-data
-breaks and disclose relative scaling; it is not an exact intraminute tick path.
+no axes or grid, and is drawn as one path per reviewed stretch so the colors can
+change along the day while the geometry stays exactly what was observed. It must
+preserve missing-data breaks and disclose relative scaling; it is not an exact
+intraminute tick path.
+
+The build also rewrites each day file's `audioUrl` to the staged same-origin
+copy and refuses to finish if one still points at an external release.
 
 The same build generates a compact `*-timeline.json` from the exact SVG
 coordinates. `session-playhead.js` synchronizes its marker to the native audio
