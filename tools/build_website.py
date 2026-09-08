@@ -15,7 +15,7 @@ refresh()
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
-    'index.html', 'journal.css', 'journal.js', 'session-playhead.js', 'content/editions.json',
+    'index.html', 'journal.css', 'journal.js', 'session-playhead.js', 'content/editions.json', 'content/trading-journal.json',
     'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
     'assets/brand/malosound-square.png',

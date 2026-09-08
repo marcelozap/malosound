@@ -55,6 +55,8 @@
   }
   function renderEntry(session, index, duration) {
     const article = el('article', 'day-entry');
+    const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', setupRating: null };
+    article.dataset.tradeResult = performance.outcome;
     article.id = `session-${session.date}`;
     const song = session.originalSong || session.closing;
     const header = el('header', 'day-heading session-cover');
@@ -84,6 +86,19 @@
     article.append(pre);
     const chart = session.lineChart;
     const drawing = section('02', 'The line the day drew');
+    const tradeStrip = el('div', 'trade-strip');
+    const result = el('span', 'trade-result');
+    const glyph = el('span', '', performance.glyph); glyph.setAttribute('aria-hidden', 'true');
+    result.append(glyph, el('span', '', `My day · ${performance.label}`));
+    const meter = el('div', 'setup-meter'); meter.setAttribute('role', 'img');
+    const rating = Number.isInteger(performance.setupRating) && performance.setupRating >= 1 && performance.setupRating <= 14 ? performance.setupRating : null;
+    meter.setAttribute('aria-label', rating === null ? 'Setup quality not rated' : `Setup quality: ${rating} of 14`);
+    meter.title = 'Setup quality · 14 is reserved for the rarest opportunities';
+    const bars = el('span', 'setup-bars'); bars.setAttribute('aria-hidden', 'true');
+    for (let i = 1; i <= 14; i++) bars.append(el('i', rating !== null && i <= rating ? 'is-lit' : ''));
+    const score = el('span', 'setup-score', rating === null ? '—' : String(rating)); score.setAttribute('aria-hidden', 'true');
+    score.append(el('small', '', '/14')); meter.append(bars, score); tradeStrip.append(result, meter);
+    drawing.append(tradeStrip);
     if (chart) {
       const figure = el('figure', 'session-drawing');
       if (chart.playheadUrl) figure.dataset.timelineSrc = chart.playheadUrl;
@@ -99,7 +114,12 @@
       method.append(link('View the source observations ↗', chart.dataUrl));
       drawing.append(method);
     } else drawing.append(el('p', '', session.closing?.marketClosed ? 'The market was closed. No session line was drawn.' : 'The line appears here after the session data is checked.'));
-    article.append(drawing);
+    const recordNotes = el('details', 'journal-details'); recordNotes.append(el('summary', '', 'My trading record'));
+    recordNotes.append(el('p', '', 'SPY draws the shape. Color records my net realized trading result after fees: green for profit, red for loss. This is a market price line, not an account equity curve. Gray means flat, no trade, or unrecorded; the label distinguishes them.'));
+    recordNotes.append(el('p', '', 'The 1–14 rating is my setup-quality assessment, separate from profit or loss. 14 is the rarest tier, aiming for roughly 14 exceptional opportunities a year; it is not a quota or a guaranteed count. Ratings are never inferred from a winning day.'));
+    if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Recorded ${performance.recordedAt}`));
+    if (performance.ratingAsOf) recordNotes.append(el('p', '', `Setup assessment time: ${performance.ratingAsOf}. A later assessment is retrospective, not a pre-trade call.`));
+    drawing.append(recordNotes); article.append(drawing);
     const music = section('03', 'The day, in another key', 'blue');
     if (song?.audioUrl) {
       music.append(el('p', 'eyebrow blue', 'Original instrumental'));
@@ -170,8 +190,10 @@
       for (let day=1;day<=count;day++) {
         const key = `${month}-${String(day).padStart(2,'0')}`; const available = byDate.has(key);
         const b = el('button', `calendar-day${available ? ' has-entry' : ''}${key === selected ? ' is-selected' : ''}`, String(day));
+        const dayResult = byDate.get(key)?.performance;
+        if (dayResult) b.dataset.tradeResult = dayResult.outcome;
         b.type = 'button'; b.disabled = !available;
-        b.setAttribute('aria-label', `${fullDate(key)}${available ? ', open journal entry' : ', no journal entry'}`);
+        b.setAttribute('aria-label', `${fullDate(key)}${available ? ', open journal entry' : ', no journal entry'}${dayResult ? `, my trading result: ${dayResult.label}` : ''}`);
         if (available) b.setAttribute('aria-pressed', String(key === selected));
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);

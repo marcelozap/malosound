@@ -29,6 +29,14 @@ is not implemented by restyling a historical song; never imply otherwise.
 
 ## Calendar and entry format
 
+Read `docs/TRADING_JOURNAL.md` for the personal trading layer. The SPY path's
+color follows Marcelo's supplied final net result, never SPY's direction.
+Publish only the small allowlisted summary; no private trade amounts/accounts.
+Without a dated result, keep the line neutral and label it Unrecorded. Apply
+the optional supplied setup-quality score on the 1–14 scale without inventing
+ratings or imposing a quota of 14 trades. Check for a new approved day result
+at the close and preserve previous result/assessment timestamps on retries.
+
 Artwork direction, clarified September 5: the real guitar reference supplies
 colors only. Preserve the transparent guitar emerging from fine flowing lines,
 in blue/teal and gold. Do not replace it with a solid or photographic guitar.
@@ -57,7 +65,7 @@ explicitly reconstructed. Calendar corrections retain their correction label.
 price line and complete static dated page for every original song with source
 data. It updates `lineChart` and the public asset list. Review and commit these
 generated files with the content. The line uses actual minute-close boundaries,
-no axes or grid, gold flowing to electric blue. It must preserve missing-data
+no axes or grid, colored by the recorded personal result. It must preserve missing-data
 breaks and disclose relative scaling; it is not an exact intraminute tick path.
 
 The same build generates a compact `*-timeline.json` from the exact SVG

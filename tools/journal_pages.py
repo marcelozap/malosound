@@ -3,6 +3,7 @@ from datetime import date, datetime, timedelta
 from html import escape as e
 import json
 from pathlib import Path
+from trade_journal import validate as validate_trades, presentation, strip as trade_strip, notes as trade_notes
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -23,7 +24,10 @@ def chapter(n, title, body):
 def refresh():
     data = json.loads((ROOT/'content/editions.json').read_text(encoding='utf-8'))
     assets = set(json.loads((ROOT/'content/market-assets.json').read_text(encoding='utf-8')))
+    trades = validate_trades(json.loads((ROOT/'content/trading-journal.json').read_text(encoding='utf-8')))
     for index, session in enumerate(sorted(data['sessions'], key=lambda s:s['date'])):
+        performance = presentation(trades.get(session['date']))
+        session['performance'] = performance
         song = session.get('originalSong') or session.get('closing')
         if not song or not song.get('audioUrl') or not song.get('chart'):
             continue
@@ -53,7 +57,7 @@ def refresh():
             x, y = round(24+b['minute']/390*952, 2), round(30+(hi-b['price'])/span*280, 2)
             path.append(f'{command}{x:.2f},{y:.2f}')
             points.append(dict(minute=b['minute'], x=x, y=y))
-        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">The line SPY drew on {day}</title><desc id="desc">Observed minute closing prices, opening boundary and attributed terminal price, 09:30 to 16:00 ET. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session.</desc><defs><linearGradient id="ink" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#e5b657"/><stop offset=".48" stop-color="#efd497"/><stop offset="1" stop-color="#50b8f5"/></linearGradient></defs><path d="{' '.join(path)}" fill="none" stroke="url(#ink)" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>'''
+        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">The line SPY drew on {day}</title><desc id="desc">Observed minute closing prices, opening boundary and attributed terminal price, 09:30 to 16:00 ET. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. Marcelo's trading result: {performance['label']}. Color represents his trading result, not SPY's return or an account equity curve.</desc><path d="{' '.join(path)}" fill="none" stroke="{performance['color']}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'
         timeline = dict(durationSeconds=source['duration_seconds'], marketStartMinutes=570,
@@ -70,7 +74,7 @@ def refresh():
         if source.get('terminal_price', {}).get('source_kind') == 'vendor_daily_close':
             notes.append(f"The final anchor is the vendor daily close of ${summary['close']:.2f}, not a separate 16:00 intraday print; the last minute closes at ${summary['last_minute_bar_close']:.2f}.")
         chart = dict(url='/'+line_path, dataUrl=source_path, playheadUrl='/'+timeline_path,
-                     alt=f'SPY’s {dt.strftime("%B")} {dt.day} price line from 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.'),
+                     alt=f'SPY’s {dt.strftime("%B")} {dt.day} price line from 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' Marcelo’s trading result: {performance["label"]}.',
                      caption=f'SPY · Observed minute-close shape · {dt.strftime("%B")} {dt.day}, {dt.year}',
                      notes=notes)
         if gaps:
@@ -86,8 +90,10 @@ def refresh():
             pre += '<details class="journal-details"><summary>Notes + sources</summary>'+paragraphs([morning['summary']]+morning.get('paragraphs',[])+['Prepared / added: '+morning.get('preparedAt','Not recorded')])+links(morning.get('sources',[]))+'</details>'
         pre = '<details class="morning-fold"><summary>Morning notes</summary>'+pre+'</details>'
         drawing = f'<figure class="session-drawing" data-timeline-src="/{timeline_path}"><div class="drawing-stage"><img src="/{line_path}" width="1000" height="340" alt="{e(chart["alt"],quote=True)}"></div><figcaption class="drawing-times"><span>09:30 ET</span><span>16:00 ET</span></figcaption></figure>'
+        drawing = trade_strip(performance) + drawing
         if gaps: drawing += '<p class="data-gap">'+e(chart['gapShort'])+'</p>'
         drawing += '<details class="journal-details"><summary>Behind the line</summary>'+paragraphs([chart['caption']]+([chart['gapNote']] if gaps else [])+notes)+links([dict(url=source_path,label='View the source observations')])+'</details>'
+        drawing += '<details class="journal-details"><summary>My trading record</summary>'+paragraphs(trade_notes(performance))+'</details>'
         music = f'<p class="eyebrow blue">Original instrumental</p><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'
         music += '<details class="journal-details"><summary>About the song</summary>'+paragraphs([f'SPY’s {dt.strftime("%B")} {dt.day}, 9:30 a.m.–4:00 p.m. ET session, compressed into a 3:15 instrumental.',song.get('thesis',song['summary'])]+song.get('paragraphs',[]))
         music += '<div class="session-table-wrap"><table class="session-table"><thead><tr><th>Market time ET</th><th>Song time</th><th>Section</th></tr></thead><tbody>'
@@ -100,6 +106,7 @@ def refresh():
         music += '</details>'
         report = song['reportUrl'].lstrip('/')
         page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="MaloSound journal for {day}: the morning thought, SPY’s observed line, and an original 3:15 instrumental."><title>{dt.strftime('%B')} {dt.day} · {e(song['title'])} — MaloSound.ai</title><link rel="stylesheet" href="/journal.css"><link rel="canonical" href="https://malosound.ai/{report}"></head><body class="art-home"><a class="skip" href="#main">Skip to content</a><div class="wrap"><header class="topbar"><a class="wordmark" href="/">malosound<span>.ai</span></a><nav class="nav" aria-label="Main navigation"><a href="/#journal">Calendar</a><a href="/#xiv">XIV</a></nav></header><main id="main" class="standalone-journal"><div class="standalone-art" aria-hidden="true"></div><article class="day-entry"><header class="day-heading session-cover"><div class="cover-aura" aria-hidden="true"></div><div class="cover-orbit" aria-hidden="true"></div><div class="cover-copy"><span class="eyebrow gold">{dt.strftime('%B')} {dt.day} · {dt.year}</span><h1>{e(song['title'])}</h1><p class="day-subtitle">SPY · SESSION REPLAY · 03:15</p></div></header>{chapter('01','Before the open',pre)}{chapter('02','The line the day drew',drawing)}{chapter('03','The day, in another key',music)}</article><p><a class="text-link" href="/#journal">Back to the calendar ↗</a></p></main></div></body></html>'''
+        page = page.replace('<article class="day-entry">', f'<article class="day-entry" data-trade-result="{performance["outcome"]}">')
         page = page.replace('</body>', '<script src="/session-playhead.js" defer></script></body>')
         write(report,page)
         assets.update([line_path,timeline_path,report,source_path.lstrip('/')])
