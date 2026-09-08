@@ -221,11 +221,7 @@ def presentation(row):
 
 
 def strip(view):
-    rating = view['setupRating']
-    label = f'Setup quality: {rating} of 14' if rating is not None else 'Setup quality not rated'
-    bars = ''.join(f'<i class="{"is-lit" if rating is not None and n <= rating else ""}"></i>' for n in range(1, 15))
-    score = str(rating) if rating is not None else '—'
-    return f'<div class="trade-strip"><span class="trade-result"><span aria-hidden="true">{view["glyph"]}</span> My day · {view["label"]}</span><div class="setup-meter" role="img" aria-label="{label}" title="Setup quality · 14 is reserved for the rarest opportunities"><span class="setup-bars" aria-hidden="true">{bars}</span><span class="setup-score" aria-hidden="true">{score}<small>/14</small></span></div></div>'
+    return f'<div class="trade-strip"><span class="trade-result"><span aria-hidden="true">{view["glyph"]}</span> My day · {view["label"]}</span></div>'
 
 
 def legend(view):
@@ -237,9 +233,7 @@ def legend(view):
 
 
 def notes(view):
-    result = ['SPY draws the shape, exactly as observed. Color marks how Marcelo judges he played each stretch: green played well, red misplayed, gold deliberately sat out, blue not reviewed. This is a market price line, not an account equity curve.',
-              'Execution is his own review after the close, never inferred from profit. A profitable stretch can be badly played and a losing one played well. Any stretch he has not reviewed stays neutral.',
-              'The 1–14 rating is Marcelo’s setup-quality assessment, separate from both execution and profit. 14 is the rarest tier, aiming for roughly 14 exceptional opportunities a year; it is not a guaranteed annual count or a quota. Ratings are never inferred from a winning day.']
+    result = ['Daily scalps. Small steps. My record in color and sound.']
     if view['executionSections']:
         for item in view['executionSections']:
             line = f'{item["startTime"]}–{item["endTime"]} ET · {EXECUTION[item["execution"]][0]}'
@@ -250,6 +244,4 @@ def notes(view):
         result.append('Execution reviewed at ' + view['executionAssessedAt'] + ', after the close.')
     if view['sourceLabel']:
         result.append(view['sourceLabel'] + ' · Net result recorded ' + view['recordedAt'] + '. The net result is a label here; it does not color the line.')
-    if view['ratingAsOf']:
-        result.append('Setup assessment time: ' + view['ratingAsOf'] + '. A later assessment is retrospective, not a pre-trade call.')
     return result

@@ -93,14 +93,7 @@
     const result = el('span', 'trade-result');
     const glyph = el('span', '', performance.glyph); glyph.setAttribute('aria-hidden', 'true');
     result.append(glyph, el('span', '', `My day · ${performance.label}`));
-    const meter = el('div', 'setup-meter'); meter.setAttribute('role', 'img');
-    const rating = Number.isInteger(performance.setupRating) && performance.setupRating >= 1 && performance.setupRating <= 14 ? performance.setupRating : null;
-    meter.setAttribute('aria-label', rating === null ? 'Setup quality not rated' : `Setup quality: ${rating} of 14`);
-    meter.title = 'Setup quality · 14 is reserved for the rarest opportunities';
-    const bars = el('span', 'setup-bars'); bars.setAttribute('aria-hidden', 'true');
-    for (let i = 1; i <= 14; i++) bars.append(el('i', rating !== null && i <= rating ? 'is-lit' : ''));
-    const score = el('span', 'setup-score', rating === null ? '—' : String(rating)); score.setAttribute('aria-hidden', 'true');
-    score.append(el('small', '', '/14')); meter.append(bars, score); tradeStrip.append(result, meter);
+    tradeStrip.append(result);
     drawing.append(tradeStrip);
     if (chart) {
       const figure = el('figure', 'session-drawing');
@@ -125,13 +118,10 @@
       drawing.append(legend);
     } else drawing.append(el('p', '', session.closing?.marketClosed ? 'The market was closed. No session line was drawn.' : 'The line appears here after the session data is checked.'));
     const recordNotes = el('details', 'journal-details'); recordNotes.append(el('summary', '', 'My trading record'));
-    recordNotes.append(el('p', '', 'SPY draws the shape, exactly as observed. Color marks how I judge I played each stretch: green played well, red misplayed, gold deliberately sat out, blue not reviewed. This is a market price line, not an account equity curve.'));
-    recordNotes.append(el('p', '', 'Execution is my own review after the close, never inferred from profit. A profitable stretch can be badly played and a losing one played well. Anything I have not reviewed stays neutral.'));
-    recordNotes.append(el('p', '', 'The 1–14 rating is my setup-quality assessment, separate from profit or loss. 14 is the rarest tier, aiming for roughly 14 exceptional opportunities a year; it is not a quota or a guaranteed count. Ratings are never inferred from a winning day.'));
+    recordNotes.append(el('p', '', 'Daily scalps. Small steps. My record in color and sound.'));
     (performance.executionSections || []).forEach(x => recordNotes.append(el('p', '', `${x.startTime}–${x.endTime} ET · ${EXECUTION_LABELS[x.execution]}${x.note ? ' · ' + x.note : ''}`)));
     if (performance.executionAssessedAt) recordNotes.append(el('p', '', `Execution reviewed at ${performance.executionAssessedAt}, after the close.`));
     if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Net result recorded ${performance.recordedAt}. The net result is a label here; it does not color the line.`));
-    if (performance.ratingAsOf) recordNotes.append(el('p', '', `Setup assessment time: ${performance.ratingAsOf}. A later assessment is retrospective, not a pre-trade call.`));
     drawing.append(recordNotes); article.append(drawing);
     const music = section('03', 'The day, in another key', 'blue');
     if (song?.audioUrl) {
