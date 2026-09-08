@@ -1,12 +1,55 @@
 {
   "schemaVersion": 1,
-  "seriesStartDate": "2026-09-03",
+  "seriesStartDate": "2026-06-03",
   "declaredStartDate": "2026-09-03",
   "songDurationSeconds": 195,
   "months": [
+    "2026-06",
     "2026-09"
   ],
   "days": [
+    {
+      "date": "2026-06-03",
+      "title": "SPY · Hourly study",
+      "hasSong": false,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-06-03-hourly.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-06-03.json"
+    },
+    {
+      "date": "2026-06-04",
+      "title": "SPY · Hourly study",
+      "hasSong": false,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-06-04-hourly.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-06-04.json"
+    },
+    {
+      "date": "2026-06-05",
+      "title": "SPY · Hourly study",
+      "hasSong": false,
+      "hasChart": true,
+      "chartUrl": "/assets/charts/2026-06-05-hourly.svg",
+      "marketClosed": false,
+      "outcome": "unrecorded",
+      "outcomeLabel": "Unrecorded",
+      "setupRating": null,
+      "executionReviewed": false,
+      "executionLabel": "Execution not reviewed",
+      "detailUrl": "/content/days/2026-06-05.json"
+    },
     {
       "date": "2026-09-03",
       "title": "After the Low",

@@ -291,7 +291,7 @@ class TradeJournalTests(unittest.TestCase):
                                          json.loads((root/f'assets/charts/{day}-timeline.json').read_text()))
                         report = (fixture/f'reports/{day}-spy-song.html').read_text(encoding='utf-8')
                         self.assertIn('data-trade-result="profit"', report)
-                        self.assertEqual(report.count('<i class='), 14)
+                        self.assertNotIn('setup-meter', report)
                         self.assertIn('exec-legend', report)
                     updated = json.loads((fixture/'content/editions.json').read_text(encoding='utf-8'))
                     for old, new in zip(editions['sessions'], updated['sessions']):

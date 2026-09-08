@@ -84,7 +84,7 @@ def validate_journal(data):
                         f'{day}: use a public HTTPS audio URL without embedded credentials.')
 
             if kind in ('closing', 'originalSong'):
-                require(entry.get('audioUrl') or entry.get('song') or entry.get('marketClosed') is True or entry.get('songPending') is True,
+                require(session.get('lineChart') or entry.get('audioUrl') or entry.get('song') or entry.get('marketClosed') is True or entry.get('songPending') is True,
                         f'{day}: recording, reference song, marketClosed, or explicit songPending required')
 
 
