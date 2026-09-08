@@ -149,7 +149,17 @@
       if (song.reportUrl) notes.append(link('Read the complete session ↗', song.reportUrl));
       if (song.midiUrl) notes.append(link('Download the editable MIDI ↗', song.midiUrl));
       music.append(notes);
-    } else music.append(el('h4', '', song?.marketClosed ? 'A day of rest.' : 'The sound is still to come.'), el('p', '', song?.marketClosed ? 'No market session, no session song.' : 'The original song will appear here when the recording is ready.'));
+    } else {
+      // A song is promised only where one was explicitly promised. An archived
+      // day that carries a chart and no music is complete as it stands, and
+      // must not read as a recording that never arrived.
+      const [heading, body] = song?.marketClosed
+        ? ['A day of rest.', 'No market session, no session song.']
+        : song?.songPending === true
+          ? ['The sound is still to come.', 'The original song will appear here when the recording is ready.']
+          : ['The line, on its own.', 'This entry is the session line and its sources. No song was made for this date.'];
+      music.append(el('h4', '', heading), el('p', '', body));
+    }
     article.append(music);
     const earlier = [session.preOpen && session.morning, session.originalSong && session.closing].filter(Boolean);
     if (earlier.length) {
@@ -222,7 +232,11 @@
       const head = el('div', 'calendar-head');
       const prev = el('button', 'month-prev', '←'); prev.type = 'button'; prev.setAttribute('aria-label', 'Previous month');
       const next = el('button', 'month-next', '→'); next.type = 'button'; next.setAttribute('aria-label', 'Next month');
-      prev.disabled = month <= (data.seriesStartDate || sessions[0].date).slice(0,7);
+      // The floor is the earlier of the declared start and the oldest entry, so
+      // a day added before the series officially began is still reachable.
+      const oldest = sessions[0].date.slice(0,7);
+      const declared = (data.seriesStartDate || '').slice(0,7);
+      prev.disabled = month <= (declared && declared < oldest ? declared : oldest);
       next.disabled = month >= sessions.at(-1).date.slice(0,7);
       prev.addEventListener('click', () => moveMonth(-1)); next.addEventListener('click', () => moveMonth(1));
       const title = el('h3','',format(`${month}-01`,{month:'long',year:'numeric'})); head.append(prev,title,next);

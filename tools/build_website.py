@@ -7,10 +7,9 @@ from pathlib import Path
 import json
 import shutil
 from urllib.parse import unquote, urlsplit
-from journal_pages import refresh
+from journal_pages import archive, refresh
+from trade_journal import validate as validate_trades
 from website_audio import stage_audio
-
-refresh()
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
@@ -115,6 +114,17 @@ class Page(HTMLParser):
             require('alt' in attrs, 'Images need alt text.')
 
 
+def check_day_audio(output, replacements):
+    """Each built day file's audioUrl, with whether it resolves to a staged local file."""
+    staged = set(replacements.values())
+    for path in sorted((output / 'content/days').glob('*.json')):
+        session = json.loads(path.read_text(encoding='utf-8'))
+        for kind in ('closing', 'originalSong'):
+            url = (session.get(kind) or {}).get('audioUrl')
+            if url:
+                yield path.name, url in staged
+
+
 def validate_links():
     pages = {}
     for name in PUBLIC_FILES:
@@ -141,6 +151,10 @@ def validate_links():
 
 
 def main():
+    # Regenerate the drawings and the archive first, then read what it wrote.
+    # This used to run at import time, which made importing the builder edit
+    # the checkout; a test that only wants check_day_audio should not do that.
+    refresh()
     data = json.loads((ROOT / 'content/editions.json').read_text())
     validate_journal(data)
     validate_links()
@@ -157,6 +171,17 @@ def main():
     marker.touch()
     replacements = stage_audio(data, OUTPUT)
     (OUTPUT / 'content/editions.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    # The archive is regenerated here, from the same object stage_audio just
+    # rewrote. The copies taken above still point at the external release URLs;
+    # the browser reads a day file, not editions.json, so without this the
+    # player would reach off-origin for audio that is already staged locally.
+    trades = validate_trades(json.loads((ROOT / 'content/trading-journal.json').read_text(encoding='utf-8')))
+    for name, text in archive(data, trades).items():
+        destination = OUTPUT / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(text, encoding='utf-8')
+    for name, local in check_day_audio(OUTPUT, replacements):
+        require(local, f'{name}: still points at an external recording after staging.')
     for name in PUBLIC_FILES:
         if name.endswith('.html'):
             page = OUTPUT / name

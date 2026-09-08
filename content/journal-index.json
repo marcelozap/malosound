@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "seriesStartDate": "2026-09-03",
+  "declaredStartDate": "2026-09-03",
   "songDurationSeconds": 195,
   "months": [
     "2026-09"

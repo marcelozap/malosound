@@ -141,15 +141,19 @@ def refresh():
     write('content/market-assets.json',json.dumps(sorted(assets),indent=2)+'\n')
 
 
-def write_archive(data, trades):
+def archive(data, trades):
     """A small index the calendar can hold, plus one detail file per day.
 
     The browser loads the index once and fetches only the day it is showing, so
     a year of entries costs the same first paint as a week. Every field here is
     derived from editions.json; nothing new is asserted.
+
+    Returns {path: text} rather than writing, so the same code that fills the
+    checkout can fill the build directory from the staged copy of the data,
+    after the audio URLs have been rewritten to local files.
     """
     sessions = sorted(data['sessions'], key=lambda s: s['date'])
-    written = []
+    files = {}
     index_days = []
     for session in sessions:
         day = session['date']
@@ -169,16 +173,26 @@ def write_archive(data, trades):
             executionReviewed=view['execution']['reviewed'],
             executionLabel=view['execution']['label'],
             detailUrl=f'/content/days/{day}.json'))
-        path = f'content/days/{day}.json'
-        write(path, json.dumps(session, ensure_ascii=False, separators=(',', ':')) + '\n')
-        written.append(path)
+        files[f'content/days/{day}.json'] = json.dumps(session, ensure_ascii=False, separators=(',', ':')) + '\n'
+    earliest = sessions[0]['date'] if sessions else None
+    declared = data.get('seriesStartDate')
     index = dict(schemaVersion=1,
-                 seriesStartDate=data.get('seriesStartDate') or (sessions[0]['date'] if sessions else None),
+                 # An entry older than the declared start is still an entry. The
+                 # calendar must be able to reach it, so the index reports the
+                 # earlier of the two and never hides a day behind the boundary.
+                 seriesStartDate=min(x for x in (declared, earliest) if x) if (declared or earliest) else None,
+                 declaredStartDate=declared,
                  songDurationSeconds=data.get('songDurationSeconds'),
                  months=sorted({s['date'][:7] for s in sessions}),
                  days=index_days)
-    write('content/journal-index.json', json.dumps(index, ensure_ascii=False, indent=2) + '\n')
-    written.append('content/journal-index.json')
-    return written
+    files['content/journal-index.json'] = json.dumps(index, ensure_ascii=False, indent=2) + '\n'
+    return files
+
+
+def write_archive(data, trades):
+    files = archive(data, trades)
+    for path, text in files.items():
+        write(path, text)
+    return list(files)
 
 if __name__ == '__main__': refresh()

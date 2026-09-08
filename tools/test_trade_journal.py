@@ -1,5 +1,6 @@
 """Behavior checks for honest daily result publishing; no live records are mutated."""
 import argparse
+import hashlib
 import io
 import json
 from pathlib import Path
@@ -296,6 +297,73 @@ class TradeJournalTests(unittest.TestCase):
                     for old, new in zip(editions['sessions'], updated['sessions']):
                         for key in ('morning', 'preOpen', 'closing', 'originalSong'):
                             self.assertEqual(old.get(key), new.get(key))
+
+
+class BuiltArchiveTests(unittest.TestCase):
+    """The browser reads a day file, so the day file is what has to be right."""
+
+    RECORDING = b'ID3' + b'\x00' * 64
+
+    def data(self, **changes):
+        digest = hashlib.sha256(self.RECORDING).hexdigest()
+        value = dict(seriesStartDate='2026-09-01', songDurationSeconds=195,
+                     sessions=[dict(date='2026-09-04', closing=dict(
+                         title='Close', summary='A day.', durationSeconds=195,
+                         audioUrl='https://example.invalid/spy-2026-09-04.mp3', audioSha256=digest))])
+        value.update(changes)
+        return value, digest
+
+    def staged(self, data, output):
+        """Run the two build steps in the order build_website runs them."""
+        import build_website
+        import website_audio
+        replacements = website_audio.stage_audio(data, output)
+        for name, text in journal_pages.archive(data, {}).items():
+            (output / name).parent.mkdir(parents=True, exist_ok=True)
+            (output / name).write_text(text, encoding='utf-8')
+        return replacements, list(build_website.check_day_audio(output, replacements))
+
+    def test_a_built_day_payload_serves_the_staged_recording_not_the_release_url(self):
+        data, digest = self.data()
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)
+            local = output / 'assets' / 'audio' / f'{digest}.mp3'
+            local.parent.mkdir(parents=True)
+            local.write_bytes(self.RECORDING)        # already staged, so no network
+            replacements, checked = self.staged(data, output)
+            payload = json.loads((output / 'content' / 'days' / '2026-09-04.json').read_text(encoding='utf-8'))
+            self.assertEqual(payload['closing']['audioUrl'], f'/assets/audio/{digest}.mp3')
+            self.assertNotIn('example.invalid', json.dumps(payload))
+            self.assertEqual(replacements, {'https://example.invalid/spy-2026-09-04.mp3': f'/assets/audio/{digest}.mp3'})
+            self.assertEqual(checked, [('2026-09-04.json', True)])
+
+    def test_a_day_payload_left_pointing_off_origin_is_caught(self):
+        import build_website
+        data, _ = self.data()
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)
+            for name, text in journal_pages.archive(data, {}).items():   # written without staging
+                (output / name).parent.mkdir(parents=True, exist_ok=True)
+                (output / name).write_text(text, encoding='utf-8')
+            self.assertEqual(list(build_website.check_day_audio(output, {})), [('2026-09-04.json', False)])
+
+    def test_the_index_reaches_back_to_an_entry_older_than_the_declared_start(self):
+        data, _ = self.data()
+        data['sessions'].append(dict(date='2026-06-03', closing=dict(title='June', summary='Older.')))
+        index = json.loads(journal_pages.archive(data, {})['content/journal-index.json'])
+        self.assertEqual(index['seriesStartDate'], '2026-06-03')
+        self.assertEqual(index['declaredStartDate'], '2026-09-01')
+        self.assertEqual(index['months'], ['2026-06', '2026-09'])
+        self.assertIn('2026-06-03', [d['date'] for d in index['days']])
+
+    def test_a_chart_only_day_is_indexed_without_promising_a_song(self):
+        data, _ = self.data()
+        data['sessions'] = [dict(date='2026-06-03', closing=dict(title='June', summary='Older.'),
+                                 lineChart=dict(url='/assets/charts/2026-06-03-line.svg'))]
+        entry = json.loads(journal_pages.archive(data, {})['content/journal-index.json'])['days'][0]
+        self.assertFalse(entry['hasSong'])
+        self.assertTrue(entry['hasChart'])
+        self.assertFalse(entry['marketClosed'])
 
 
 class DailyIntakeTests(unittest.TestCase):
