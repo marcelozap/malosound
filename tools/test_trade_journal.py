@@ -1,5 +1,6 @@
 """Behavior checks for honest daily result publishing; no live records are mutated."""
 import argparse
+import io
 import json
 from pathlib import Path
 import re
@@ -24,9 +25,9 @@ def raw(**changes):
 
 
 def reviewed(*spans, assessed=AFTER_CLOSE):
-    """spans: (start, end, execution[, note])"""
+    """spans: (start, end, execution[, published text])"""
     return dict(executionSections=[dict(startTime=s[0], endTime=s[1], execution=s[2],
-                                        **({'note': s[3]} if len(s) > 3 else {}))
+                                        **({'publicNote': s[3]} if len(s) > 3 else {}))
                                    for s in spans],
                 executionAssessedAt=assessed)
 
@@ -119,7 +120,7 @@ class TradeJournalTests(unittest.TestCase):
         row = normalize(raw(**reviewed(('09:48', '09:52', 'good', 'Took the open cleanly.'),
                                        ('12:38', '12:48', 'misplayed'))), NOW)
         self.assertEqual([s['execution'] for s in row['executionSections']], ['good', 'misplayed'])
-        self.assertIsNone(row['executionSections'][1]['note'])
+        self.assertIsNone(row['executionSections'][1]['publicNote'])
         self.assertEqual(execution_summary(row['executionSections'])['label'], 'Reviewed · 1 played well, 1 misplayed')
 
     def test_execution_rejects_bad_spans_classes_and_times(self):
@@ -145,13 +146,35 @@ class TradeJournalTests(unittest.TestCase):
             normalize(raw(executionAssessedAt=AFTER_CLOSE), NOW)
         with self.assertRaises(ValueError):      # reviewed during the session
             normalize(raw(**reviewed(('09:48', '09:52', 'good'), assessed='2026-09-04T11:00:00-04:00')), NOW)
+        with self.assertRaises(ValueError):      # reviewed after the row was recorded
+            normalize(raw(**reviewed(('09:48', '09:52', 'good'), assessed='2026-09-08T09:00:00-04:00')), NOW)
 
     def test_execution_notes_never_carry_amounts(self):
         for note in ('Paid $420 for that mistake.', 'Gave back 1,200 dollars.', 'Lost 3k on the fade.'):
             with self.subTest(note=note), self.assertRaises(ValueError):
                 normalize(raw(**reviewed(('09:48', '09:52', 'misplayed', note))), NOW)
         ok = normalize(raw(**reviewed(('09:48', '09:52', 'misplayed', 'Chased the second push and paid for it.'))), NOW)
-        self.assertIn('Chased', ok['executionSections'][0]['note'])
+        self.assertIn('Chased', ok['executionSections'][0]['publicNote'])
+
+    def test_public_text_refuses_position_detail_and_overlong_notes(self):
+        for note in ('Sold 7 contracts into it.', 'Held 12 puts too long.', 'Averaged into 250 shares.',
+                     'Bought the 756 call late.', 'Emailed me@example.com about it.', 'x' * 141):
+            with self.subTest(note=note), self.assertRaises(ValueError):
+                normalize(raw(**reviewed(('09:48', '09:52', 'misplayed', note))), NOW)
+
+    def test_an_ordinary_note_key_is_refused_so_private_text_cannot_arrive_by_habit(self):
+        with self.assertRaises(ValueError):
+            normalize(raw(executionSections=[dict(startTime='09:48', endTime='09:52', execution='good',
+                                                  note='Sized too big on that entry.')],
+                          executionAssessedAt=AFTER_CLOSE), NOW)
+
+    def test_malformed_sections_are_refused_not_silently_dropped(self):
+        for sections in ([dict(startTime='09:48', endTime='09:52')],          # no class
+                         [dict(startTime='09:48', execution='good')],          # no end
+                         ['09:48-09:52 good'],                                 # not a mapping
+                         [dict(startTime='09:48', endTime='09:52', execution='good', account='X')]):
+            with self.subTest(sections=sections), self.assertRaises(ValueError):
+                normalize(raw(executionSections=sections, executionAssessedAt=AFTER_CLOSE), NOW)
 
     def test_profit_never_implies_good_execution(self):
         row = normalize(raw(netRealizedPnl='500', **reviewed(('09:48', '09:52', 'misplayed'))), NOW)
@@ -168,10 +191,10 @@ class TradeJournalTests(unittest.TestCase):
     def test_segments_preserve_every_observed_point_in_order(self):
         points = grid(30)
         for sections in ([],
-                         [dict(startTime='09:33', endTime='09:37', execution='good', note=None)],
-                         [dict(startTime='09:31', endTime='09:34', execution='good', note=None),
-                          dict(startTime='09:40', endTime='09:52', execution='misplayed', note=None)],
-                         [dict(startTime='09:30', endTime='16:00', execution='sat_out', note=None)]):
+                         [dict(startTime='09:33', endTime='09:37', execution='good', publicNote=None)],
+                         [dict(startTime='09:31', endTime='09:34', execution='good', publicNote=None),
+                          dict(startTime='09:40', endTime='09:52', execution='misplayed', publicNote=None)],
+                         [dict(startTime='09:30', endTime='16:00', execution='sat_out', publicNote=None)]):
             with self.subTest(n=len(sections)):
                 runs = line(points, sections=sections)
                 rebuilt = []
@@ -183,7 +206,7 @@ class TradeJournalTests(unittest.TestCase):
 
     def test_segment_boundaries_land_on_real_minutes_and_are_continuous(self):
         points = grid(20)
-        runs = line(points, sections=[dict(startTime='09:35', endTime='09:40', execution='good', note=None)])
+        runs = line(points, sections=[dict(startTime='09:35', endTime='09:40', execution='good', publicNote=None)])
         self.assertEqual([r['execution'] for r in runs], ['unreviewed', 'good', 'unreviewed'])
         for before, after in zip(runs, runs[1:]):
             self.assertEqual(before['points'][-1], after['points'][0], 'runs must share their boundary point')
@@ -278,14 +301,21 @@ class TradeJournalTests(unittest.TestCase):
 class DailyIntakeTests(unittest.TestCase):
     """log_day.py is the after-close entry point; it must never widen the allowlist."""
 
-    def build(self, **changes):
-        import log_day
+    def flags(self, **changes):
         args = argparse.Namespace(date='2026-09-04', outcome='profit', setup=None, rated_at=None,
-                                  played=[], misplayed=[], sat_out=[], assessed=AFTER_CLOSE,
-                                  private_note=[], replace=False, show=False)
+                                  played=[], misplayed=[], sat_out=[], public_note=[],
+                                  assessed=AFTER_CLOSE, private_note=[], replace=False, show=False)
         for key, value in changes.items():
             setattr(args, key, value)
-        return log_day.build(args)
+        return args
+
+    def both(self, **changes):
+        import log_day
+        args = self.flags(**changes)
+        return log_day.build(args, log_day.spans(args), None, None)
+
+    def build(self, **changes):
+        return self.both(**changes)[0]
 
     def test_flags_become_ordered_sections_with_their_classes(self):
         record = self.build(played=[['09:48', '09:52', 'Took the open cleanly.']],
@@ -293,9 +323,27 @@ class DailyIntakeTests(unittest.TestCase):
                             sat_out=[['09:30', '09:48', 'Waited for the range.']])
         self.assertEqual([(s['startTime'], s['execution']) for s in record['executionSections']],
                          [('09:30', 'sat_out'), ('09:48', 'good'), ('12:38', 'misplayed')])
-        self.assertEqual(record['executionSections'][0]['note'], 'Waited for the range.')
-        # 12:38 was given no note, so no note key is invented for it.
-        self.assertNotIn('note', record['executionSections'][2])
+
+    def test_a_stretch_note_stays_private_until_it_is_explicitly_published(self):
+        record, private = self.both(played=[['09:48', '09:52', 'Took the open cleanly.']],
+                                    misplayed=[['12:38', '12:48', 'Chased the second push.']])
+        self.assertNotIn('Took the open cleanly', json.dumps(record))
+        self.assertNotIn('Chased the second push', json.dumps(record))
+        self.assertNotIn('publicNote', json.dumps(record))
+        self.assertEqual([x['note'] for x in private['sections']],
+                         ['Took the open cleanly.', 'Chased the second push.'])
+
+    def test_designated_text_is_the_only_text_that_crosses_over(self):
+        record, _ = self.both(played=[['09:48', '09:52', 'Took the open cleanly, felt slow after.']],
+                              misplayed=[['12:38', '12:48', 'Chased the second push.']],
+                              public_note=[['09:48', '09:52', 'Took the open cleanly.']])
+        self.assertEqual(record['executionSections'][0]['publicNote'], 'Took the open cleanly.')
+        self.assertNotIn('publicNote', record['executionSections'][1])
+        self.assertNotIn('felt slow after', json.dumps(record))
+
+    def test_publishing_text_for_a_stretch_that_does_not_exist_is_refused(self):
+        with self.assertRaises(SystemExit):
+            self.both(played=[['09:48', '09:52']], public_note=[['10:00', '11:00', 'Anything.']])
 
     def test_a_day_with_no_named_stretches_carries_no_review(self):
         record = self.build()
@@ -320,6 +368,74 @@ class DailyIntakeTests(unittest.TestCase):
         row = normalize(record, NOW)
         self.assertEqual(row['setupRating'], 14)
         self.assertEqual(row['executionSections'][0]['execution'], 'misplayed')
+
+
+class IntakeOnDiskTests(unittest.TestCase):
+    """End to end on temporary roots. No real trade record is read or written."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root = Path(tmp.name) / 'site'
+        (self.root / 'content').mkdir(parents=True)
+        self.ledger = self.root / 'content' / 'trading-journal.json'
+        self.ledger.write_text('{"schemaVersion": 2, "days": []}\n', encoding='utf-8')
+        self.private_root = Path(tmp.name) / 'private'
+        self.private = self.private_root / '2026-09-04' / 'day-review.json'
+
+    def log(self, *extra, outcome='profit', timestamped=True):
+        import log_day
+        argv = ['--date', '2026-09-04', '--outcome', outcome, '--setup', '9',
+                '--played', '09:48', '09:52', 'Took the open cleanly.', *extra]
+        if timestamped:
+            argv += ['--assessed', AFTER_CLOSE]
+        with patch('sys.stdout', new=io.StringIO()):
+            return log_day.main(argv, root=self.root, private_root=self.private_root)
+
+    def row(self):
+        return json.loads(self.ledger.read_text(encoding='utf-8'))['days'][0]
+
+    def test_the_ledger_gets_the_span_and_the_note_stays_in_the_private_file(self):
+        self.log('--private-note', 'Sized too big on that entry.')
+        published = self.ledger.read_text(encoding='utf-8')
+        self.assertNotIn('Took the open cleanly', published)
+        self.assertNotIn('Sized too big', published)
+        self.assertEqual(self.row()['executionSections'][0]['execution'], 'good')
+        stored = json.loads(self.private.read_text(encoding='utf-8'))
+        self.assertEqual(stored['sections'][0]['note'], 'Took the open cleanly.')
+        self.assertEqual(stored['privateNotes'], ['Sized too big on that entry.'])
+
+    def test_designated_text_reaches_the_ledger(self):
+        self.log('--public-note', '09:48', '09:52', 'Took the open cleanly.')
+        self.assertIn('Took the open cleanly', self.ledger.read_text(encoding='utf-8'))
+
+    def test_repeating_the_same_command_keeps_both_files_byte_identical(self):
+        self.log('--private-note', 'Sized too big.', timestamped=False)
+        public, private = self.ledger.read_bytes(), self.private.read_bytes()
+        self.log(timestamped=False)          # same command, default timestamps, note omitted
+        self.assertEqual(self.ledger.read_bytes(), public)
+        self.assertEqual(self.private.read_bytes(), private)
+        self.assertEqual(json.loads(private.decode())['privateNotes'], ['Sized too big.'])
+
+    def test_a_refused_change_leaves_the_private_file_and_the_ledger_untouched(self):
+        self.log('--private-note', 'Sized too big.')
+        public, private = self.ledger.read_bytes(), self.private.read_bytes()
+        with self.assertRaises(ValueError):
+            self.log(outcome='loss')
+        self.assertEqual(self.ledger.read_bytes(), public)
+        self.assertEqual(self.private.read_bytes(), private)
+
+    def test_a_refused_first_run_writes_nothing_at_all(self):
+        with self.assertRaises(ValueError):
+            self.log('--public-note', '09:48', '09:52', 'Paid $420 for that.')
+        self.assertFalse(self.private.exists())
+        self.assertEqual(json.loads(self.ledger.read_text(encoding='utf-8'))['days'], [])
+
+    def test_replace_corrects_both_records(self):
+        self.log()
+        self.log('--replace', outcome='loss')
+        self.assertEqual(self.row()['outcome'], 'loss')
+        self.assertEqual(json.loads(self.private.read_text(encoding='utf-8'))['outcome'], 'loss')
 
 
 if __name__ == '__main__': unittest.main()

@@ -36,11 +36,27 @@ NEUTRAL_EXECUTION = 'unreviewed'
 FIELDS = {'date', 'outcome', 'setupRating', 'recordedAt', 'ratingAsOf', 'sourceKind',
           'executionSections', 'executionAssessedAt'}
 SECTION_FIELDS = {'startTime', 'endTime', 'execution'}
-SECTION_OPTIONAL = {'note'}
+# `publicNote` is the ONLY text that may be published, and only when Marcelo
+# explicitly designates it. A plain note stays in the private record and never
+# reaches this schema; `note` is refused here so it cannot arrive by habit.
+SECTION_OPTIONAL = {'publicNote'}
 SESSION_OPEN, SESSION_CLOSE = 570, 960          # 09:30 and 16:00, minutes from midnight ET
 CLOCK = re.compile(r'^([01]\d|2[0-3]):([0-5]\d)$')
-# A note is Marcelo's own words about how he played. Amounts stay private.
-MONEY = re.compile(r'[$€£]\s?\d|\b\d[\d,]*\.?\d*\s?(dollars|usd|k\b)', re.IGNORECASE)
+# Public text is kept deliberately small, and this guard is the last line rather
+# than the first. The first line is that nothing is published unless Marcelo
+# designates it; a pattern can never prove a sentence is safe to publish. What it
+# can do is refuse the shapes that carry money, identity or position size, so a
+# slip does not quietly become a publication. Clock times and small counts still
+# pass, which is all a short execution remark needs.
+PUBLIC_NOTE_MAX = 140
+UNSAFE_PUBLIC = re.compile(
+    r'[$€£¥@]'                                           # currency marks and '@'
+    r'|\d{3,}'                                           # amounts, account and order ids
+    r'|\d+\.\d'                                          # 1.46: a price or an amount
+    r'|\d+(\.\d+)?\s*[km]\b'                             # 3k, 1.2m: money in shorthand
+    r'|\b(dollars?|usd|eur|gbp|account|acct|order\s*id'  # named money and identifiers
+    r'|contracts?|shares?|calls?|puts?|strikes?)\b',     # position detail stays private
+    re.IGNORECASE)
 
 
 def timestamp(value):
@@ -82,7 +98,7 @@ def validate_sections(raw, assessed_at):
     out, previous_end = [], None
     for item in raw:
         if not isinstance(item, dict) or not SECTION_FIELDS <= set(item) or set(item) - SECTION_FIELDS - SECTION_OPTIONAL:
-            raise ValueError('Each execution section needs startTime, endTime and execution, plus an optional note.')
+            raise ValueError('Each execution section needs exactly startTime, endTime and execution, plus an optional publicNote. A plain "note" is refused: ordinary remarks stay in the private record.')
         start, end = minute_of_day(item['startTime']), minute_of_day(item['endTime'])
         if start >= end:
             raise ValueError('An execution section must end after it starts.')
@@ -90,14 +106,18 @@ def validate_sections(raw, assessed_at):
             raise ValueError('Execution sections must be ordered and must not overlap.')
         if item['execution'] not in EXECUTION or item['execution'] == NEUTRAL_EXECUTION:
             raise ValueError('Execution must be good, misplayed or sat_out; unreviewed is the default, not a choice.')
-        note = item.get('note')
-        if note is not None and (not isinstance(note, str) or not note.strip()):
-            raise ValueError('An execution note must be text.')
-        if note and MONEY.search(note):
-            raise ValueError('Execution notes stay free of amounts; dollars are private.')
+        note = item.get('publicNote')
+        if note is not None:
+            if not isinstance(note, str) or not note.strip():
+                raise ValueError('A public note must be non-empty text, or absent.')
+            if len(note) > PUBLIC_NOTE_MAX:
+                raise ValueError(f'Keep a public note under {PUBLIC_NOTE_MAX} characters.')
+            found = UNSAFE_PUBLIC.search(note)
+            if found:
+                raise ValueError(f'Public notes stay minimal; {found.group(0)!r} looks like an amount or identifier. Keep it in the private record.')
         previous_end = end
         out.append(dict(startTime=item['startTime'], endTime=item['endTime'],
-                        execution=item['execution'], note=note))
+                        execution=item['execution'], publicNote=note))
     return out
 
 
@@ -134,6 +154,8 @@ def validate(data):
             session_close = datetime.combine(date.fromisoformat(day), time(16, 0), ZoneInfo('America/New_York'))
             if assessed < session_close:
                 raise ValueError('Execution is reviewed after the close, not during the session.')
+            if assessed > recorded:
+                raise ValueError('Execution cannot be assessed after the row was recorded.')
         days[day] = row
     return days
 
@@ -221,8 +243,8 @@ def notes(view):
     if view['executionSections']:
         for item in view['executionSections']:
             line = f'{item["startTime"]}–{item["endTime"]} ET · {EXECUTION[item["execution"]][0]}'
-            if item['note']:
-                line += ' · ' + item['note']
+            if item['publicNote']:
+                line += ' · ' + item['publicNote']
             result.append(line)
     if view['executionAssessedAt']:
         result.append('Execution reviewed at ' + view['executionAssessedAt'] + ', after the close.')

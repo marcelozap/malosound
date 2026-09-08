@@ -49,32 +49,51 @@ def normalize(raw, recorded_at=None):
                executionSections=raw.get('executionSections'),
                executionAssessedAt=raw.get('executionAssessedAt'),
                recordedAt=recorded_at or datetime.now(timezone.utc).isoformat(timespec='seconds'))
-    if row['executionSections'] is not None:
-        row['executionSections'] = [
-            {k: v for k, v in dict(startTime=s['startTime'], endTime=s['endTime'],
-                                   execution=s['execution'], note=s.get('note')).items()
-             if k != 'note' or v is not None}
-            for s in row['executionSections'] if isinstance(s, dict) and {'startTime', 'endTime', 'execution'} <= set(s)]
+    # Sections are NOT filtered. A malformed or unexpected section is a mistake worth
+    # seeing, and silently dropping one would publish a day whose colors are not the
+    # ones that were supplied. validate() enforces the exact shape and rejects it.
+    if row['executionSections'] is not None and not isinstance(row['executionSections'], list):
+        raise ValueError('executionSections must be a list of reviewed spans, or absent.')
     validate({'schemaVersion': 2, 'days': [row]})
     return row
 
 
-def stage(source, ledger, replace=False):
-    raw = json.loads(source.read_text(encoding='utf-8'))
-    row = normalize(raw)
+def published(ledger, day):
+    """The row already published for one date, or None. Reads only; validates what it reads."""
+    return validate(json.loads(ledger.read_text(encoding='utf-8'))).get(day)
+
+
+def plan(row, ledger, replace=False):
+    """Decide the whole ledger change without writing anything.
+
+    Returns (changed, data). Every reason to refuse is raised here, so a caller
+    can preflight a write that touches more than this one file and leave the
+    disk untouched when the answer is no.
+    """
     data = json.loads(ledger.read_text(encoding='utf-8'))
     days = validate(data)
     old = days.get(row['date'])
     if old:
         if all(old[k] == row[k] for k in row if k != 'recordedAt'):
-            return False
+            return False, data
         if not replace:
             raise ValueError('This day already has a different result. Review the correction before using --replace.')
     days[row['date']] = row
     data['days'] = sorted(days.values(), key=lambda x: x['date'])
     validate(data)
+    return True, data
+
+
+def commit(ledger, data):
     ledger.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
-    return True
+
+
+def stage(source, ledger, replace=False):
+    row = normalize(json.loads(source.read_text(encoding='utf-8')))
+    changed, data = plan(row, ledger, replace)
+    if changed:
+        commit(ledger, data)
+    return changed
 
 
 if __name__ == '__main__':
