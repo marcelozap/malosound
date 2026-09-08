@@ -299,6 +299,45 @@ class TradeJournalTests(unittest.TestCase):
                             self.assertEqual(old.get(key), new.get(key))
 
 
+class ChartOnlySourceTests(unittest.TestCase):
+    def test_source_without_music_builds_a_day_and_preserves_gaps(self):
+        root = journal_pages.ROOT
+        editions = json.loads((root/'content/editions.json').read_text(encoding='utf-8'))
+        session = next(s for s in editions['sessions'] if s['date'] == '2026-09-03')
+        song = session.get('originalSong') or session['closing']
+        source_path = song['chart']['dataUrl'].lstrip('/')
+        source = json.loads((root/source_path).read_text(encoding='utf-8'))
+        source.pop('duration_seconds', None)
+        source.pop('sections', None)
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture = Path(tmp)
+            (fixture/'content').mkdir()
+            (fixture/source_path).parent.mkdir(parents=True, exist_ok=True)
+            (fixture/source_path).write_text(json.dumps(source), encoding='utf-8')
+            for name, value in {
+                'market-assets': [],
+                'trading-journal': {'schemaVersion': 2, 'days': []},
+                'editions': {'sessions': [{'date': session['date'], 'closing': {
+                    'title': 'Historical session', 'chart': song['chart']}}]},
+            }.items():
+                (fixture/f'content/{name}.json').write_text(json.dumps(value), encoding='utf-8')
+            with patch.object(journal_pages, 'ROOT', fixture):
+                journal_pages.refresh()
+            day = json.loads((fixture/'content/days/2026-09-03.json').read_text(encoding='utf-8'))
+            chart = day['lineChart']
+            self.assertNotIn('playheadUrl', chart)
+            self.assertNotIn('song', chart['gapNote'])
+            self.assertNotIn('silence', chart['gapShort'])
+            self.assertFalse(list(fixture.rglob('*timeline.json')))
+            svg = (fixture/chart['url'].lstrip('/')).read_text(encoding='utf-8')
+            self.assertEqual(svg.count('<path '), 2)  # real source gap remains
+            index = json.loads((fixture/'content/journal-index.json').read_text(encoding='utf-8'))
+            self.assertTrue(index['days'][0]['hasChart'])
+            self.assertFalse(index['days'][0]['hasSong'])
+            assets = json.loads((fixture/'content/market-assets.json').read_text(encoding='utf-8'))
+            self.assertTrue(all((fixture/p).is_file() for p in assets))
+
+
 class BuiltArchiveTests(unittest.TestCase):
     """The browser reads a day file, so the day file is what has to be right."""
 

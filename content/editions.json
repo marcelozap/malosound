@@ -151,14 +151,14 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-04-line.svg",
         "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
-        "playheadUrl": "/assets/charts/2026-09-04-timeline.json",
         "alt": "SPY’s September 4 price line from 09:30 to 16:00 ET. Execution not reviewed.",
         "caption": "SPY · Observed minute-close shape · September 4, 2026",
         "notes": [
           "Open at minute 0; minute closes at boundaries 1..389; separate closing print at 390.",
           "The line joins observed boundaries without smoothing. It is not the exact intraminute tick path. Height is scaled to this session’s observed high and low; shapes across dates do not compare absolute price ranges.",
           "Observed minute volume totals 28,204,051 shares, 82.92% of the provider's daily total. Dynamics use those observed volumes; no missing volume is invented."
-        ]
+        ],
+        "playheadUrl": "/assets/charts/2026-09-04-timeline.json"
       },
       "performance": {
         "outcome": "unrecorded",
@@ -319,7 +319,6 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-03-line.svg",
         "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
-        "playheadUrl": "/assets/charts/2026-09-03-timeline.json",
         "alt": "SPY’s September 3 price line from 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET. Execution not reviewed.",
         "caption": "SPY · Observed minute-close shape · September 3, 2026",
         "notes": [
@@ -329,6 +328,7 @@
           "Observed minute open: $768.43; vendor daily open: $767.90. Observed minute low: $767.47; daily low: $767.45. These source discrepancies remain unresolved.",
           "The final anchor is the vendor daily close of $773.17, not a separate 16:00 intraday print; the last minute closes at $773.11."
         ],
+        "playheadUrl": "/assets/charts/2026-09-03-timeline.json",
         "gapNote": "Missing source data: 13:54–13:55 ET. The line breaks there; the song leaves space at 2:12.0–2:12.5. No price or volume was filled in.",
         "gapShort": "Source gap · 13:54–13:55 ET · silence 2:12.0–2:12.5"
       },

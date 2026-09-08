@@ -80,10 +80,12 @@ def refresh():
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">The line SPY drew on {day}</title><desc id="desc">Observed minute closing prices, opening boundary and attributed terminal price, 09:30 to 16:00 ET. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'
-        timeline = dict(durationSeconds=source['duration_seconds'], marketStartMinutes=570,
+        timeline = dict(marketStartMinutes=570,
                         marketDurationMinutes=390, width=1000, height=340, points=points,
                         gaps=[dict(startMinute=g['start_minute'], endMinute=g['end_minute']) for g in gaps])
-        write(timeline_path, json.dumps(timeline, separators=(',', ':'))+'\n')
+        if has_song:
+            timeline = dict(durationSeconds=source['duration_seconds'], **timeline)
+            write(timeline_path, json.dumps(timeline, separators=(',', ':'))+'\n')
         notes = [source.get('price_convention','Minute closing prices are placed at their end-of-minute boundaries.'),
                  'The line joins observed boundaries without smoothing. It is not the exact intraminute tick path. Height is scaled to this session’s observed high and low; shapes across dates do not compare absolute price ranges.',
                  source.get('data_note','Source: Yahoo Finance. Retrospective interpretation.')]
@@ -93,11 +95,16 @@ def refresh():
             notes.append(f"Observed minute open: ${summary['open']:.2f}; vendor daily open: ${daily['open']:.2f}. Observed minute low: ${summary['low']:.2f}; daily low: ${daily['low']:.2f}. These source discrepancies remain unresolved.")
         if source.get('terminal_price', {}).get('source_kind') == 'vendor_daily_close':
             notes.append(f"The final anchor is the vendor daily close of ${summary['close']:.2f}, not a separate 16:00 intraday print; the last minute closes at ${summary['last_minute_bar_close']:.2f}.")
-        chart = dict(url='/'+line_path, dataUrl=source_path, playheadUrl='/'+timeline_path,
+        chart = dict(url='/'+line_path, dataUrl=source_path,
                      alt=f'SPY’s {dt.strftime("%B")} {dt.day} price line from 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
                      caption=f'SPY · Observed minute-close shape · {dt.strftime("%B")} {dt.day}, {dt.year}',
                      notes=notes)
-        if gaps:
+        if has_song:
+            chart['playheadUrl'] = '/'+timeline_path
+        if gaps and not has_song:
+            chart['gapNote'] = f'Missing source data: {gap_times}. The line breaks there. No price or volume was filled in.'
+            chart['gapShort'] = f'Source gap · {gap_times}'
+        elif gaps:
             rests = ', '.join(sound(g['start_minute'])+'–'+sound(g['end_minute']) for g in gaps)
             chart['gapNote']=f'Missing source data: {gap_times}. The line breaks there; the song leaves space at {rests}. No price or volume was filled in.'
             chart['gapShort']=f'Source gap · {gap_times} · silence {rests}'
@@ -115,10 +122,12 @@ def refresh():
         drawing += '<details class="journal-details"><summary>Behind the line</summary>'+paragraphs([chart['caption']]+([chart['gapNote']] if gaps else [])+notes)+links([dict(url=source_path,label='View the source observations')])+'</details>'
         drawing += '<details class="journal-details"><summary>My trading record</summary>'+paragraphs(trade_notes(performance))+'</details>'
         if not has_song or not song.get('reportUrl'):
-            # Chart-only archive day. The line, timeline and provenance are already
-            # written above; there is simply no player and no standalone page to
+            # Chart-only archive day. The line and provenance are already
+            # written above; there is no music timeline or standalone page to
             # build. Music stays optional for older entries.
-            assets.update([line_path, timeline_path, source_path.lstrip('/')])
+            assets.update([line_path, source_path.lstrip('/')])
+            if has_song:
+                assets.add(timeline_path)
             continue
         music = f'<p class="eyebrow blue">Original instrumental</p><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'
         music += '<details class="journal-details"><summary>About the song</summary>'+paragraphs([f'SPY’s {dt.strftime("%B")} {dt.day}, 9:30 a.m.–4:00 p.m. ET session, compressed into a 3:15 instrumental.',song.get('thesis',song['summary'])]+song.get('paragraphs',[]))
