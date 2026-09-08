@@ -12,6 +12,7 @@
   const format = (value, options) => new Intl.DateTimeFormat('en-US', { ...options, timeZone: 'UTC' }).format(date(value));
   const fullDate = value => format(value, { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   const shortDate = value => format(value, { month: 'long', day: 'numeric' });
+  const miniDate = value => format(value, { month: 'short', day: 'numeric' });
   // Mirrors EXECUTION in tools/trade_journal.py; keep both in step.
   const EXECUTION_COLORS = { good:'#58dfa4', misplayed:'#ff7188', sat_out:'#e5b657', unreviewed:'#50b8f5' };
   const EXECUTION_LABELS = { good:'Played well', misplayed:'Misplayed', sat_out:'Sat out', unreviewed:'Not reviewed' };
@@ -58,37 +59,25 @@
   }
   function renderEntry(session, index, duration) {
     const article = el('article', 'day-entry');
-    const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', setupRating: null, executionSections: [] };
+    const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', executionSections: [] };
     article.dataset.tradeResult = performance.outcome;
     article.id = `session-${session.date}`;
     const song = session.originalSong || session.closing;
+    const chart = session.lineChart;
+    const sessionHours = chart?.sessionHours || '9:30 a.m.–4:00 p.m. ET';
     const header = el('header', 'day-heading session-cover');
     const aura = el('div', 'cover-aura'); aura.setAttribute('aria-hidden', 'true');
     const orbit = el('div', 'cover-orbit'); orbit.setAttribute('aria-hidden', 'true');
     const copy = el('div', 'cover-copy');
     copy.append(el('span', 'eyebrow gold', `${shortDate(session.date)} · ${session.date.slice(0, 4)}`));
-    const h = el('h2', '', song?.audioUrl ? song.title : shortDate(session.date)); h.id = 'selected-day-heading';
+    const h = el('h2', '', song?.audioUrl ? (song.title || shortDate(session.date)) : (session.title || shortDate(session.date)));
+    h.id = 'selected-day-heading';
     article.setAttribute('aria-labelledby', h.id);
-    copy.append(h, el('p', 'day-subtitle', `SPY · ${song?.audioUrl ? 'SESSION REPLAY · 03:15' : 'SESSION JOURNAL'}`));
+    copy.append(h, el('p', 'day-subtitle', `SPY · ${song?.audioUrl ? 'SESSION CHART + RECORDING' : 'SESSION CHART'}`));
     header.append(aura, orbit, copy);
     article.append(header);
-    const morning = session.preOpen || session.morning;
-    const pre = section('01', 'Before the open');
-    const morningFold = el('details', 'morning-fold');
-    morningFold.append(el('summary', '', 'Morning notes'));
-    if (morning) {
-      morningFold.append(el('p', 'entry-status', morning.label), el('h4', '', morning.title));
-      const refs = sources(morning);
-      refs.append(el('p', 'chapter-deck', morning.summary));
-      (morning.paragraphs || []).forEach(p => refs.append(el('p', '', p)));
-      if (morning.reportUrl) refs.append(link('Read the full morning research ↗', morning.reportUrl));
-      if (morning.mapUrl) refs.append(link('Explore the market map ↗', morning.mapUrl));
-      morningFold.append(refs);
-    } else morningFold.append(el('p', '', 'No morning note for this date.'));
-    pre.append(morningFold);
-    article.append(pre);
-    const chart = session.lineChart;
-    const drawing = section('02', 'The line the day drew');
+
+    const drawing = section('01', 'Market chart');
     const tradeStrip = el('div', 'trade-strip');
     const result = el('span', 'trade-result');
     const glyph = el('span', '', performance.glyph); glyph.setAttribute('aria-hidden', 'true');
@@ -116,17 +105,22 @@
       keys.forEach(k => { const key = el('span','exec-key'); const swatch = el('i');
         swatch.style.background = EXECUTION_COLORS[k]; key.append(swatch, document.createTextNode(EXECUTION_LABELS[k])); legend.append(key); });
       drawing.append(legend);
-    } else drawing.append(el('p', '', session.closing?.marketClosed ? 'The market was closed. No session line was drawn.' : 'The line appears here after the session data is checked.'));
-    const recordNotes = el('details', 'journal-details'); recordNotes.append(el('summary', '', 'My trading record'));
-    recordNotes.append(el('p', '', 'Daily scalps. Small steps. My record in color and sound.'));
+    } else {
+      drawing.append(el('p', '', session.closing?.marketClosed ? 'Closed session; no line.' : 'No line available yet.'));
+    }
+    const recordNotes = el('details', 'journal-details'); recordNotes.append(el('summary', '', 'Execution'));
+    if (!(performance.executionSections || []).length) {
+      recordNotes.append(el('p', '', 'No execution review yet.'));
+    }
     (performance.executionSections || []).forEach(x => recordNotes.append(el('p', '', `${x.startTime}–${x.endTime} ET · ${EXECUTION_LABELS[x.execution]}${x.note ? ' · ' + x.note : ''}`)));
     if (performance.executionAssessedAt) recordNotes.append(el('p', '', `Execution reviewed at ${performance.executionAssessedAt}, after the close.`));
-    if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Net result recorded ${performance.recordedAt}. The net result is a label here; it does not color the line.`));
-    drawing.append(recordNotes); article.append(drawing);
-    const music = section('03', 'The day, in another key', 'blue');
+    if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Net result recorded ${performance.recordedAt}.`));
+    drawing.append(recordNotes);
+    article.append(drawing);
+
+    const music = section('02', 'Optional recording', 'blue');
     if (song?.audioUrl) {
       music.append(el('p', 'eyebrow blue', 'Original instrumental'));
-      const sessionHours = chart?.sessionHours || '9:30 a.m.–4:00 p.m. ET';
       music.append(player(song, duration));
       const meta = el('div', 'song-specs');
       ['03:15', `${song.tempoBpm || 80} BPM`, 'SPY → SOUND'].forEach(t => meta.append(el('span', '', t)));
@@ -134,23 +128,31 @@
       const notes = sources(song, 'About the song');
       notes.append(el('p', '', `SPY’s ${shortDate(session.date)}, ${sessionHours} session, compressed into a 3:15 instrumental.`));
       if (song.thesis) notes.append(el('p', '', song.thesis));
-      notes.append(el('p', '', song.summary));
+      if (song.summary) notes.append(el('p', '', song.summary));
       (song.paragraphs || []).forEach(p => notes.append(el('p', '', p)));
       if (song.reportUrl) notes.append(link('Read the complete session ↗', song.reportUrl));
       if (song.midiUrl) notes.append(link('Download the editable MIDI ↗', song.midiUrl));
       music.append(notes);
     } else {
-      // A song is promised only where one was explicitly promised. An archived
-      // day that carries a chart and no music is complete as it stands, and
-      // must not read as a recording that never arrived.
-      const [heading, body] = song?.marketClosed
-        ? ['A day of rest.', 'No market session, no session song.']
-        : song?.songPending === true
-          ? ['The sound is still to come.', 'The original song will appear here when the recording is ready.']
-          : ['The line, on its own.', 'This entry is the session line and its sources. No song was made for this date.'];
-      music.append(el('h4', '', heading), el('p', '', body));
+      music.append(el('p', '', song?.marketClosed ? 'Closed session; chart-only.' : song?.songPending ? 'Recording pending.' : 'Chart-only session.'));
     }
     article.append(music);
+
+    const morning = session.preOpen || session.morning;
+    const pre = section('03', 'Context');
+    const morningFold = el('details', 'morning-fold');
+    morningFold.append(el('summary', '', 'Morning notes'));
+    if (morning) {
+      morningFold.append(el('p', 'entry-status', morning.label), el('h4', '', morning.title));
+      const refs = sources(morning);
+      refs.append(el('p', 'chapter-deck', morning.summary));
+      (morning.paragraphs || []).forEach(p => refs.append(el('p', '', p)));
+      if (morning.reportUrl) refs.append(link('Read the full morning research ↗', morning.reportUrl));
+      if (morning.mapUrl) refs.append(link('Explore the market map ↗', morning.mapUrl));
+      morningFold.append(refs);
+    } else morningFold.append(el('p', '', 'No morning note for this date.'));
+    pre.append(morningFold);
+    article.append(pre);
     return article;
   }
   // The calendar holds only a small index; a day's full entry is fetched when it
@@ -241,8 +243,19 @@
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);
       }
+      const history = el('div', 'calendar-history');
+      history.append(el('span', 'eyebrow gold', 'All sessions'));
+      const list = el('div', 'calendar-history-list');
+      for (const row of [...sessions].reverse()) {
+        const b = el('button', `calendar-history-item${row.date === selected ? ' is-selected' : ''}${row.hasSong ? ' has-song' : ''}`, miniDate(row.date));
+        b.type = 'button'; b.dataset.date = row.date;
+        b.setAttribute('aria-label', `${fullDate(row.date)}${row.hasSong ? ', has recording' : ', chart-only'}`);
+        b.addEventListener('click', () => { choose(row.date, true); });
+        list.append(b);
+      }
+      history.append(list);
       const legend = el('div', 'calendar-legend'); legend.append(el('span','legend-dot'),el('span','','Sessions'));
-      calendar.replaceChildren(el('span','eyebrow gold','Choose a session'),head,grid,legend);
+      calendar.replaceChildren(el('span','eyebrow gold','Choose a session'),head,grid,history,legend);
     }
     window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(),false); });
     choose(selected,false);
