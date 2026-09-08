@@ -1,5 +1,6 @@
 """Behavior checks for honest daily result publishing; no live records are mutated."""
 import argparse
+import datetime
 import hashlib
 import io
 import json
@@ -12,6 +13,7 @@ from unittest.mock import patch
 
 import journal_pages
 import trade_journal
+import reconcile_xiv_archive
 from record_trading_day import normalize, stage
 from trade_journal import EXECUTION, execution_summary, presentation, segments, validate
 
@@ -594,6 +596,258 @@ class RendererFieldTests(unittest.TestCase):
                 read.add(line[i + 2:j])
         self.assertTrue(read, 'Expected the render line to read at least one section field.')
         self.assertTrue(read <= allowed, f'journal.js reads fields the schema will never publish: {sorted(read - allowed)}')
+
+
+class ArchiveReconciliationTests(unittest.TestCase):
+    """Reconciling the archived XIV$ workspace into the private archive.
+
+    Every fixture here is synthetic. These tests never read Marcelo's real broker
+    exports and never write into the real archive, which is why the source and
+    archive roots are arguments rather than constants in the tool.
+    """
+
+    LOT_HEADER = ('closed_date,opened_date,symbol,underlying,direction,expiration,quantity,'
+                  'proceeds,cost_basis,lot_pnl,transaction_pnl,same_day,zero_dte,wash_sale,'
+                  'disallowed_loss,name')
+
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.source = Path(self.tmp.name) / 'xiv'
+        self.archive = Path(self.tmp.name) / 'archive'
+        (self.source / 'journal_backfill').mkdir(parents=True)
+        (self.source / 'reports').mkdir(parents=True)
+
+    def lots(self, name, rows):
+        body = [self.LOT_HEADER]
+        for day, under, pnl, qty in rows:
+            body.append(f'{day},{day},{under} X,{under},call,{day},{qty},0,0,{pnl},,True,True,False,0.0,NAME')
+        path = self.source / 'journal_backfill' / name
+        path.write_text('\n'.join(body) + '\n', encoding='utf-8')
+        return path
+
+    def journal(self, name, rows):
+        lines = [json.dumps(dict(id='pnl-journal-' + d, type='pnl_journal_entry', date=d,
+                                 source_file='export.csv', exact_pnl=p, lot_rows=n,
+                                 process_color=c, agent_notes=['Backfilled from broker export.']))
+                 for d, p, n, c in rows]
+        (self.source / 'journal_backfill' / name).write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+    def shell(self, name, rows):
+        lines = [json.dumps(dict(id='pnl-journal-' + d, date=d, traded=t)) for d, t in rows]
+        (self.source / 'journal_backfill' / name).write_text('\n'.join(lines) + '\n', encoding='utf-8')
+
+    def receipts(self, month, exports):
+        payload = dict(latest_by_date={}, all=[
+            dict(name=n, date=d, asof=a, rows=r, contracts=c, pnl=p)
+            for n, d, a, r, c, p in exports])
+        (self.source / 'reports' / f'recent_realized_receipts_{month}.json').write_text(
+            json.dumps(payload), encoding='utf-8')
+
+    def standard(self, month='2026-07', span='2026-05-04_to_2026-07-31'):
+        self.lots(f'trade_receipts_lots_{span}.csv',
+                  [('2026-07-02', 'SPY', 796.11, 1), ('2026-07-06', 'SPY', 235.39, 1)])
+        self.journal(f'pnl_journal_entries_daily_{span}.jsonl',
+                     [('2026-07-02', 796.11, 1, 'red'), ('2026-07-06', 235.39, 1, 'red')])
+        self.shell(f'daily_calendar_journal_shell_weekdays_{span}.jsonl',
+                   [('2026-07-02', True), ('2026-07-03', False), ('2026-07-06', True)])
+        self.receipts(month, [('e1.csv', '07/02/2026', 'Thu Jul 02  16:06:07 EDT 2026', 96, 263.0, 837.73)])
+
+    def run_tool(self, month='2026-07'):
+        return reconcile_xiv_archive.reconcile(self.source, month, 'TESTRUN')
+
+    # --- choosing the right export -------------------------------------------------
+
+    def test_the_month_is_read_from_the_export_whose_range_covers_it(self):
+        # A stale generation of every export sits beside the current one. Taking
+        # the first glob match reconciled July against a file ending in June and
+        # reported zero trading days: a confident, empty, wrong answer.
+        self.standard()
+        self.lots('trade_receipts_lots_2024-01-01_to_2026-06-20.csv', [('2026-06-01', 'SPY', 1.0, 1)])
+        self.journal('pnl_journal_entries_daily_2024-01-01_to_2026-06-20.jsonl', [])
+        self.shell('daily_calendar_journal_shell_weekdays_2024-01-01_to_2026-06-20.jsonl', [])
+        _, index = self.run_tool()
+        self.assertEqual(index['tradingDates'], ['2026-07-02', '2026-07-06'])
+
+    def test_a_month_no_export_covers_is_refused_rather_than_reported_empty(self):
+        self.standard()
+        with self.assertRaises(ValueError):
+            self.run_tool('2026-11')
+
+    # --- disagreements survive -----------------------------------------------------
+
+    def test_a_settled_total_that_differs_from_the_last_receipt_records_both(self):
+        # The receipt was taken while the session was still moving; the export is
+        # what settled. Choosing one silently would hide the only interesting
+        # thing about the pair.
+        self.standard()
+        _, index = self.run_tool()
+        clash = [c for c in index['conflicts'] if c.get('date') == '2026-07-02' and 'settled' in c]
+        self.assertEqual(len(clash), 1)
+        self.assertEqual(clash[0]['settled'], 796.11)
+        self.assertEqual(clash[0]['lastSnapshot'], 837.73)
+
+    def test_a_receipt_export_dated_outside_the_month_is_never_a_trading_day(self):
+        # A bulk history export is filed under the earliest date it contains. It
+        # is thousands of rows spanning months, and it is not a session.
+        self.standard()
+        self.receipts('2026-07', [
+            ('e1.csv', '07/02/2026', 'Thu Jul 02  16:06:07 EDT 2026', 96, 263.0, 837.73),
+            ('bulk.csv', '04/10/2026', 'Fri Jul 10  09:44:36 EDT 2026', 2803, 5780.0, -4849.51)])
+        records, index = self.run_tool()
+        self.assertNotIn('2026-04-10', records)
+        self.assertEqual([e['reportedDate'] for e in index['unmatchedReceiptExports']], ['2026-04-10'])
+
+    def test_every_receipt_for_a_day_is_kept_in_the_order_it_was_taken(self):
+        self.standard()
+        self.receipts('2026-07', [
+            ('c.csv', '07/02/2026', 'Thu Jul 02  13:02:13 EDT 2026', 35, 57.0, 843.64),
+            ('a.csv', '07/02/2026', 'Thu Jul 02  09:53:39 EDT 2026', 4, 6.0, 216.33)])
+        records, _ = self.run_tool()
+        chain = records['2026-07-02']['receiptSnapshots']['chain']
+        self.assertEqual([c['realized'] for c in chain], [216.33, 843.64])
+
+    # --- the line that must not be crossed ------------------------------------------
+
+    def test_no_record_ever_carries_an_execution_assessment(self):
+        self.standard()
+        records, index = self.run_tool()
+        self.assertTrue(records)
+        for day, record in records.items():
+            self.assertEqual(record['execution']['executionSections'], [], day)
+            self.assertIsNone(record['execution']['executionAssessedAt'], day)
+            self.assertEqual(record['execution']['status'], 'unreviewed', day)
+        self.assertEqual(index['executionAssessmentsFound'], 0)
+
+    def test_the_machine_colour_is_kept_only_as_refused_provenance(self):
+        # process_color is arithmetic over profit and lot count. It uses the same
+        # three words as a real review and means nothing like them, so it is
+        # carried in a block that says so and never near executionSections.
+        self.standard()
+        records, _ = self.run_tool()
+        block = records['2026-07-02']['notAnAssessment']
+        self.assertEqual(block['processColor'], 'red')
+        self.assertIn('Profit does not establish execution quality', block['reason'])
+        self.assertNotIn('process', json.dumps(records['2026-07-02']['execution']))
+
+    def test_the_site_execution_vocabulary_never_appears_in_a_reconciled_record(self):
+        # The published classes are good / misplayed / sat_out. If one of those
+        # words ever reaches a reconciliation record, something has started
+        # translating broker data into a grade.
+        self.standard()
+        records, index = self.run_tool()
+        blob = json.dumps([records, index], ensure_ascii=False)
+        for word in ('"good"', '"misplayed"', '"sat_out"'):
+            self.assertNotIn(word, blob)
+
+    def test_a_day_is_never_chart_eligible_without_a_price_series(self):
+        self.standard()
+        records, index = self.run_tool()
+        self.assertEqual(index['chartEligibleDates'], [])
+        for record in records.values():
+            self.assertFalse(record['chartEligible'])
+            self.assertIsNone(record['marketPathSource'])
+
+    # --- what gets written, and where ------------------------------------------------
+
+    def test_a_quiet_weekday_is_listed_but_is_not_a_trading_date(self):
+        self.standard()
+        _, index = self.run_tool()
+        self.assertEqual(index['quietWeekdays'], ['2026-07-03'])
+        self.assertNotIn('2026-07-03', index['tradingDates'])
+        self.assertIn('not proof', index['quietWeekdayNote'].lower())
+
+    def test_records_are_written_only_under_the_private_archive_root(self):
+        self.standard()
+        records, index = self.run_tool()
+        written = reconcile_xiv_archive.write(records, index, self.archive, '2026-07')
+        for path in written:
+            self.assertTrue(path.is_absolute() or True)
+            self.assertIn(self.archive, path.parents)
+        self.assertTrue((self.archive / '2026-07-02' / 'archive-reconciliation.json').is_file())
+        self.assertTrue((self.archive / '_reconciliation' / '2026-07.json').is_file())
+
+    def test_a_dry_run_writes_nothing(self):
+        self.standard()
+        with patch('sys.stdout', io.StringIO()):
+            reconcile_xiv_archive.main(['--month', '2026-07', '--source', str(self.source),
+                                        '--archive', str(self.archive), '--dry-run'])
+        self.assertFalse(self.archive.exists())
+
+    # --- chart eligibility is detected, not asserted ---------------------------------
+
+    def snapshot(self, folder, stamps, offset=-14400, granularity='1h'):
+        path = self.archive / folder / 'source-yahoo-hourly-3mo.json'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(dict(chart=dict(result=[dict(
+            meta=dict(symbol='SPY', gmtoffset=offset, dataGranularity=granularity,
+                      exchangeTimezoneName='America/New_York'),
+            timestamps_note='unused', timestamp=list(stamps),
+            indicators=dict(quote=[dict(open=[], high=[], low=[], close=[])]))]))),
+            encoding='utf-8')
+        return path
+
+    def stamps_for(self, day, hours, offset=-14400):
+        base = datetime.datetime.strptime(day, '%Y-%m-%d').replace(tzinfo=datetime.timezone.utc)
+        return [int(base.timestamp()) + h * 3600 - offset for h in hours]
+
+    def test_a_date_becomes_chart_eligible_when_its_bars_are_saved(self):
+        # The first run of this tool found no July price series at all and every
+        # record said so. A snapshot saved afterwards has to make those same
+        # records true without anyone editing a constant, so the archive is
+        # rescanned each run rather than trusted to a flag.
+        self.standard()
+        _, index = self.run_tool()
+        self.assertEqual(index['chartEligibleDates'], [])
+
+        self.snapshot('2026-07', self.stamps_for('2026-07-02', range(10, 16)))
+        records, index = reconcile_xiv_archive.reconcile(self.source, '2026-07', 'TESTRUN', self.archive)
+        self.assertEqual(index['chartEligibleDates'], ['2026-07-02'])
+        self.assertTrue(records['2026-07-02']['chartEligible'])
+        self.assertEqual(records['2026-07-02']['marketPathBars'], 6)
+        self.assertEqual(len(records['2026-07-02']['marketPathSource']['sha256']), 64)
+        self.assertIsNone(records['2026-07-02']['chartBlockedBecause'])
+        # A day the market was open for but nothing closed on is still not a
+        # trading date, so it never turns up as an eligible session.
+        self.assertFalse(records['2026-07-06']['chartEligible'])
+
+    def test_bars_are_bucketed_by_exchange_date_not_utc(self):
+        # A late bar belongs to the session it traded in. Bucketing by UTC would
+        # move it silently onto the following date, which is the kind of error
+        # that produces a chart nobody can tell is wrong.
+        self.standard()
+        self.snapshot('2026-07', [int(datetime.datetime(
+            2026, 7, 3, 1, 0, tzinfo=datetime.timezone.utc).timestamp())])
+        records, index = reconcile_xiv_archive.reconcile(self.source, '2026-07', 'TESTRUN', self.archive)
+        self.assertEqual(index['marketDatesWithPrices'], ['2026-07-02'])
+        self.assertEqual(records['2026-07-02']['marketPathBars'], 1)
+
+    def test_chart_eligible_never_means_reviewed(self):
+        # Drawable and assessed are different questions. Having the price path
+        # says the line can be drawn; it says nothing about how it was traded.
+        self.standard()
+        self.snapshot('2026-07', self.stamps_for('2026-07-02', range(10, 16)))
+        records, index = reconcile_xiv_archive.reconcile(self.source, '2026-07', 'TESTRUN', self.archive)
+        self.assertEqual(index['chartEligibleDates'], ['2026-07-02'])
+        self.assertEqual(index['executionAssessmentsFound'], 0)
+        self.assertEqual(records['2026-07-02']['execution']['executionSections'], [])
+        self.assertEqual(records['2026-07-02']['execution']['status'], 'unreviewed')
+
+    def test_a_snapshot_that_is_not_a_chart_payload_is_skipped_quietly(self):
+        self.standard()
+        path = self.archive / '2026-07' / 'source-yahoo-daily.json'
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('{"not": "a chart"}', encoding='utf-8')
+        _, index = reconcile_xiv_archive.reconcile(self.source, '2026-07', 'TESTRUN', self.archive)
+        self.assertEqual(index['chartEligibleDates'], [])
+
+    def test_every_figure_names_the_file_and_hash_it_came_from(self):
+        self.standard()
+        records, _ = self.run_tool()
+        settled = records['2026-07-02']['settled']
+        self.assertEqual(len(settled['source']['sha256']), 64)
+        self.assertTrue(settled['source']['path'].endswith('.csv'))
+        self.assertNotIn(str(self.source), settled['source']['path'])
 
 
 if __name__ == '__main__': unittest.main()
