@@ -4,8 +4,9 @@ from html import escape as e
 import json
 from pathlib import Path
 from trade_journal import (validate as validate_trades, presentation, strip as trade_strip,
-                           notes as trade_notes, legend as trade_legend, segments as execution_segments,
+                           notes as trade_notes, legend as trade_legend,
                            EXECUTION)
+import session_chart
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -22,6 +23,51 @@ def links(values):
 
 def chapter(n, title, body):
     return f'<section class="journal-chapter chapter-{n}"><div class="chapter-label"><span class="chapter-number gold">{n}</span><h2 class="eyebrow gold">{title}</h2></div>{body}</section>'
+
+def redraw_archive_charts(data, trades):
+    """Redraw every saved archive session from its own bars and the current review.
+
+    Hourly and minute archive days were drawn once, by the backfill tool that
+    imported them, and never again. That meant an execution review could never
+    reach them: Marcelo could assess a June session and its chart would stay
+    neutral blue for ever, because nothing regenerated it. Song days were redrawn
+    on every build and archive days were not, and the difference was invisible
+    until someone actually reviewed a day.
+
+    Drawing them here, from the saved bars plus the ledger, puts every published
+    day on the same footing.
+    """
+    redrawn = []
+    for session in data['sessions']:
+        chart = session.get('lineChart') or {}
+        url, data_url = chart.get('url', ''), chart.get('dataUrl', '')
+        if not url or not data_url or url.endswith('-line.svg'):
+            continue
+        saved = ROOT / data_url.lstrip('/')
+        if not saved.is_file():
+            # Declared but not on disk. This is the unavailable-chart case, not a
+            # reason to fail the build, and it must never be filled in with
+            # another date's bars. verify_published_charts reports it by name.
+            continue
+        source = json.loads(saved.read_text(encoding='utf-8'))
+        bars = session_chart.bars_from(source)
+        if not bars:
+            continue
+        performance = presentation(trades.get(session['date']))
+        hourly = source.get('interval') == '1h'
+        detail = ('Seven candles, one per hourly bar, positioned by the clock across the '
+                  'regular session. The last covers 15:30 to 16:00 ET. Hourly bars, not a '
+                  'minute path.' if hourly else
+                  'One candle per observed minute, 09:30 to 16:00 ET.')
+        write(url.lstrip('/'), session_chart.document(
+            session['date'], bars, performance['executionSections'],
+            title=f'SPY {session["date"]} {"hourly" if hourly else "minute"} candles',
+            detail=detail))
+        chart['alt'] = (f'SPY {"hourly" if hourly else "minute"} candles for {session["date"]}, '
+                        f'09:30 to 16:00 ET. {performance["execution"]["label"]}.')
+        redrawn.append(session['date'])
+    return redrawn
+
 
 def refresh():
     data = json.loads((ROOT/'content/editions.json').read_text(encoding='utf-8'))
@@ -63,21 +109,12 @@ def refresh():
         # One <path> per reviewed stretch. The coordinates are the same observed
         # points in the same order; only the stroke color changes at a boundary,
         # and a boundary point is drawn in both runs so the line stays unbroken.
-        runs = execution_segments(points, gap_ends, performance['executionSections'])
-        drawn = ''.join(
-            '<path d="' + ' '.join(('M' if i == 0 else 'L') + f'{p["x"]:.2f},{p["y"]:.2f}'
-                                   for i, p in enumerate(run['points']))
-            + f'" fill="none" stroke="{EXECUTION[run["execution"]][1]}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>'
-            for run in runs)
-        if performance['executionSections']:
-            marks = '; '.join(f'{s["startTime"]}–{s["endTime"]} ET {EXECUTION[s["execution"]][0].lower()}'
-                              for s in performance['executionSections'])
-            colour_note = (f'Color marks Marcelo’s own review of how he played each stretch ({marks}); '
-                           'unreviewed stretches stay neutral. Color is not profit and not SPY’s return.')
-        else:
-            colour_note = ('No stretch of this session has been reviewed for execution, so the whole line '
-                           'is neutral. Color is not profit and not SPY’s return.')
-        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">The line SPY drew on {day}</title><desc id="desc">Observed minute closing prices, opening boundary and attributed terminal price, 09:30 to 16:00 ET. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
+        # Candles, not a line. Every minute's high and low was already in this
+        # file; drawing only the closes discarded most of what the session did.
+        drawn = session_chart.candles(session_chart.bars_from(source),
+                                      performance['executionSections'], lo, hi)
+        colour_note = session_chart.colour_note(performance['executionSections'])
+        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">SPY candles for {day}, 09:30 to 16:00 ET</title><desc id="desc">One candle per observed minute, 09:30 to 16:00 ET: body from open to close, wick from high to low. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'
         timeline = dict(marketStartMinutes=570,
@@ -96,8 +133,8 @@ def refresh():
         if source.get('terminal_price', {}).get('source_kind') == 'vendor_daily_close':
             notes.append(f"The final anchor is the vendor daily close of ${summary['close']:.2f}, not a separate 16:00 intraday print; the last minute closes at ${summary['last_minute_bar_close']:.2f}.")
         chart = dict(url='/'+line_path, dataUrl=source_path,
-                     alt=f'SPY’s {dt.strftime("%B")} {dt.day} price line from 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
-                     caption=f'SPY · Observed minute-close shape · {dt.strftime("%B")} {dt.day}, {dt.year}',
+                     alt=f'SPY minute candles for {dt.strftime("%B")} {dt.day}, 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
+                     caption=f'SPY · Minute candles · {dt.strftime("%B")} {dt.day}, {dt.year}',
                      notes=notes)
         if has_song:
             chart['playheadUrl'] = '/'+timeline_path
@@ -145,6 +182,7 @@ def refresh():
         page = page.replace('</body>', '<script src="/session-playhead.js" defer></script></body>')
         write(report,page)
         assets.update([line_path,timeline_path,report,source_path.lstrip('/')])
+    redraw_archive_charts(data, trades)
     write('content/editions.json',json.dumps(data,ensure_ascii=False,indent=2)+'\n')
     assets.update(write_archive(data, trades))
     write('content/market-assets.json',json.dumps(sorted(assets),indent=2)+'\n')
