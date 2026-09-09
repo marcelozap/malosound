@@ -14,6 +14,7 @@ from unittest.mock import patch
 import journal_pages
 import trade_journal
 import reconcile_xiv_archive
+import verify_published_charts
 from record_trading_day import normalize, stage
 from trade_journal import EXECUTION, execution_summary, presentation, segments, validate
 
@@ -848,6 +849,102 @@ class ArchiveReconciliationTests(unittest.TestCase):
         self.assertEqual(len(settled['source']['sha256']), 64)
         self.assertTrue(settled['source']['path'].endswith('.csv'))
         self.assertNotIn(str(self.source), settled['source']['path'])
+
+
+class PublishedChartTests(unittest.TestCase):
+    """The checker that says the published charts are right.
+
+    A checker nobody checks is worth nothing, and this one has already been wrong
+    once: an earlier version knew only the archive's `sourceSha256`/`bars` schema
+    and reported the two song days, which write `source_sha256`/`minutes`, as
+    having no provenance at all. It manufactured the fault it existed to find.
+    So each test here breaks a published day on purpose and asserts the fault is
+    seen.
+    """
+
+    def day(self, date='2026-07-15', **over):
+        payload = dict(
+            date=date,
+            lineChart=dict(url=f'/assets/charts/{date}-hourly.svg',
+                           dataUrl=f'/content/history/{date}-hourly.json',
+                           caption='Hourly bars', gapShort='Hourly bars, not a minute path',
+                           gapNote='Seven bars.', alt='SPY hourly'),
+            performance=dict(executionSections=[], executionAssessedAt=None, setupRating=None,
+                             execution=dict(label='Execution not reviewed')))
+        payload.update(over)
+        return payload
+
+    def tree(self, date='2026-07-15', history=None, payload=None):
+        root = Path(tempfile.mkdtemp())
+        self.addCleanup(lambda: __import__('shutil').rmtree(root, ignore_errors=True))
+        (root / 'assets/charts').mkdir(parents=True)
+        (root / 'content/history').mkdir(parents=True)
+        (root / f'assets/charts/{date}-hourly.svg').write_text('<svg/>', encoding='utf-8')
+        body = dict(date=date, symbol='SPY', interval='1h', sourceSha256='a' * 64,
+                    bars=[dict(open=1, high=2, low=0, close=1) for _ in range(7)])
+        body.update(history or {})
+        (root / f'content/history/{date}-hourly.json').write_text(
+            json.dumps(body), encoding='utf-8')
+        return root, payload or self.day(date)
+
+    def faults(self, date='2026-07-15', history=None, payload=None):
+        root, body = self.tree(date, history, payload)
+        return verify_published_charts.check_day(date, body, root)
+
+    def test_a_correct_day_reports_nothing(self):
+        self.assertEqual(self.faults(), [])
+
+    def test_a_chart_drawing_another_date_is_caught(self):
+        # The failure Marcelo actually reported: the page shows a session that is
+        # not the one selected.
+        faults = self.faults(history=dict(date='2026-07-14'))
+        self.assertTrue(any('dated 2026-07-14' in f for f in faults), faults)
+
+    def test_a_payload_filed_under_the_wrong_date_is_caught(self):
+        faults = self.faults(payload=self.day('2026-07-15') | dict(date='2026-07-13'))
+        self.assertTrue(any('dated 2026-07-13' in f for f in faults), faults)
+
+    def test_missing_supplied_data_is_caught(self):
+        root, body = self.tree()
+        (root / 'content/history/2026-07-15-hourly.json').unlink()
+        faults = verify_published_charts.check_day('2026-07-15', body, root)
+        self.assertTrue(any('supplied data missing' in f for f in faults), faults)
+
+    def test_hourly_bars_sold_as_a_minute_path_are_caught(self):
+        chart = dict(url='/assets/charts/2026-07-15-hourly.svg',
+                     dataUrl='/content/history/2026-07-15-hourly.json',
+                     caption='The minute line', gapShort='', gapNote='', alt='')
+        faults = self.faults(payload=self.day() | dict(lineChart=chart))
+        self.assertTrue(any('not described as hourly' in f for f in faults), faults)
+        self.assertTrue(any('disclaim being a minute path' in f for f in faults), faults)
+
+    def test_an_invented_execution_section_is_caught(self):
+        perf = dict(executionSections=[dict(startTime='09:30', endTime='09:48', execution='good')],
+                    executionAssessedAt='2026-07-15T17:00', setupRating=9,
+                    execution=dict(label='Played well'))
+        faults = self.faults(payload=self.day() | dict(performance=perf))
+        self.assertTrue(any('execution sections' in f for f in faults), faults)
+        self.assertTrue(any('assessment timestamp' in f for f in faults), faults)
+        self.assertTrue(any('setup rating' in f for f in faults), faults)
+
+    def test_both_history_schemas_are_read_as_provenance(self):
+        # The archive writes sourceSha256/bars; the song days write
+        # source_sha256/minutes. Neither is missing provenance.
+        self.assertEqual(self.faults(), [])
+        song = dict(sourceSha256=None, source_sha256='b' * 64, bars=None,
+                    minutes=[{'close': 1}] * 390, interval=None)
+        root = Path(tempfile.mkdtemp())
+        self.addCleanup(lambda: __import__('shutil').rmtree(root, ignore_errors=True))
+        (root / 'assets/charts').mkdir(parents=True)
+        (root / 'content/history').mkdir(parents=True)
+        (root / 'assets/charts/2026-09-03-hourly.svg').write_text('<svg/>', encoding='utf-8')
+        body = {k: v for k, v in dict(date='2026-09-03', symbol='SPY', **song).items() if v is not None}
+        (root / 'content/history/2026-09-03-hourly.json').write_text(json.dumps(body), encoding='utf-8')
+        chart = dict(url='/assets/charts/2026-09-03-hourly.svg',
+                     dataUrl='/content/history/2026-09-03-hourly.json',
+                     caption='The day\'s line', gapShort='', gapNote='', alt='')
+        faults = verify_published_charts.check_day('2026-09-03', self.day('2026-09-03') | dict(lineChart=chart), root)
+        self.assertEqual([f for f in faults if 'source hash' in f], [])
 
 
 if __name__ == '__main__': unittest.main()
