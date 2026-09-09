@@ -106,7 +106,12 @@
       const figure = el('figure', 'session-drawing');
       if (chart.playheadUrl) figure.dataset.timelineSrc = chart.playheadUrl;
       const stage = el('div', 'drawing-stage');
-      const img = el('img'); img.src = chart.url; img.alt = chart.alt; img.width = 1000; img.height = 340;
+      const img = el('img'); img.alt = chart.alt; img.width = 1000; img.height = 340;
+      img.addEventListener('error', () => {
+        figure.removeAttribute('data-timeline-src');
+        figure.replaceChildren(el('p', 'data-gap', 'Chart unavailable for this date.'));
+      }, { once: true });
+      img.src = chart.url;
       const caption = el('figcaption', 'drawing-times');
       caption.append(el('span', '', chart.startLabel || '09:30 ET'), el('span', '', chart.endLabel || '16:00 ET'));
       stage.append(img); figure.append(stage, caption); drawing.append(figure);
@@ -234,7 +239,11 @@
       : [...sessionsByMonth.keys()].sort();
     const monthIndex = new Map(months.map((value, idx) => [value, idx]));
     const hashDate = () => location.hash.match(/^#session-(\d{4}-\d{2}-\d{2})$/)?.[1];
-    const isNavigableDate = value => Boolean(value && monthIndex.has(monthOf(value)));
+    const isNavigableDate = value => {
+      if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value) || !monthIndex.has(monthOf(value))) return false;
+      const parsed = date(value);
+      return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+    };
     let selected = isNavigableDate(hashDate()) ? hashDate() : sessions.at(-1).date;
     let month = monthOf(selected);
     if (!monthIndex.has(month)) month = months.includes(monthOf(selected)) ? monthOf(selected) : sessions.at(-1).date.slice(0, 7);

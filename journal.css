@@ -28,6 +28,7 @@
 .calendar-day.has-entry.no-chart:after{background:#e5b65799}
 .calendar-day.has-entry:hover{background:#e5b65725}.calendar-day.is-selected{background:#e5b657;color:#081014;border-color:#e5b657;box-shadow:0 0 25px #e5b65720}
 .calendar-day.is-selected:hover{background:#f2c66a}
+.calendar-day.no-entry.is-selected{background:#e5b657;color:#081014;border-color:#e5b657}
 .missing-entry .day-heading{min-height:260px;display:flex;flex-direction:column;justify-content:center}
 .missing-entry .day-heading h2{max-width:18ch}
 .calendar-legend{display:flex;align-items:center;gap:9px;margin-top:25px;font-size:12px;color:#b7bec2}.legend-dot{width:5px;height:5px;background:#e5b657;border-radius:50%;flex:none}
