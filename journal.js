@@ -306,29 +306,8 @@
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);
       }
-      const history = el('div', 'calendar-history');
-      history.append(el('span', 'eyebrow gold', 'All sessions'));
-      for (const monthKey of [...months].reverse()) {
-        const title = el('p', 'calendar-month', format(`${monthKey}-01`, { month: 'short', year: 'numeric' }));
-        const list = el('div', 'calendar-history-list');
-        const rows = sessionsByMonth.get(monthKey) || [];
-        for (const row of rows) {
-          const b = el('button', `calendar-history-item${row.date === selected ? ' is-selected' : ''}${row.hasSong ? ' has-song' : ''}${row.hasChart === false ? ' no-chart' : ''}`, miniDate(row.date));
-          b.type = 'button'; b.dataset.date = row.date;
-          const rowStatus = [];
-          if (row.hasChart === false) rowStatus.push('chart unavailable');
-          if (row.hasSong === false) rowStatus.push('no recording');
-          if (row.marketClosed) rowStatus.push('market closed note');
-          b.setAttribute('aria-label', `${fullDate(row.date)}${rowStatus.length ? `, ${rowStatus.join(', ')}` : ', chart and recording available'}`);
-          b.addEventListener('click', () => { choose(row.date, true); });
-          list.append(b);
-        }
-        if (rows.length) {
-          history.append(title, list);
-        }
-      }
       const legend = el('div', 'calendar-legend'); legend.append(el('span', 'legend-dot'),el('span', '', 'Sessions'));
-      calendar.replaceChildren(el('span', 'eyebrow gold', 'Choose a session'), head, grid, history, legend);
+      calendar.replaceChildren(el('span', 'eyebrow gold', 'Choose a session'), head, grid, legend);
     }
     window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(), false); });
     choose(selected, false);
