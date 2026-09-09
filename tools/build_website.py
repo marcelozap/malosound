@@ -18,7 +18,6 @@ PUBLIC_FILES = (
     'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
     'assets/brand/malosound-square.png',
-    'studio.html', 'latin-house-lab.html', 'latin-house-lab.css', 'latin-house-lab.js',
     'gateway/sample-01.audioanalysis.v1.json', 'gateway/sample-02.audioanalysis.v1.json',
 )
 PUBLIC_FILES += tuple(json.loads((ROOT / 'content/market-assets.json').read_text()))

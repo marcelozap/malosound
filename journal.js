@@ -183,6 +183,13 @@
     article.append(pre);
     return article;
   }
+  function renderMissingEntry(day) {
+    const article = el('article', 'day-entry missing-entry');
+    const header = el('header', 'day-heading');
+    header.append(el('span', 'eyebrow gold', fullDate(day)), el('h2', '', 'No journal entry for this date.'));
+    article.append(header);
+    return article;
+  }
   // The calendar holds only a small index; a day's full entry is fetched when it
   // is opened and then cached, so an archive of many months costs one small file.
   const detailCache = new Map();
@@ -227,7 +234,8 @@
       : [...sessionsByMonth.keys()].sort();
     const monthIndex = new Map(months.map((value, idx) => [value, idx]));
     const hashDate = () => location.hash.match(/^#session-(\d{4}-\d{2}-\d{2})$/)?.[1];
-    let selected = byDate.has(hashDate()) ? hashDate() : sessions.at(-1).date;
+    const isNavigableDate = value => Boolean(value && monthIndex.has(monthOf(value)));
+    let selected = isNavigableDate(hashDate()) ? hashDate() : sessions.at(-1).date;
     let month = monthOf(selected);
     if (!monthIndex.has(month)) month = months.includes(monthOf(selected)) ? monthOf(selected) : sessions.at(-1).date.slice(0, 7);
     const sidebar = el('aside', 'calendar-panel'); sidebar.setAttribute('aria-label', 'Journal calendar');
@@ -239,7 +247,7 @@
     let pending = 0;
     function choose(day, updateHash) {
       const entry = byDate.get(day);
-      if (!entry) return;
+      if (!isNavigableDate(day)) return;
       detachPlayhead();
       stage.querySelectorAll('audio').forEach(a => a.pause());
       selected = day;
@@ -247,6 +255,11 @@
       drawCalendar();
       if (updateHash) history.replaceState(null, '', `#session-${day}`);
       const token = ++pending;
+      if (!entry) {
+        stage.replaceChildren(renderMissingEntry(day));
+        announced.textContent = `No journal entry for ${fullDate(day)}.`;
+        return;
+      }
       if (!detailCache.has(day)) stage.replaceChildren(el('p', 'calendar-note', `Opening ${fullDate(day)}…`));
       loadDay(day, entry).then(session => {
         if (token !== pending) return;
@@ -285,7 +298,7 @@
       for (let i = 0; i < blanks; i++) grid.append(el('span', 'calendar-blank'));
       for (let day = 1; day <= count; day++) {
         const key = `${month}-${String(day).padStart(2, '0')}`; const available = byDate.has(key);
-        const b = el('button', `calendar-day${available ? ' has-entry' : ''}${key === selected ? ' is-selected' : ''}`, String(day));
+        const b = el('button', `calendar-day${available ? ' has-entry' : ' no-entry'}${key === selected ? ' is-selected' : ''}`, String(day));
         const row = byDate.get(key);
         if (row) {
           const rowState = normalizeExecutionState(row.performance || row);
@@ -294,7 +307,6 @@
           if (row.hasSong === false) b.classList.add('no-song');
         }
         b.type = 'button';
-        b.disabled = !available;
         const status = [];
         if (row) {
           if (typeof row.hasChart !== 'undefined') status.push(`chart ${row.hasChart ? 'available' : 'unavailable'}`);
@@ -302,14 +314,14 @@
         }
         if (row && row.marketClosed) status.push('market-closed');
         b.setAttribute('aria-label', `${fullDate(key)}${available ? ', open journal entry' : ', no journal entry'}${status.length ? `, ${status.join(', ')}` : ''}`);
-        if (available) b.setAttribute('aria-pressed', String(key === selected));
+        b.setAttribute('aria-pressed', String(key === selected));
         b.addEventListener('click', () => { choose(key,true); calendar.querySelector(`[data-date="${key}"]`)?.focus(); });
         b.dataset.date = key; grid.append(b);
       }
       const legend = el('div', 'calendar-legend'); legend.append(el('span', 'legend-dot'),el('span', '', 'Sessions'));
       calendar.replaceChildren(el('span', 'eyebrow gold', 'Choose a session'), head, grid, legend);
     }
-    window.addEventListener('hashchange', () => { if (byDate.has(hashDate())) choose(hashDate(), false); });
+    window.addEventListener('hashchange', () => { if (isNavigableDate(hashDate())) choose(hashDate(), false); });
     choose(selected, false);
     if (byDate.has(hashDate())) stage.scrollIntoView({ block:'start', behavior:'instant' });
   }).catch(() => {

@@ -18,6 +18,8 @@
 .weekday{text-align:center;font-size:11px;color:#91a0aa;padding:3px 0 10px}
 .calendar-grid .calendar-day{position:relative;min-width:0;aspect-ratio:1;border-radius:10px;font-size:14px;font-variant-numeric:tabular-nums}
 .calendar-day:disabled{color:#55616a}
+.calendar-day.no-entry{color:#65747d;border:1px solid transparent}
+.calendar-day.no-entry:hover{color:#d4dde2;background:#50b8f50d;border-color:#50b8f533}
 .calendar-day.has-entry{background:#e5b6570b;border:1px solid #e5b65740}
 .calendar-day.has-entry.has-song{color:#e5b657}
 .calendar-day.has-entry.no-song{color:#89a0ad}
@@ -26,6 +28,8 @@
 .calendar-day.has-entry.no-chart:after{background:#e5b65799}
 .calendar-day.has-entry:hover{background:#e5b65725}.calendar-day.is-selected{background:#e5b657;color:#081014;border-color:#e5b657;box-shadow:0 0 25px #e5b65720}
 .calendar-day.is-selected:hover{background:#f2c66a}
+.missing-entry .day-heading{min-height:260px;display:flex;flex-direction:column;justify-content:center}
+.missing-entry .day-heading h2{max-width:18ch}
 .calendar-legend{display:flex;align-items:center;gap:9px;margin-top:25px;font-size:12px;color:#b7bec2}.legend-dot{width:5px;height:5px;background:#e5b657;border-radius:50%;flex:none}
 .calendar-note{font-size:13px;line-height:1.7;color:#91a0aa;margin:18px 0 0;border-top:1px solid #ffffff12;padding-top:18px}
 .selected-session{min-width:0;scroll-margin-top:25px}.day-entry{border:1px solid #ffffff16;border-radius:22px;background:linear-gradient(150deg,#15150f77,transparent 30%,#0c23302b),#070c10;overflow:hidden}
