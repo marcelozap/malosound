@@ -14,7 +14,7 @@ The Python build has no requirement to call a ChatGPT model.
 With Python 3 installed, run from the extracted folder:
 
 ```sh
-python tools/build_website.py
+python -X utf8 tools/build_website.py
 python -m http.server 8080 --directory build
 ```
 
