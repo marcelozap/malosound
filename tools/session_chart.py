@@ -1,27 +1,30 @@
 #!/usr/bin/env python3
-"""Draw one trading session as candles, positioned by the clock.
+"""Draw one trading session as a thin price line, positioned by the clock.
 
-Two things were wrong with the charts before this existed, and both were the kind
-of wrong that a metadata check passes.
+Bars are placed by their time, not their index. Seven hourly bars spread evenly
+across the width would put the last one at six sevenths, but a session is 390
+minutes and the last bar covers only the 30 minutes from 15:30 — spreading them
+by index leaves every bar off its true position and the drawing short of the
+close. Here x comes from the clock: minute 0 is the 09:30 open at the left edge,
+minute 390 is the 16:00 close at the right, and a bar's width is its actual
+duration.
 
-Bars were placed by their index rather than their time. Seven hourly bars were
-spread evenly across the width, but a session is 390 minutes and the last bar
-covers only the 30 minutes from 15:30, so every bar sat slightly off its true
-position and the drawing stopped short of the close. Here x comes from the
-clock: minute 0 is the 09:30 open at the left edge, minute 390 is the 16:00
-close at the right, and a bar's width is its actual duration.
+The line touches the session open and every observed bar's close, in the order
+they happened, and nothing in between is invented. Hourly bars stay hourly —
+seven wide steps, clearly not a minute path — because the line connects exactly
+the boundaries that were actually observed and no others. A source gap breaks
+the line rather than bridging it; the gap is real and stays visible.
 
-Minute sessions were drawn as a line of closing prices while the source carried
-full OHLC for every minute. The high and low of each minute were on disk and
-thrown away at drawing time. Where candle data exists, candles are drawn.
+One rule governs colour. **The line is never coloured by direction.** A falling
+stretch and a rising stretch are the same colour, because green and red are
+reserved for Marcelo's own review of how he played a stretch. Colouring the line
+green because the price rose would be deriving execution quality from price
+movement, which is the single thing this project refuses to do. Unreviewed time
+is neutral blue, and stays that way no matter what the price did.
 
-One rule governs colour, and it is the reason this module does not do what every
-other candle chart does. **Candles are never coloured by direction.** An up
-candle and a down candle are the same colour, because green and red are reserved
-for Marcelo's own review of how he played a stretch. Colouring a candle green
-because the price rose would be deriving execution quality from price movement,
-which is the single thing this project refuses to do. Unreviewed time is neutral
-blue, and stays that way no matter what the price did.
+A candle renderer (`candles`, `classify`) is kept below, still correct and still
+tested, in case a candle presentation is wanted again later. Nothing here calls
+it; the published charts are lines.
 """
 from trade_journal import EXECUTION, NEUTRAL_EXECUTION, session_minute
 
@@ -128,19 +131,70 @@ def bars_from(source):
             if not bar.get('missing') and all(bar.get(k) is not None for k in OHLC)]
 
 
+def line_paths(runs):
+    """SVG `<path>` elements, one per coloured run of a thin price line."""
+    drawn = []
+    for run in runs:
+        colour = EXECUTION[run['execution']][1]
+        path = ' '.join(f'{"M" if i == 0 else "L"}{p["x"]:.2f},{p["y"]:.2f}'
+                        for i, p in enumerate(run['points']))
+        drawn.append(f'<path d="{path}" fill="none" stroke="{colour}" '
+                     f'stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>')
+    return ''.join(drawn)
+
+
+def lines(bars, sections=(), low=None, high=None):
+    """The thin price line for one session, built from saved bars.
+
+    Positions come from the clock (`x_of`), exactly as `candles` used: one
+    point at the first bar's open, then one point at the end of every bar (its
+    close). A segment between two consecutive points takes its bar's execution
+    colour only when a reviewed span covers that bar's ENTIRE span — the same
+    full-containment rule `classify` already gives candles. This matters most
+    for hourly bars: colouring the whole 09:30-10:30 step because a review
+    started at 09:48 would claim the review covers 09:30-09:48 too, which it
+    does not. For a one-minute bar, full containment and point coverage are
+    the same thing, so this behaves exactly as before at minute resolution. A
+    source gap starts a new, disconnected run rather than bridging one.
+    """
+    if not bars:
+        return ''
+    prices = [p for bar in bars for p in (bar['open'], bar['close'])]
+    low = low if low is not None else min(prices)
+    high = high if high is not None else max(prices)
+
+    def point(minute, price):
+        return dict(x=x_of(minute), y=y_of(price, low, high))
+
+    runs, previous_end, previous_point = [], None, None
+    for bar in bars:
+        start, end = bar['startMinute'], bar['startMinute'] + bar['durationMinutes']
+        entry, exit_ = point(start, bar['open']), point(end, bar['close'])
+        colour_class = classify(start, end, sections)
+        gap = previous_end is not None and start > previous_end
+        if gap or not runs:
+            runs.append(dict(execution=colour_class, points=[entry, exit_]))
+        elif runs[-1]['execution'] == colour_class:
+            runs[-1]['points'].append(exit_)
+        else:
+            runs.append(dict(execution=colour_class, points=[previous_point, exit_]))
+        previous_end, previous_point = end, exit_
+    return line_paths(runs)
+
+
 def colour_note(sections):
     if sections:
         marks = '; '.join(f'{s["startTime"]}–{s["endTime"]} ET {EXECUTION[s["execution"]][0].lower()}'
                           for s in sections)
-        return (f'Colour marks Marcelo’s own review of how he played each stretch ({marks}); '
-                'unreviewed stretches stay neutral. Candles are never coloured by whether '
+        return (f'The line’s colour marks Marcelo’s own review of how he played each stretch ({marks}); '
+                'unreviewed stretches stay neutral. The line is never coloured by whether '
                 'the price rose or fell.')
-    return ('No stretch of this session has been reviewed for execution, so every candle is '
-            'neutral. Candles are never coloured by whether the price rose or fell.')
+    return ('No stretch of this session has been reviewed for execution, so the whole line is '
+            'neutral. The line is never coloured by whether the price rose or fell.')
 
 
 def document(day, bars, sections=(), title='', detail='', low=None, high=None):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
             f'aria-labelledby="t d"><title id="t">{title or f"SPY {day}"}</title>'
             f'<desc id="d">{detail} {colour_note(sections)}</desc>'
-            f'{candles(bars, sections, low, high)}</svg>')
+            f'{lines(bars, sections, low, high)}</svg>')

@@ -55,16 +55,25 @@ def redraw_archive_charts(data, trades):
             continue
         performance = presentation(trades.get(session['date']))
         hourly = source.get('interval') == '1h'
-        detail = ('Seven candles, one per hourly bar, positioned by the clock across the '
-                  'regular session. The last covers 15:30 to 16:00 ET. Hourly bars, not a '
-                  'minute path.' if hourly else
-                  'One candle per observed minute, 09:30 to 16:00 ET.')
+        detail = ('A thin line joins the session open and each hourly bar’s close — eight '
+                  'points across the regular session, positioned by the clock. The last bar '
+                  'covers 15:30 to 16:00 ET. Hourly bars, not a minute path.' if hourly else
+                  'A thin line joins the session open and every observed minute close, '
+                  '09:30 to 16:00 ET.')
         write(url.lstrip('/'), session_chart.document(
             session['date'], bars, performance['executionSections'],
-            title=f'SPY {session["date"]} {"hourly" if hourly else "minute"} candles',
+            title=f'SPY {session["date"]} {"hourly" if hourly else "minute"} line',
             detail=detail))
-        chart['alt'] = (f'SPY {"hourly" if hourly else "minute"} candles for {session["date"]}, '
+        chart['alt'] = (f'SPY {"hourly" if hourly else "minute"} line for {session["date"]}, '
                         f'09:30 to 16:00 ET. {performance["execution"]["label"]}.')
+        if hourly:
+            chart['gapNote'] = ('The line joins the session open and each hourly bar’s close — '
+                                'eight points in all. Bar timestamps mark interval starts; the '
+                                'final interval ends at 16:00 ET. No interpolation between them '
+                                'and no execution assessment.')
+            chart['notes'] = ['A thin line connects the session open and each hourly bar’s '
+                              'close, in the order they were observed. Height is scaled to '
+                              'this session.']
         redrawn.append(session['date'])
     return redrawn
 
@@ -109,12 +118,10 @@ def refresh():
         # One <path> per reviewed stretch. The coordinates are the same observed
         # points in the same order; only the stroke color changes at a boundary,
         # and a boundary point is drawn in both runs so the line stays unbroken.
-        # Candles, not a line. Every minute's high and low was already in this
-        # file; drawing only the closes discarded most of what the session did.
-        drawn = session_chart.candles(session_chart.bars_from(source),
-                                      performance['executionSections'], lo, hi)
+        drawn = session_chart.lines(session_chart.bars_from(source),
+                                    performance['executionSections'], lo, hi)
         colour_note = session_chart.colour_note(performance['executionSections'])
-        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">SPY candles for {day}, 09:30 to 16:00 ET</title><desc id="desc">One candle per observed minute, 09:30 to 16:00 ET: body from open to close, wick from high to low. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
+        svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">SPY line for {day}, 09:30 to 16:00 ET</title><desc id="desc">A thin line joins the session open and every observed minute close, 09:30 to 16:00 ET, without smoothing. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'
         timeline = dict(marketStartMinutes=570,
@@ -133,8 +140,8 @@ def refresh():
         if source.get('terminal_price', {}).get('source_kind') == 'vendor_daily_close':
             notes.append(f"The final anchor is the vendor daily close of ${summary['close']:.2f}, not a separate 16:00 intraday print; the last minute closes at ${summary['last_minute_bar_close']:.2f}.")
         chart = dict(url='/'+line_path, dataUrl=source_path,
-                     alt=f'SPY minute candles for {dt.strftime("%B")} {dt.day}, 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
-                     caption=f'SPY · Minute candles · {dt.strftime("%B")} {dt.day}, {dt.year}',
+                     alt=f'SPY minute line for {dt.strftime("%B")} {dt.day}, 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
+                     caption=f'SPY · Minute line · {dt.strftime("%B")} {dt.day}, {dt.year}',
                      notes=notes)
         if has_song:
             chart['playheadUrl'] = '/'+timeline_path

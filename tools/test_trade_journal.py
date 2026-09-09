@@ -258,7 +258,7 @@ class TradeJournalTests(unittest.TestCase):
             # against a committed drawing. A review must move colour and nothing
             # else, and stating it that way means the test does not have to be
             # regenerated every time the drawing legitimately changes shape.
-            geometry = {}
+            geometry, path_counts = {}, {}
             for name, review, expected in cases:
                 with self.subTest(case=name):
                     rows = [dict(date=s['date'], outcome='profit', setupRating=14,
@@ -272,11 +272,19 @@ class TradeJournalTests(unittest.TestCase):
                     with patch.object(journal_pages, 'ROOT', fixture): journal_pages.refresh()
                     for day in ('2026-09-03', '2026-09-04'):
                         svg = (fixture/f'assets/charts/{day}-line.svg').read_text(encoding='utf-8')
-                        # Every candle, colour stripped out: position and size only.
-                        shape = re.findall(r'<rect x="([\d.]+)" y="([\d.]+)" width="([\d.]+)" height="([\d.]+)"', svg)
-                        self.assertTrue(shape, f'{day} drew no candles')
-                        geometry.setdefault(day, {})[name] = shape
-                        fills = re.findall(r'fill="(#[0-9a-f]{6})"', svg)
+                        # Every observed point across every run, colour stripped out.
+                        # A boundary point is drawn at the end of one run and the
+                        # start of the next, so consecutive duplicates collapse to one.
+                        points = []
+                        for d in re.findall(r'<path d="([^"]+)"', svg):
+                            for point in re.findall(r'[ML]([\d.]+,[\d.]+)', d):
+                                if not points or points[-1] != point:
+                                    points.append(point)
+                        self.assertTrue(points, f'{day} drew no line')
+                        geometry.setdefault(day, {})[name] = points
+                        if name == 'none':
+                            path_counts[day] = svg.count('<path ')
+                        fills = re.findall(r'stroke="(#[0-9a-f]{6})"', svg)
                         transitions = [c for i, c in enumerate(fills) if i == 0 or c != fills[i-1]]
                         self.assertEqual(transitions, expected, f'{day} colour did not follow the review')
                         # Music timing and the playhead map never move with a review.
@@ -286,10 +294,10 @@ class TradeJournalTests(unittest.TestCase):
                 shapes = list(by_case.values())
                 for other in shapes[1:]:
                     self.assertEqual(shapes[0], other, f'{day} geometry moved when the review changed')
-            # 2026-09-03 carries one real source gap, so it draws one candle fewer
-            # than the gapless 2026-09-04. The hole is left open, never bridged.
-            self.assertEqual(len(geometry['2026-09-03']['none']) + 1,
-                             len(geometry['2026-09-04']['none']))
+            # 2026-09-03 carries one real source gap, so unreviewed it draws one
+            # more separate run than the gapless 2026-09-04. The hole is left
+            # open — the line breaks there, never bridged.
+            self.assertEqual(path_counts['2026-09-03'], path_counts['2026-09-04'] + 1)
 class ChartOnlySourceTests(unittest.TestCase):
     def test_source_without_music_builds_a_day_and_preserves_gaps(self):
         root = journal_pages.ROOT
@@ -321,11 +329,10 @@ class ChartOnlySourceTests(unittest.TestCase):
             self.assertNotIn('silence', chart['gapShort'])
             self.assertFalse(list(fixture.rglob('*timeline.json')))
             svg = (fixture/chart['url'].lstrip('/')).read_text(encoding='utf-8')
-            # The gap survives the move from a line to candles: the missing
-            # minute is absent rather than bridged, so the day is one candle
-            # short of a complete 390 and nothing was drawn across the hole.
-            self.assertEqual(svg.count('<rect '), 389)
-            self.assertNotIn('<path ', svg)
+            # The missing minute breaks the line rather than being bridged: one
+            # real gap draws as two separate runs, unreviewed so both blue.
+            self.assertEqual(svg.count('<path '), 2)
+            self.assertNotIn('<rect ', svg)
             index = json.loads((fixture/'content/journal-index.json').read_text(encoding='utf-8'))
             self.assertTrue(index['days'][0]['hasChart'])
             self.assertFalse(index['days'][0]['hasSong'])
@@ -1043,6 +1050,98 @@ class SessionCandleTests(unittest.TestCase):
         source = dict(minutes=[dict(minute=0, open=1, high=2, low=0, close=1, missing=False),
                                dict(minute=1, open=None, high=None, low=None, close=None, missing=True)])
         self.assertEqual([b['startMinute'] for b in session_chart.bars_from(source)], [0])
+
+
+class SessionLineTests(unittest.TestCase):
+    """Thin lines: same clock, same colour rule as candles — a different mark."""
+
+    BLUE, GREEN, RED, GOLD = '#50b8f5', '#58dfa4', '#ff7188', '#e5b657'
+
+    def hour(self, start, o, h, l, c, minutes=60):
+        return dict(startMinute=start, durationMinutes=minutes, open=o, high=h, low=l, close=c)
+
+    def session(self):
+        # Seven hourly bars, the last covering 15:30 to 16:00.
+        spans = [(0, 60), (60, 60), (120, 60), (180, 60), (240, 60), (300, 60), (360, 30)]
+        return [self.hour(s, 100, 102, 99, 101, d) for s, d in spans]
+
+    # --- geometry ---------------------------------------------------------------
+
+    def test_the_line_spans_the_regular_session_exactly_by_the_clock(self):
+        svg = session_chart.document('2026-06-15', self.session())
+        points = re.findall(r'[ML]([\d.]+),([\d.]+)', svg)
+        xs = [float(x) for x, y in points]
+        self.assertAlmostEqual(min(xs), session_chart.MARGIN_X, places=6)
+        self.assertAlmostEqual(max(xs), session_chart.WIDTH - session_chart.MARGIN_X, places=6)
+        # Not evenly spaced by index: the last bar starts at 15:30, six sevenths
+        # of the width would be a different x than the true 360/390 position.
+        evenly = session_chart.MARGIN_X + 6 / 7 * session_chart.PLOT_WIDTH
+        self.assertNotAlmostEqual(xs[-2], evenly, places=1)
+
+    def test_hourly_data_draws_eight_connected_points_not_smoothed(self):
+        # Open plus seven closes: exactly the boundaries that were observed,
+        # joined by straight segments, nothing invented in between.
+        svg = session_chart.lines(self.session())
+        self.assertEqual(svg.count('<path'), 1)
+        d = re.search(r'<path d="([^"]+)"', svg).group(1)
+        self.assertEqual(d.count('M') + d.count('L'), 8)
+
+    def test_no_candle_shapes_are_drawn(self):
+        svg = session_chart.document('2026-06-15', self.session())
+        self.assertNotIn('<rect', svg)
+        self.assertIn('<path', svg)
+
+    # --- colour ------------------------------------------------------------------
+
+    def test_an_unreviewed_session_is_entirely_neutral(self):
+        svg = session_chart.lines(self.session())
+        self.assertIn(self.BLUE, svg)
+        for colour in (self.GREEN, self.RED, self.GOLD):
+            self.assertNotIn(colour, svg)
+
+    def test_a_reviewed_stretch_takes_its_colour(self):
+        sections = [dict(startTime='09:30', endTime='10:30', execution='good'),
+                    dict(startTime='10:30', endTime='11:30', execution='misplayed')]
+        svg = session_chart.lines(self.session(), sections)
+        self.assertIn(self.GREEN, svg)
+        self.assertIn(self.RED, svg)
+        self.assertIn(self.BLUE, svg)  # the five unreviewed hours stay neutral
+
+    def test_direction_never_decides_colour(self):
+        rose = self.hour(0, 100, 106, 99, 105)
+        fell = self.hour(60, 105, 106, 98, 99)
+        good = [dict(startTime='09:30', endTime='11:30', execution='good')]
+        bad = [dict(startTime='09:30', endTime='11:30', execution='misplayed')]
+        self.assertIn(self.GREEN, session_chart.lines([rose, fell], good))
+        self.assertNotIn(self.RED, session_chart.lines([rose, fell], good))
+        self.assertIn(self.RED, session_chart.lines([rose, fell], bad))
+        self.assertNotIn(self.GREEN, session_chart.lines([rose, fell], bad))
+
+    def test_a_partly_covered_hour_is_not_coloured(self):
+        sections = [dict(startTime='09:48', endTime='10:30', execution='good')]
+        svg = session_chart.lines([self.hour(0, 100, 102, 99, 101)], sections)
+        self.assertIn(self.BLUE, svg)
+        self.assertNotIn(self.GREEN, svg)
+
+    # --- gaps ----------------------------------------------------------------------
+
+    def test_a_source_gap_breaks_the_line_into_two_runs(self):
+        bars = [self.hour(0, 100, 101, 99, 100, 60), self.hour(120, 105, 106, 104, 105, 60)]
+        svg = session_chart.lines(bars)
+        self.assertEqual(svg.count('<path'), 2)
+
+    # --- same presentation regardless of resolution ---------------------------------
+
+    def test_hourly_and_minute_sources_draw_the_same_kind_of_mark(self):
+        hourly_source = dict(interval='1h', bars=[
+            dict(startTime=f'2026-06-15T{h:02d}:{m:02d}:00-04:00', open=1, high=2, low=0, close=1)
+            for h, m in ((9, 30), (10, 30), (11, 30), (12, 30), (13, 30), (14, 30), (15, 30))])
+        minute_source = dict(bars=[dict(minute=i, open=1, high=2, low=0, close=1) for i in range(390)])
+        for source in (hourly_source, minute_source):
+            svg = session_chart.lines(session_chart.bars_from(source))
+            self.assertIn('<path', svg)
+            self.assertNotIn('<rect', svg)
+            self.assertNotIn('<line', svg)
 
 
 if __name__ == '__main__': unittest.main()
