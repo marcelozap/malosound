@@ -7,6 +7,7 @@ from trade_journal import (validate as validate_trades, presentation, strip as t
                            notes as trade_notes, legend as trade_legend,
                            EXECUTION)
 import session_chart
+from trade_overlays import note as trade_overlay_note
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -63,14 +64,14 @@ def redraw_archive_charts(data, trades):
         write(url.lstrip('/'), session_chart.document(
             session['date'], bars, performance['executionSections'],
             title=f'SPY {session["date"]} {"hourly" if hourly else "minute"} line',
-            detail=detail))
+            detail=detail, trade_sections=performance['tradeSections']))
         chart['alt'] = (f'SPY {"hourly" if hourly else "minute"} line for {session["date"]}, '
-                        f'09:30 to 16:00 ET. {performance["execution"]["label"]}.')
+                        f'09:30 to 16:00 ET. {trade_overlay_note(performance["tradeSections"])}')
         if hourly:
             chart['gapNote'] = ('The line joins the session open and each hourly bar’s close — '
                                 'eight points in all. Bar timestamps mark interval starts; the '
                                 'final interval ends at 16:00 ET. No interpolation between them '
-                                'and no execution assessment.')
+                                'and no minute-level price path. Trade colors use only supplied times and outcomes.')
             chart['notes'] = ['A thin line connects the session open and each hourly bar’s '
                               'close, in the order they were observed. Height is scaled to '
                               'this session.']
@@ -118,14 +119,15 @@ def refresh():
         # One <path> per reviewed stretch. The coordinates are the same observed
         # points in the same order; only the stroke color changes at a boundary,
         # and a boundary point is drawn in both runs so the line stays unbroken.
-        drawn = session_chart.lines(session_chart.bars_from(source),
-                                    performance['executionSections'], lo, hi)
-        colour_note = session_chart.colour_note(performance['executionSections'])
+        drawn = session_chart.trade_lines(session_chart.bars_from(source),
+                                          performance['tradeSections'], lo, hi)
+        colour_note = trade_overlay_note(performance['tradeSections'])
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">SPY line for {day}, 09:30 to 16:00 ET</title><desc id="desc">A thin line joins the session open and every observed minute close, 09:30 to 16:00 ET, without smoothing. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'
         timeline = dict(marketStartMinutes=570,
                         marketDurationMinutes=390, width=1000, height=340, points=points,
+                        tradeSections=performance['tradeSections'],
                         gaps=[dict(startMinute=g['start_minute'], endMinute=g['end_minute']) for g in gaps])
         if has_song:
             timeline = dict(durationSeconds=source['duration_seconds'], **timeline)
@@ -140,7 +142,7 @@ def refresh():
         if source.get('terminal_price', {}).get('source_kind') == 'vendor_daily_close':
             notes.append(f"The final anchor is the vendor daily close of ${summary['close']:.2f}, not a separate 16:00 intraday print; the last minute closes at ${summary['last_minute_bar_close']:.2f}.")
         chart = dict(url='/'+line_path, dataUrl=source_path,
-                     alt=f'SPY minute line for {dt.strftime("%B")} {dt.day}, 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+f' {performance["execution"]["label"]}.',
+                     alt=f'SPY minute line for {dt.strftime("%B")} {dt.day}, 09:30 to 16:00 ET'+('; breaks mark '+gap_times+'.' if gaps else '.')+' '+colour_note,
                      caption=f'SPY · Minute line · {dt.strftime("%B")} {dt.day}, {dt.year}',
                      notes=notes)
         if has_song:
@@ -173,7 +175,7 @@ def refresh():
             if has_song:
                 assets.add(timeline_path)
             continue
-        music = f'<p class="eyebrow blue">Original instrumental</p><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'
+        music = f'<p class="eyebrow blue">One song. One session.</p><div class="journal-player"><audio controls preload="metadata" aria-label="Listen to {e(song["title"],quote=True)}" src="{e(song["audioUrl"],quote=True)}"></audio></div><div class="song-specs"><span>03:15</span><span>80 BPM</span><span>SPY → SOUND</span></div>'
         music += '<details class="journal-details"><summary>About the song</summary>'+paragraphs([f'SPY’s {dt.strftime("%B")} {dt.day}, 9:30 a.m.–4:00 p.m. ET session, compressed into a 3:15 instrumental.',song.get('thesis',song['summary'])]+song.get('paragraphs',[]))
         music += '<div class="session-table-wrap"><table class="session-table"><thead><tr><th>Market time ET</th><th>Song time</th><th>Section</th></tr></thead><tbody>'
         for s in source.get('sections',[]):

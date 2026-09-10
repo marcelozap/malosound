@@ -49,6 +49,8 @@ def normalize(raw, recorded_at=None):
                executionSections=raw.get('executionSections'),
                executionAssessedAt=raw.get('executionAssessedAt'),
                recordedAt=recorded_at or datetime.now(timezone.utc).isoformat(timespec='seconds'))
+    if 'tradeSections' in raw:
+        row['tradeSections'] = raw['tradeSections']
     # Sections are NOT filtered. A malformed or unexpected section is a mistake worth
     # seeing, and silently dropping one would publish a day whose colors are not the
     # ones that were supplied. validate() enforces the exact shape and rejects it.
@@ -74,7 +76,7 @@ def plan(row, ledger, replace=False):
     days = validate(data)
     old = days.get(row['date'])
     if old:
-        if all(old[k] == row[k] for k in row if k != 'recordedAt'):
+        if all(old.get(k) == row[k] for k in row if k != 'recordedAt'):
             return False, data
         if not replace:
             raise ValueError('This day already has a different result. Review the correction before using --replace.')

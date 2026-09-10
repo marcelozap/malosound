@@ -151,7 +151,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-04-line.svg",
         "dataUrl": "/assets/charts/2026-09-04-spy-data.json",
-        "alt": "SPY minute line for September 4, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY minute line for September 4, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "SPY · Minute line · September 4, 2026",
         "notes": [
           "Open at minute 0; minute closes at boundaries 1..389; separate closing print at 390.",
@@ -165,6 +165,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -319,7 +320,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-03-line.svg",
         "dataUrl": "/assets/charts/2026-09-03-spy-data.json",
-        "alt": "SPY minute line for September 3, 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET. Execution not reviewed.",
+        "alt": "SPY minute line for September 3, 09:30 to 16:00 ET; breaks mark 13:54–13:55 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "SPY · Minute line · September 3, 2026",
         "notes": [
           "Observed first-minute open at boundary 0; minute closes at end boundaries. Gap 13:54–13:55 is not joined. The 13:55 boundary uses the genuinely observed next bar open. Boundary 390 uses the attributed vendor daily close, not a separate 16:00 print.",
@@ -337,6 +338,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -362,7 +364,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-02-minute.svg",
         "dataUrl": "/content/history/2026-09-02-minute.json",
-        "alt": "SPY minute line for 2026-09-02, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY minute line for 2026-09-02, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 762.45 · Last minute close 765.15",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
@@ -377,6 +379,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -402,7 +405,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-09-01-minute.svg",
         "dataUrl": "/content/history/2026-09-01-minute.json",
-        "alt": "SPY minute line for 2026-09-01, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY minute line for 2026-09-01, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 762.01 · Last minute close 761.70",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
@@ -417,6 +420,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -442,7 +446,7 @@
       "lineChart": {
         "url": "/assets/charts/2026-08-31-minute.svg",
         "dataUrl": "/content/history/2026-08-31-minute.json",
-        "alt": "SPY minute line for 2026-08-31, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY minute line for 2026-08-31, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 767.33 · Last minute close 766.95",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
@@ -457,6 +461,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -482,12 +487,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-31-hourly.svg",
         "dataUrl": "/content/history/2026-07-31-hourly.json",
-        "alt": "SPY hourly line for 2026-07-31, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-31, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 744.68 · Last bar close 746.81 · Range 737.68–748.90",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -497,6 +502,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -522,12 +528,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-29-hourly.svg",
         "dataUrl": "/content/history/2026-07-29-hourly.json",
-        "alt": "SPY hourly line for 2026-07-29, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-29, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 739.97 · Last bar close 729.54 · Range 729.10–742.68",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -537,6 +543,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -562,12 +569,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-27-hourly.svg",
         "dataUrl": "/content/history/2026-07-27-hourly.json",
-        "alt": "SPY hourly line for 2026-07-27, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-27, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 744.91 · Last bar close 739.02 · Range 735.87–745.53",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -577,6 +584,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -602,12 +610,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-24-hourly.svg",
         "dataUrl": "/content/history/2026-07-24-hourly.json",
-        "alt": "SPY hourly line for 2026-07-24, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-24, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 738.51 · Last bar close 738.86 · Range 737.29–743.72",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -617,6 +625,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -642,12 +651,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-23-hourly.svg",
         "dataUrl": "/content/history/2026-07-23-hourly.json",
-        "alt": "SPY hourly line for 2026-07-23, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-23, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 739.37 · Last bar close 738.17 · Range 735.21–742.56",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -657,6 +666,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -682,12 +692,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-22-hourly.svg",
         "dataUrl": "/content/history/2026-07-22-hourly.json",
-        "alt": "SPY hourly line for 2026-07-22, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-22, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 746.62 · Last bar close 747.33 · Range 746.37–750.02",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -697,6 +707,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -722,12 +733,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-21-hourly.svg",
         "dataUrl": "/content/history/2026-07-21-hourly.json",
-        "alt": "SPY hourly line for 2026-07-21, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-21, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 746.29 · Last bar close 748.33 · Range 744.18–749.04",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -737,6 +748,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -762,12 +774,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-20-hourly.svg",
         "dataUrl": "/content/history/2026-07-20-hourly.json",
-        "alt": "SPY hourly line for 2026-07-20, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-20, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 747.06 · Last bar close 742.14 · Range 741.51–748.73",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -777,6 +789,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -802,12 +815,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-17-hourly.svg",
         "dataUrl": "/content/history/2026-07-17-hourly.json",
-        "alt": "SPY hourly line for 2026-07-17, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-17, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 742.08 · Last bar close 743.16 · Range 740.80–747.29",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -817,6 +830,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -842,12 +856,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-16-hourly.svg",
         "dataUrl": "/content/history/2026-07-16-hourly.json",
-        "alt": "SPY hourly line for 2026-07-16, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-16, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 752.76 · Last bar close 750.76 · Range 747.88–754.57",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -857,6 +871,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -882,12 +897,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-15-hourly.svg",
         "dataUrl": "/content/history/2026-07-15-hourly.json",
-        "alt": "SPY hourly line for 2026-07-15, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-15, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 754.24 · Last bar close 754.73 · Range 750.20–755.58",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -897,6 +912,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -922,12 +938,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-14-hourly.svg",
         "dataUrl": "/content/history/2026-07-14-hourly.json",
-        "alt": "SPY hourly line for 2026-07-14, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-14, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 750.91 · Last bar close 751.87 · Range 748.66–753.31",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -937,6 +953,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -962,12 +979,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-13-hourly.svg",
         "dataUrl": "/content/history/2026-07-13-hourly.json",
-        "alt": "SPY hourly line for 2026-07-13, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-13, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 752.47 · Last bar close 749.10 · Range 748.00–753.91",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -977,6 +994,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1002,12 +1020,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-10-hourly.svg",
         "dataUrl": "/content/history/2026-07-10-hourly.json",
-        "alt": "SPY hourly line for 2026-07-10, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-10, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 752.05 · Last bar close 754.90 · Range 748.10–755.42",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1017,6 +1035,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1042,12 +1061,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-09-hourly.svg",
         "dataUrl": "/content/history/2026-07-09-hourly.json",
-        "alt": "SPY hourly line for 2026-07-09, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-09, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 747.35 · Last bar close 751.65 · Range 745.59–751.97",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1057,6 +1076,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1082,12 +1102,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-08-hourly.svg",
         "dataUrl": "/content/history/2026-07-08-hourly.json",
-        "alt": "SPY hourly line for 2026-07-08, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-08, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 743.16 · Last bar close 745.29 · Range 739.51–746.15",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1097,6 +1117,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1122,12 +1143,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-06-hourly.svg",
         "dataUrl": "/content/history/2026-07-06-hourly.json",
-        "alt": "SPY hourly line for 2026-07-06, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-06, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 748.74 · Last bar close 751.31 · Range 747.41–752.41",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1137,6 +1158,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1162,12 +1184,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-02-hourly.svg",
         "dataUrl": "/content/history/2026-07-02-hourly.json",
-        "alt": "SPY hourly line for 2026-07-02, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-02, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 747.40 · Last bar close 744.84 · Range 740.03–751.31",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1177,6 +1199,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1202,12 +1225,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-07-01-hourly.svg",
         "dataUrl": "/content/history/2026-07-01-hourly.json",
-        "alt": "SPY hourly line for 2026-07-01, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-07-01, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 745.00 · Last bar close 745.70 · Range 742.38–749.43",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1217,6 +1240,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1242,12 +1266,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-30-hourly.svg",
         "dataUrl": "/content/history/2026-06-30-hourly.json",
-        "alt": "SPY hourly line for 2026-06-30, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-30, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 741.29 · Last bar close 746.48 · Range 740.89–748.02",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1257,6 +1281,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1282,12 +1307,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-29-hourly.svg",
         "dataUrl": "/content/history/2026-06-29-hourly.json",
-        "alt": "SPY hourly line for 2026-06-29, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-29, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 736.53 · Last bar close 740.85 · Range 732.09–741.56",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1297,6 +1322,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1322,12 +1348,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-26-hourly.svg",
         "dataUrl": "/content/history/2026-06-26-hourly.json",
-        "alt": "SPY hourly line for 2026-06-26, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-26, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 728.95 · Last bar close 729.08 · Range 716.58–736.53",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1337,6 +1363,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1362,12 +1389,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-25-hourly.svg",
         "dataUrl": "/content/history/2026-06-25-hourly.json",
-        "alt": "SPY hourly line for 2026-06-25, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-25, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 738.91 · Last bar close 733.27 · Range 729.60–739.37",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1377,6 +1404,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1402,12 +1430,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-24-hourly.svg",
         "dataUrl": "/content/history/2026-06-24-hourly.json",
-        "alt": "SPY hourly line for 2026-06-24, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-24, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 735.17 · Last bar close 733.08 · Range 730.84–739.95",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1417,6 +1445,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1442,12 +1471,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-23-hourly.svg",
         "dataUrl": "/content/history/2026-06-23-hourly.json",
-        "alt": "SPY hourly line for 2026-06-23, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-23, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 733.81 · Last bar close 733.67 · Range 732.30–739.63",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1457,6 +1486,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1482,12 +1512,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-22-hourly.svg",
         "dataUrl": "/content/history/2026-06-22-hourly.json",
-        "alt": "SPY hourly line for 2026-06-22, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-22, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 747.70 · Last bar close 744.38 · Range 743.13–750.18",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1497,6 +1527,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1522,12 +1553,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-18-hourly.svg",
         "dataUrl": "/content/history/2026-06-18-hourly.json",
-        "alt": "SPY hourly line for 2026-06-18, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-18, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 747.76 · Last bar close 746.59 · Range 743.86–748.23",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1537,6 +1568,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1562,12 +1594,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-17-hourly.svg",
         "dataUrl": "/content/history/2026-06-17-hourly.json",
-        "alt": "SPY hourly line for 2026-06-17, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-17, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 751.29 · Last bar close 740.93 · Range 739.23–752.15",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1577,6 +1609,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1602,12 +1635,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-16-hourly.svg",
         "dataUrl": "/content/history/2026-06-16-hourly.json",
-        "alt": "SPY hourly line for 2026-06-16, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-16, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 754.55 · Last bar close 750.35 · Range 749.88–755.44",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1617,6 +1650,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1642,12 +1676,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-15-hourly.svg",
         "dataUrl": "/content/history/2026-06-15-hourly.json",
-        "alt": "SPY hourly line for 2026-06-15, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-15, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 751.85 · Last bar close 754.66 · Range 751.76–756.68",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1657,6 +1691,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1682,12 +1717,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-12-hourly.svg",
         "dataUrl": "/content/history/2026-06-12-hourly.json",
-        "alt": "SPY hourly line for 2026-06-12, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-12, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 740.71 · Last bar close 741.66 · Range 735.03–744.44",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1697,6 +1732,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1722,12 +1758,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-11-hourly.svg",
         "dataUrl": "/content/history/2026-06-11-hourly.json",
-        "alt": "SPY hourly line for 2026-06-11, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-11, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 728.76 · Last bar close 737.64 · Range 724.41–740.00",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1737,6 +1773,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1762,12 +1799,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-10-hourly.svg",
         "dataUrl": "/content/history/2026-06-10-hourly.json",
-        "alt": "SPY hourly line for 2026-06-10, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-10, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 733.39 · Last bar close 725.43 · Range 725.33–738.38",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1777,6 +1814,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1802,12 +1840,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-09-hourly.svg",
         "dataUrl": "/content/history/2026-06-09-hourly.json",
-        "alt": "SPY hourly line for 2026-06-09, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-09, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 743.63 · Last bar close 737.06 · Range 722.59–746.90",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1817,6 +1855,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1842,12 +1881,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-05-hourly.svg",
         "dataUrl": "/content/history/2026-06-05-hourly.json",
-        "alt": "SPY hourly line for 2026-06-05, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-05, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 752.31 · Last bar close 737.40 · Range 735.53–752.82",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1857,6 +1896,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1882,12 +1922,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-04-hourly.svg",
         "dataUrl": "/content/history/2026-06-04-hourly.json",
-        "alt": "SPY hourly line for 2026-06-04, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-04, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 752.10 · Last bar close 757.05 · Range 751.47–758.31",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1897,6 +1937,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,
@@ -1922,12 +1963,12 @@
       "lineChart": {
         "url": "/assets/charts/2026-06-03-hourly.svg",
         "dataUrl": "/content/history/2026-06-03-hourly.json",
-        "alt": "SPY hourly line for 2026-06-03, 09:30 to 16:00 ET. Execution not reviewed.",
+        "alt": "SPY hourly line for 2026-06-03, 09:30 to 16:00 ET. No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.",
         "caption": "Open 758.15 · Last bar close 754.19 · Range 753.57–758.80",
         "startLabel": "09:30 ET",
         "endLabel": "16:00 ET",
         "gapShort": "Hourly bars · not a minute path",
-        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no execution assessment.",
+        "gapNote": "The line joins the session open and each hourly bar’s close — eight points in all. Bar timestamps mark interval starts; the final interval ends at 16:00 ET. No interpolation between them and no minute-level price path. Trade colors use only supplied times and outcomes.",
         "notes": [
           "A thin line connects the session open and each hourly bar’s close, in the order they were observed. Height is scaled to this session."
         ]
@@ -1937,6 +1978,7 @@
         "label": "Unrecorded",
         "glyph": "—",
         "color": "#81929e",
+        "tradeSections": [],
         "setupRating": null,
         "ratingAsOf": null,
         "recordedAt": null,

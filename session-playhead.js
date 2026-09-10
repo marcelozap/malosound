@@ -80,6 +80,11 @@
         if (disposed) return;
         const seconds = clamp(Number.isFinite(audio.currentTime) ? audio.currentTime : 0, 0, data.durationSeconds);
         const p = position(data, seconds);
+        const tradeMinute = value => { const [h, m, s = 0] = value.split(':').map(Number); return h * 60 + m + s / 60 - 570; };
+        const activeOutcomes = new Set((data.tradeSections || []).filter(s => s.underlying === 'SPY' && tradeMinute(s.startTime) <= p.minute && p.minute < tradeMinute(s.endTime)).map(s => s.outcome));
+        const outcome = !p.gap && activeOutcomes.size === 1 ? [...activeOutcomes][0] : 'unrecorded';
+        const color = outcome === 'profit' ? '#e5b657' : outcome === 'loss' ? '#50b8f5' : '#81929e';
+        svg.style.setProperty('--trade-color', color);
         const ready = validDuration() && !invalid && !audio.error;
         article.classList.toggle('is-playing', ready && !audio.paused && !audio.ended && audio.readyState >= 3);
         toggle.disabled = invalid || !!audio.error;
@@ -96,7 +101,7 @@
         time.textContent = `${songClock(seconds)} / ${songClock(data.durationSeconds)}`;
         clock.textContent = marketClock(data.marketStartMinutes + p.minute);
         if (Math.floor(seconds) !== lastSecond || p.gap !== lastGap) {
-          note.textContent = p.gap ? 'Source gap' : '';
+          note.textContent = p.gap ? 'Source gap' : outcome === 'profit' ? 'Profitable trade' : outcome === 'loss' ? 'Losing trade' : 'Neutral';
           lastSecond = Math.floor(seconds); lastGap = p.gap;
         }
         toggle.textContent = audio.paused || audio.ended ? '▶' : 'Ⅱ';

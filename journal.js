@@ -80,7 +80,7 @@
     const hasChart = Boolean(chart && chart.url);
     const hasSong = Boolean(song && song.audioUrl);
     const sessionHours = chart?.sessionHours || '9:30 a.m.–4:00 p.m. ET';
-    article.dataset.tradeResult = executionState;
+    article.dataset.tradeResult = 'neutral';
     article.id = `session-${session.date}`;
     const header = el('header', 'day-heading session-cover');
     const aura = el('div', 'cover-aura'); aura.setAttribute('aria-hidden', 'true');
@@ -97,9 +97,8 @@
     const drawing = section('01', 'Market chart');
     const tradeStrip = el('div', 'trade-strip');
     const result = el('span', 'trade-result');
-    const glyph = el('span', '', performance.glyph); glyph.setAttribute('aria-hidden', 'true');
-    const stateText = executionState === 'unreviewed' ? 'Execution not reviewed' : `${EXECUTION_LABELS[executionState]}`;
-    result.append(glyph, el('span', '', `Execution · ${stateText}`));
+    const tradeSections = performance.tradeSections || [];
+    result.append(el('span', '', tradeSections.length ? 'Trade outcomes · Entry to exit' : 'No timed trade outcomes supplied.'));
     tradeStrip.append(result);
     drawing.append(tradeStrip);
     if (hasChart) {
@@ -121,15 +120,14 @@
       (chart.notes || []).forEach(p => method.append(el('p', '', p)));
       method.append(link('View the source observations ↗', chart.dataUrl));
       drawing.append(method);
-      const exec = performance.executionSections || [];
-      const keys = ['unreviewed'].concat(['good','misplayed','sat_out'].filter(k => exec.some(x => x.execution === k)));
+      const keys = [['#e5b657', 'Profitable trade'], ['#50b8f5', 'Losing trade'], ['#81929e', 'Neutral / no outcome overlay']];
       const legend = el('div', 'exec-legend'); legend.setAttribute('role', 'img');
-      legend.setAttribute('aria-label', 'Execution color key');
+      legend.setAttribute('aria-label', 'Trade outcome color key');
       keys.forEach(k => {
         const key = el('span', 'exec-key');
         const swatch = el('i');
-        swatch.style.background = EXECUTION_COLORS[k];
-        key.append(swatch, document.createTextNode(EXECUTION_LABELS[k]));
+        swatch.style.background = k[0];
+        key.append(swatch, document.createTextNode(k[1]));
         legend.append(key);
       });
       drawing.append(legend);
@@ -149,15 +147,21 @@
     if (performance.sourceLabel) recordNotes.append(el('p', '', `${performance.sourceLabel} · Net result recorded ${performance.recordedAt}.`));
     drawing.append(recordNotes);
     article.append(drawing);
+    const tradeNotes = el('details', 'journal-details');
+    tradeNotes.append(el('summary', '', 'Trade outcomes'), el('p', '', 'Gold shows winning trades; blue shows losing trades. Colors mark completed outcomes between supplied entry and exit times, not running profit or execution quality. Breakeven, unknown outcomes, conflicting overlaps, and time outside supplied trades stay neutral.'));
+    if (!tradeSections.length) tradeNotes.append(el('p', '', 'Missing timing is not evidence that no trades occurred.'));
+    tradeSections.forEach(s => tradeNotes.append(el('p', '', `${s.startTime}–${s.endTime} ET · ${s.outcome === 'profit' ? 'Profitable trade' : s.outcome === 'loss' ? 'Losing trade' : 'Neutral'}`)));
+    drawing.append(tradeNotes);
 
     const music = section('02', 'Original song', 'blue');
     if (hasSong) {
-      music.append(el('p', 'eyebrow blue', 'Original instrumental'));
+      music.append(el('p', 'eyebrow blue', 'One song. One session.'));
       music.append(player(song, Number(song.durationSeconds || duration) || 0));
       const meta = el('div', 'song-specs');
       ['03:15', `${song.tempoBpm || 80} BPM`, 'SPY → SOUND'].forEach(t => meta.append(el('span', '', t)));
       music.append(meta);
       const notes = sources(song, 'About the song');
+      notes.append(el('p', '', 'Musical interpretation of the trading day, not a trading result or forecast.'));
       notes.append(el('p', '', `SPY’s ${shortDate(session.date)}, ${sessionHours} session, compressed into a 3:15 instrumental.`));
       if (song.thesis) notes.append(el('p', '', song.thesis));
       if (song.summary) notes.append(el('p', '', song.summary));
@@ -248,7 +252,7 @@
     let month = monthOf(selected);
     if (!monthIndex.has(month)) month = months.includes(monthOf(selected)) ? monthOf(selected) : sessions.at(-1).date.slice(0, 7);
     const sidebar = el('aside', 'calendar-panel'); sidebar.setAttribute('aria-label', 'Journal calendar');
-    const art = el('div', 'calendar-art'); art.setAttribute('aria-hidden', 'true'); art.append(el('span', '', 'SIGNAL / SOUND'));
+    const art = el('div', 'calendar-art'); art.setAttribute('aria-hidden', 'true'); art.append(el('span', '', 'MARKET / MUSIC'));
     const calendar = el('div', 'calendar'); const stage = el('div', 'selected-session');
     const announced = el('p', 'sr-only'); announced.setAttribute('role', 'status'); announced.setAttribute('aria-live', 'polite');
     sidebar.append(art, calendar); root.replaceChildren(sidebar, stage, announced);
@@ -310,8 +314,7 @@
         const b = el('button', `calendar-day${available ? ' has-entry' : ' no-entry'}${key === selected ? ' is-selected' : ''}`, String(day));
         const row = byDate.get(key);
         if (row) {
-          const rowState = normalizeExecutionState(row.performance || row);
-          if (rowState) b.dataset.tradeResult = rowState;
+          b.dataset.tradeResult = 'neutral';
           if (row.hasChart === false) b.classList.add('no-chart');
           if (row.hasSong === false) b.classList.add('no-song');
         }

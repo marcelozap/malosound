@@ -126,7 +126,7 @@ def validate(data):
         raise ValueError('Invalid public trading journal.')
     days = {}
     for row in data['days']:
-        if not isinstance(row, dict) or set(row) != FIELDS:
+        if not isinstance(row, dict) or not FIELDS <= set(row) or set(row) - FIELDS - {'tradeSections'}:
             raise ValueError('Publish only the approved daily summary fields; no private trade data.')
         day = row['date']
         if not isinstance(day, str) or date.fromisoformat(day).isoformat() != day or day in days:
@@ -134,6 +134,9 @@ def validate(data):
         if row['outcome'] not in RESULTS or row['outcome'] == 'unrecorded':
             raise ValueError('A recorded day needs an explicit outcome.')
         recorded = timestamp(row['recordedAt'])
+        if 'tradeSections' in row:
+            from trade_overlays import validate as validate_overlays
+            row['tradeSections'] = validate_overlays(row['tradeSections'])
         if date.fromisoformat(day) > recorded.astimezone(ZoneInfo('America/New_York')).date():
             raise ValueError('A completed result cannot be dated after its recording date in New York.')
         if row['sourceKind'] not in ('user_reported', 'imported_result'):
@@ -211,6 +214,7 @@ def presentation(row):
     rating = row['setupRating'] if row else None
     sections = (row.get('executionSections') or []) if row else []
     return dict(outcome=outcome, label=label, glyph=glyph, color=color,
+                tradeSections=(row.get('tradeSections') or []) if row else [],
                 setupRating=rating, ratingAsOf=row['ratingAsOf'] if row else None,
                 recordedAt=row['recordedAt'] if row else None,
                 executionSections=sections,
@@ -221,19 +225,21 @@ def presentation(row):
 
 
 def strip(view):
-    return f'<div class="trade-strip"><span class="trade-result"><span aria-hidden="true">{view["glyph"]}</span> My day · {view["label"]}</span></div>'
+    from trade_overlays import note
+    return f'<div class="trade-strip"><span class="trade-result">{note([]) if not view.get("tradeSections") else "Trade outcomes · Entry to exit"}</span></div>'
 
 
 def legend(view):
     """Only the classes actually present on this day's line."""
-    present = ['unreviewed'] + [k for k in ('good', 'misplayed', 'sat_out')
-                                if any(s['execution'] == k for s in view['executionSections'])]
-    items = ''.join(f'<span class="exec-key"><i style="background:{EXECUTION[k][1]}"></i>{EXECUTION[k][0]}</span>' for k in present)
-    return f'<div class="exec-legend" role="img" aria-label="Execution color key">{items}</div>'
+    items = ''.join(f'<span class="exec-key"><i style="background:{color}"></i>{label}</span>' for color, label in
+                    [('#e5b657', 'Profitable trade'), ('#50b8f5', 'Losing trade'), ('#81929e', 'Neutral / no outcome overlay')])
+    return f'<div class="exec-legend" role="img" aria-label="Trade outcome color key">{items}</div>'
 
 
 def notes(view):
-    result = ['Daily scalps. Small steps. My record in color and sound.']
+    from trade_overlays import note, LABELS
+    result = [note(view.get('tradeSections', [])), view['execution']['label']]
+    result += [f'{s["startTime"]}–{s["endTime"]} ET · {LABELS[s["outcome"]]}' for s in view.get('tradeSections', [])]
     if view['executionSections']:
         for item in view['executionSections']:
             line = f'{item["startTime"]}–{item["endTime"]} ET · {EXECUTION[item["execution"]][0]}'
@@ -243,5 +249,5 @@ def notes(view):
     if view['executionAssessedAt']:
         result.append('Execution reviewed at ' + view['executionAssessedAt'] + ', after the close.')
     if view['sourceLabel']:
-        result.append(view['sourceLabel'] + ' · Net result recorded ' + view['recordedAt'] + '. The net result is a label here; it does not color the line.')
+        result.append(view['sourceLabel'] + ' · Net result recorded ' + view['recordedAt'] + '. The daily total does not determine individual trade colors.')
     return result

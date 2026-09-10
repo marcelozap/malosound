@@ -193,8 +193,24 @@ def colour_note(sections):
             'neutral. The line is never coloured by whether the price rose or fell.')
 
 
-def document(day, bars, sections=(), title='', detail='', low=None, high=None):
+def trade_lines(bars, trade_sections=(), low=None, high=None):
+    """Clip the existing market path at trade times without inventing price points."""
+    from trade_overlays import COLORS, intervals
+    base = lines(bars, (), low, high).replace(EXECUTION[NEUTRAL_EXECUTION][1], COLORS['unrecorded'])
+    pieces = [base]
+    for index, (start, end, outcome) in enumerate(intervals(trade_sections)):
+        if outcome not in ('profit', 'loss'):
+            continue
+        clip = f'trade-window-{index}'
+        pieces.append(f'<defs><clipPath id="{clip}"><rect x="{x_of(start):.4f}" y="0" '
+                      f'width="{x_of(end)-x_of(start):.4f}" height="{HEIGHT}"/></clipPath></defs>'
+                      f'<g clip-path="url(#{clip})">{base.replace(COLORS["unrecorded"], COLORS[outcome])}</g>')
+    return ''.join(pieces)
+
+
+def document(day, bars, sections=(), title='', detail='', low=None, high=None, trade_sections=()):
+    from trade_overlays import note
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
             f'aria-labelledby="t d"><title id="t">{title or f"SPY {day}"}</title>'
-            f'<desc id="d">{detail} {colour_note(sections)}</desc>'
-            f'{lines(bars, sections, low, high)}</svg>')
+            f'<desc id="d">{detail} {note(trade_sections)}</desc>'
+            f'{trade_lines(bars, trade_sections, low, high)}</svg>')
