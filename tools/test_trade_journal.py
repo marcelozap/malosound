@@ -276,8 +276,13 @@ class TradeJournalTests(unittest.TestCase):
             geometry, run_counts = {}, {}
             for name, sections, expected_colours in cases:
                 with self.subTest(case=name):
+                    # Each row records its own session after that session's close.
+                    # A single fixed timestamp went stale the moment the archive
+                    # was extended past it, because a result cannot be recorded
+                    # before the day it describes.
                     rows = [dict(date=s['date'], outcome='profit', setupRating=14,
-                                 ratingAsOf='2026-09-03T09:00:00-04:00', recordedAt=NOW,
+                                 ratingAsOf=f"{s['date']}T09:00:00-04:00",
+                                 recordedAt=f"{s['date']}T18:00:00-04:00",
                                  sourceKind='user_reported',
                                  executionSections=None, executionAssessedAt=None,
                                  **({'tradeSections': sections} if sections else {}))
