@@ -71,6 +71,42 @@
     wrap.append(audio, status, retry);
     return wrap;
   }
+  function tradeTimeline(sections) {
+    const minute = value => { const [h, m, s = 0] = value.split(':').map(Number); return h * 60 + m + s / 60 - 570; };
+    const labels = { profit: 'Win', loss: 'Loss', flat: 'Breakeven', unrecorded: 'Unknown' };
+    const wrap = el('section', 'trade-timeline');
+    wrap.setAttribute('aria-label', 'Recorded trade windows');
+    const heading = el('div', 'trade-timeline-heading');
+    heading.append(el('h4', '', 'Trades'), el('span', '', `${sections.length} timed`));
+    const axis = el('div', 'trade-timeline-axis');
+    axis.append(el('span', '', '09:30 ET'), el('span', '', '16:00 ET'));
+    const readout = el('p', 'trade-timeline-readout', 'Select a trade for its entry and exit.');
+    readout.setAttribute('role', 'status');
+    const rows = el('div', 'trade-timeline-rows');
+    sections.forEach((s, i) => {
+      const start = minute(s.startTime), end = minute(s.endTime);
+      if (!Number.isFinite(start) || !Number.isFinite(end) || start < 0 || end > 390 || end <= start) return;
+      const label = labels[s.outcome] || 'Unknown';
+      const row = el('button', 'trade-timeline-row');
+      row.type = 'button'; row.dataset.outcome = s.outcome;
+      row.setAttribute('aria-pressed', 'false');
+      row.setAttribute('aria-label', `Trade ${i + 1}, ${label}, ${s.startTime} to ${s.endTime} Eastern Time`);
+      const track = el('span', 'trade-timeline-track');
+      track.setAttribute('aria-hidden', 'true');
+      const span = el('span', 'trade-timeline-span');
+      span.style.left = `${start / 390 * 100}%`;
+      span.style.width = `${(end - start) / 390 * 100}%`;
+      track.append(span);
+      row.append(el('span', 'trade-timeline-number', String(i + 1)), track, el('span', 'trade-timeline-outcome', label));
+      row.addEventListener('click', () => {
+        rows.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === row)));
+        readout.textContent = `${i + 1} · ${label} · ${s.startTime}–${s.endTime} ET`;
+      });
+      rows.append(row);
+    });
+    wrap.append(heading, axis, rows, readout);
+    return wrap;
+  }
   function renderEntry(session, index, duration) {
     const article = el('article', 'day-entry');
     const performance = session.performance || { outcome: 'unrecorded', label: 'Unrecorded', glyph: '—', executionSections: [] };
@@ -101,6 +137,15 @@
     result.append(el('span', '', tradeSections.length ? 'Trade outcomes · Entry to exit' : 'No timed trade outcomes supplied.'));
     tradeStrip.append(result);
     drawing.append(tradeStrip);
+    const coverage = performance.tradeCoverage;
+    const partial = Array.isArray(coverage?.untimed) && coverage.untimed.length > 0;
+    if (partial) {
+      const coverageNote = el('details', 'trade-coverage');
+      coverageNote.append(el('summary', '', 'Partial coverage'),
+        el('p', '', `${(coverage.timed || []).join(', ')} timed trades; ${coverage.untimed.join(', ')} timing unavailable.`),
+        el('p', '', 'Uncoloured time means this record is incomplete there, not that no trading happened.'));
+      drawing.append(coverageNote);
+    }
     if (hasChart) {
       const figure = el('figure', 'session-drawing');
       if (chart.playheadUrl) figure.dataset.timelineSrc = chart.playheadUrl;
@@ -114,6 +159,7 @@
       const caption = el('figcaption', 'drawing-times');
       caption.append(el('span', '', chart.startLabel || '09:30 ET'), el('span', '', chart.endLabel || '16:00 ET'));
       stage.append(img); figure.append(stage, caption); drawing.append(figure);
+      if (tradeSections.length) drawing.append(tradeTimeline(tradeSections));
       if (chart.gapNote) drawing.append(el('p', 'data-gap', chart.gapShort || chart.gapNote));
       const method = el('details', 'journal-details'); method.append(el('summary', '', 'Behind the line'), el('p', '', chart.caption));
       if (chart.gapNote) method.append(el('p', '', chart.gapNote));
@@ -149,7 +195,7 @@
     article.append(drawing);
     const tradeNotes = el('details', 'journal-details');
     tradeNotes.append(el('summary', '', 'Trade outcomes'), el('p', '', 'Gold shows winning trades; blue shows losing trades. Colors mark completed outcomes between supplied entry and exit times, not running profit or execution quality. Breakeven, unknown outcomes, conflicting overlaps, and time outside supplied trades stay neutral.'));
-    if (!tradeSections.length) tradeNotes.append(el('p', '', 'Missing timing is not evidence that no trades occurred.'));
+    if (!tradeSections.length || partial) tradeNotes.append(el('p', '', 'Uncoloured time means this record is incomplete there, not that no trading happened.'));
     tradeSections.forEach(s => tradeNotes.append(el('p', '', `${s.startTime}–${s.endTime} ET · ${s.outcome === 'profit' ? 'Profitable trade' : s.outcome === 'loss' ? 'Losing trade' : 'Neutral'}`)));
     drawing.append(tradeNotes);
 
@@ -345,3 +391,72 @@
   });
 })();
 
+
+// Presentation only: no market points, trade outcomes or source records are changed.
+(() => {
+  'use strict';
+  if (!document.body.classList.contains('trading-room')) return;
+  // Remap the chart's three-colour palette in sRGB: neutral becomes pink;
+  // gold and blue are fixed points. Alpha and all chart geometry stay intact.
+  const neutral = [129, 146, 158], pink = [242, 140, 190];
+  const gold = [229, 182, 87], blue = [80, 184, 245];
+  const normal = [gold[1]*blue[2]-gold[2]*blue[1], gold[2]*blue[0]-gold[0]*blue[2], gold[0]*blue[1]-gold[1]*blue[0]];
+  const denominator = normal.reduce((sum, value, i) => sum + value*neutral[i], 0);
+  const matrix = pink.flatMap((value, row) => [
+    ...normal.map((component, column) => Number(row === column) + (value-neutral[row])*component/denominator), 0, 0
+  ]).concat([0, 0, 0, 1, 0]);
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const palette = document.createElementNS(svgNS, 'svg');
+  palette.setAttribute('width', '0'); palette.setAttribute('height', '0');
+  palette.setAttribute('aria-hidden', 'true'); palette.style.position = 'absolute';
+  const definitions = document.createElementNS(svgNS, 'defs');
+  const filter = document.createElementNS(svgNS, 'filter');
+  filter.id = 'neutral-line-pink'; filter.setAttribute('color-interpolation-filters', 'sRGB');
+  const transform = document.createElementNS(svgNS, 'feColorMatrix');
+  transform.setAttribute('type', 'matrix'); transform.setAttribute('values', matrix.join(' '));
+  filter.append(transform); definitions.append(filter); palette.append(definitions); document.body.prepend(palette);
+  const root = document.getElementById('current-editions');
+  const enhance = () => {
+    root?.querySelectorAll('.day-entry:not([data-room-ready])').forEach(article => {
+      article.dataset.roomReady = 'true';
+      article.querySelectorAll('.exec-legend [style]').forEach(marker => {
+        if (marker.style.backgroundColor === 'rgb(129, 146, 158)') marker.style.backgroundColor = '#f28cbe';
+      });
+      const date = article.id.match(/^session-(\d{4}-\d{2}-\d{2})$/)?.[1];
+      const heading = article.querySelector('.session-cover h2');
+      const music = article.querySelector('.chapter-02');
+      if (heading && date) {
+        const title = heading.textContent;
+        heading.textContent = new Date(date + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+        if (music?.querySelector('audio')) {
+          const name = document.createElement('h3'); name.className = 'room-track-title'; name.textContent = title;
+          music.prepend(name);
+        }
+      }
+      if (music && !music.querySelector('audio')) music.hidden = true;
+      article.querySelectorAll('.morning-fold > summary').forEach(summary => { summary.textContent = 'Context'; });
+    });
+  };
+  if (root) { new MutationObserver(enhance).observe(root, { childList: true, subtree: true }); enhance(); }
+  const eventsRoot = document.getElementById('scheduled-events');
+  if (eventsRoot) fetch('content/scheduled-events.json', { cache: 'no-cache' })
+    .then(response => { if (!response.ok) throw new Error('unavailable'); return response.json(); })
+    .then(data => {
+      if (data.schemaVersion !== 1 || !Array.isArray(data.events)) throw new Error('unsupported');
+      const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year:'numeric',month:'2-digit',day:'2-digit' }).format(new Date());
+      const events = data.events.filter(e => e.kind === 'scheduled' && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && e.date >= today && e.name && e.sourceUrl && e.retrievedAt)
+        .sort((a,b) => (a.date + (a.time || '99:99')).localeCompare(b.date + (b.time || '99:99')));
+      const fragment = document.createDocumentFragment();
+      events.slice(0,12).forEach(event => {
+        const url = new URL(event.sourceUrl); if (url.protocol !== 'https:') return;
+        const row = document.createElement('div'); row.className = 'room-event';
+        const date = document.createElement('time'); date.dateTime = event.date; date.textContent = new Date(event.date+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
+        const time = document.createElement('time'); time.textContent = event.timeKnown && event.time ? event.time + (event.timezone === 'America/New_York' ? '' : ' '+event.timezone) : 'TBA';
+        const detail = document.createElement('div'); const source = document.createElement('a'); source.href = url.href; source.textContent = event.name + ' \u2197';
+        const meta = document.createElement('small'); meta.textContent = [event.sourceOrg,event.status === 'confirmed' && event.official ? 'Scheduled' : 'Tentative','Checked '+event.retrievedAt.slice(0,10)].filter(Boolean).join(' / ');
+        detail.append(source,meta); row.append(date,time,detail); fragment.append(row);
+      });
+      eventsRoot.replaceChildren(fragment);
+      if (!eventsRoot.children.length) eventsRoot.textContent = 'No upcoming events supplied. This is not a complete calendar.';
+    }).catch(() => { eventsRoot.textContent = 'Schedule not available yet.'; eventsRoot.classList.add('room-muted'); });
+})();
