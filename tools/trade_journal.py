@@ -126,17 +126,28 @@ def validate(data):
         raise ValueError('Invalid public trading journal.')
     days = {}
     for row in data['days']:
-        if not isinstance(row, dict) or not FIELDS <= set(row) or set(row) - FIELDS - {'tradeSections'}:
+        if not isinstance(row, dict) or not FIELDS <= set(row) or set(row) - FIELDS - {'tradeSections', 'tradeCoverage'}:
             raise ValueError('Publish only the approved daily summary fields; no private trade data.')
         day = row['date']
         if not isinstance(day, str) or date.fromisoformat(day).isoformat() != day or day in days:
             raise ValueError('Invalid or duplicate trading date.')
-        if row['outcome'] not in RESULTS or row['outcome'] == 'unrecorded':
-            raise ValueError('A recorded day needs an explicit outcome.')
-        recorded = timestamp(row['recordedAt'])
         if 'tradeSections' in row:
             from trade_overlays import validate as validate_overlays
             row['tradeSections'] = validate_overlays(row['tradeSections'])
+        if 'tradeCoverage' in row:
+            from trade_overlays import validate_coverage
+            row['tradeCoverage'] = validate_coverage(row['tradeCoverage'])
+        # A day may carry timed trades without anyone stating the day's net
+        # result. The two are different facts: one trade's own outcome is not
+        # the day's total, and across more than one account a total is not even
+        # the same question. Requiring an aggregate before a single window can
+        # be drawn would force exactly the conflation this schema exists to
+        # prevent, so 'unrecorded' is allowed when the row carries trades.
+        if row['outcome'] not in RESULTS:
+            raise ValueError('A recorded day needs an explicit outcome.')
+        if row['outcome'] == 'unrecorded' and not row.get('tradeSections'):
+            raise ValueError('A recorded day needs an explicit outcome, or the timed trades it is recording.')
+        recorded = timestamp(row['recordedAt'])
         if date.fromisoformat(day) > recorded.astimezone(ZoneInfo('America/New_York')).date():
             raise ValueError('A completed result cannot be dated after its recording date in New York.')
         if row['sourceKind'] not in ('user_reported', 'imported_result'):
@@ -215,6 +226,7 @@ def presentation(row):
     sections = (row.get('executionSections') or []) if row else []
     return dict(outcome=outcome, label=label, glyph=glyph, color=color,
                 tradeSections=(row.get('tradeSections') or []) if row else [],
+                tradeCoverage=(row.get('tradeCoverage') or None) if row else None,
                 setupRating=rating, ratingAsOf=row['ratingAsOf'] if row else None,
                 recordedAt=row['recordedAt'] if row else None,
                 executionSections=sections,
@@ -225,8 +237,21 @@ def presentation(row):
 
 
 def strip(view):
+    """The one line above the chart.
+
+    When coverage is partial it says so here, where a reader actually looks,
+    rather than only in the image description a sighted reader never sees.
+    """
     from trade_overlays import note
-    return f'<div class="trade-strip"><span class="trade-result">{note([]) if not view.get("tradeSections") else "Trade outcomes · Entry to exit"}</span></div>'
+    coverage = view.get('tradeCoverage') or {}
+    if not view.get('tradeSections'):
+        headline = note([], None, view.get('tradeCoverage'))
+    else:
+        headline = 'Trade outcomes · Entry to exit'
+        if coverage.get('untimed'):
+            headline += (' · Partial coverage: ' + ', '.join(coverage.get('timed') or [])
+                         + ' timed; ' + ', '.join(coverage['untimed']) + ' timing unavailable')
+    return f'<div class="trade-strip"><span class="trade-result">{headline}</span></div>'
 
 
 def legend(view):
@@ -238,7 +263,8 @@ def legend(view):
 
 def notes(view):
     from trade_overlays import note, LABELS
-    result = [note(view.get('tradeSections', [])), view['execution']['label']]
+    result = [note(view.get('tradeSections', []), None, view.get('tradeCoverage')),
+              view['execution']['label']]
     result += [f'{s["startTime"]}–{s["endTime"]} ET · {LABELS[s["outcome"]]}' for s in view.get('tradeSections', [])]
     if view['executionSections']:
         for item in view['executionSections']:

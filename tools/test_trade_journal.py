@@ -17,6 +17,7 @@ import reconcile_xiv_archive
 import verify_published_charts
 import session_chart
 import trade_overlays
+import derive_trade_sections
 from record_trading_day import normalize, stage
 from trade_journal import EXECUTION, execution_summary, presentation, segments, validate
 
@@ -1260,6 +1261,150 @@ class TradeOverlayTests(unittest.TestCase):
         self.assertIn('hourly observations', hourly)
         self.assertNotIn('hourly observations', minute)
         self.assertNotEqual(hourly, minute, 'the empty state should not read identically everywhere')
+
+
+class TradeCoverageTests(unittest.TestCase):
+    """One record, more than one source. A source that cannot time its trades
+    leaves the record incomplete; it does not make the day idle."""
+
+    def test_a_source_is_a_broker_name_never_an_account(self):
+        self.assertEqual(trade_overlays.validate_coverage(dict(timed=['Webull'], untimed=['Schwab'])),
+                         dict(timed=['Webull'], untimed=['Schwab']))
+        # An account identifier must not reach public output by habit.
+        for bad in ('XXXX5208', 'Schwab 5208', '5208', ''):
+            with self.subTest(name=bad), self.assertRaises(ValueError):
+                trade_overlays.validate_coverage(dict(timed=[bad]))
+
+    def test_coverage_shape_is_enforced(self):
+        for bad in ({}, dict(timed=[]), dict(unknown=['Webull']), [], 'Webull'):
+            with self.subTest(value=bad), self.assertRaises(ValueError):
+                trade_overlays.validate_coverage(bad)
+        self.assertIsNone(trade_overlays.validate_coverage(None))
+
+    def test_partial_coverage_says_the_record_is_incomplete(self):
+        text = trade_overlays.coverage_note(dict(timed=['Webull'], untimed=['Schwab']))
+        self.assertIn('Partial coverage: Webull timed trades; Schwab timing unavailable.', text)
+        self.assertIn('not that no trading happened', text)
+
+    def test_full_coverage_adds_no_caveat(self):
+        self.assertEqual(trade_overlays.coverage_note(dict(timed=['Webull'])), '')
+        self.assertEqual(trade_overlays.coverage_note(None), '')
+
+    def test_the_visible_strip_states_partial_coverage_not_only_the_alt_text(self):
+        # A sighted reader never sees an image description, so the caveat has to
+        # appear in the page text too.
+        view = presentation(dict(date='2026-06-03', outcome='unrecorded', setupRating=None,
+                                 ratingAsOf=None, recordedAt=NOW, sourceKind='imported_result',
+                                 executionSections=None, executionAssessedAt=None,
+                                 tradeSections=[dict(startTime='09:48:48', endTime='09:51:01',
+                                                     outcome='profit', underlying='SPY',
+                                                     sourceKind='imported_result')],
+                                 tradeCoverage=dict(timed=['Webull'], untimed=['Schwab'])))
+        rendered = trade_journal.strip(view)
+        self.assertIn('Partial coverage', rendered)
+        self.assertIn('Webull timed', rendered)
+        self.assertIn('Schwab timing unavailable', rendered)
+        self.assertIn('Partial coverage', ' '.join(trade_journal.notes(view)))
+
+    def test_note_carries_the_caveat_whether_or_not_windows_exist(self):
+        coverage = dict(timed=['Webull'], untimed=['Schwab'])
+        drawn = trade_overlays.note([dict(startTime='10:00', endTime='11:00', outcome='profit',
+                                          underlying='SPY', sourceKind='imported_result')],
+                                    'hourly', coverage)
+        empty = trade_overlays.note([], 'hourly', coverage)
+        for text in (drawn, empty):
+            self.assertIn('Partial coverage', text)
+
+    # --- the ledger rule that lets trades stand on their own -------------------
+
+    def test_a_day_may_record_trades_without_declaring_a_day_result(self):
+        row = dict(date='2026-06-03', outcome='unrecorded', setupRating=None, ratingAsOf=None,
+                   recordedAt=NOW, sourceKind='imported_result',
+                   executionSections=None, executionAssessedAt=None,
+                   tradeSections=[dict(startTime='09:48:48', endTime='09:51:01', outcome='profit',
+                                       underlying='SPY', sourceKind='imported_result')])
+        days = validate(dict(schemaVersion=2, days=[row]))
+        self.assertEqual(len(days['2026-06-03']['tradeSections']), 1)
+        self.assertEqual(days['2026-06-03']['outcome'], 'unrecorded')
+
+    def test_an_unrecorded_day_with_no_trades_is_still_refused(self):
+        row = dict(date='2026-06-03', outcome='unrecorded', setupRating=None, ratingAsOf=None,
+                   recordedAt=NOW, sourceKind='imported_result',
+                   executionSections=None, executionAssessedAt=None)
+        with self.assertRaises(ValueError):
+            validate(dict(schemaVersion=2, days=[row]))
+
+
+class DeriveTradeSectionsTests(unittest.TestCase):
+    """Windows come from completed positions, and outcomes from their own fills."""
+
+    def fill(self, time, side, quantity, price, contract='SPY 756 call'):
+        return dict(time=time, side=side, quantity=quantity, price=price, contract=contract)
+
+    def test_scaling_out_is_one_window_not_three(self):
+        fills = [self.fill('11:25:02', 'Buy', 7, 0.99),
+                 self.fill('11:27:43', 'Sell', 5, 1.12),
+                 self.fill('11:29:20', 'Sell', 2, 1.18)]
+        public, private, _ = derive_trade_sections.derive(fills)
+        self.assertEqual(len(public), 1)
+        self.assertEqual((public[0]['startTime'], public[0]['endTime']), ('11:25:02', '11:29:20'))
+        self.assertEqual(private[0]['grossRealized'], 103.00)
+        self.assertEqual(public[0]['outcome'], 'profit')
+
+    def test_two_contracts_held_at_once_are_two_windows(self):
+        fills = [self.fill('09:48:48', 'Buy', 6, 1.45, 'SPY 756 call'),
+                 self.fill('09:49:21', 'Buy', 7, 1.90, 'SPY 755 call'),
+                 self.fill('09:50:55', 'Sell', 7, 2.05, 'SPY 755 call'),
+                 self.fill('09:51:01', 'Sell', 6, 1.55, 'SPY 756 call')]
+        public, _, _ = derive_trade_sections.derive(fills)
+        self.assertEqual(len(public), 2)
+        self.assertEqual(sorted((p['startTime'], p['endTime']) for p in public),
+                         [('09:48:48', '09:51:01'), ('09:49:21', '09:50:55')])
+
+    def test_reentering_the_same_contract_is_a_second_window(self):
+        fills = [self.fill('09:48:48', 'Buy', 6, 1.45),
+                 self.fill('09:51:01', 'Sell', 6, 1.55),
+                 self.fill('11:25:02', 'Buy', 7, 0.99),
+                 self.fill('11:29:20', 'Sell', 7, 1.18)]
+        public, _, _ = derive_trade_sections.derive(fills)
+        self.assertEqual([(p['startTime'], p['endTime']) for p in public],
+                         [('09:48:48', '09:51:01'), ('11:25:02', '11:29:20')])
+
+    def test_a_loss_is_a_loss_from_its_own_fills(self):
+        fills = [self.fill('10:00:00', 'Buy', 4, 2.00), self.fill('10:30:00', 'Sell', 4, 1.50)]
+        public, private, _ = derive_trade_sections.derive(fills)
+        self.assertEqual(private[0]['grossRealized'], -200.00)
+        self.assertEqual(public[0]['outcome'], 'loss')
+
+    def test_a_position_still_open_cannot_be_drawn(self):
+        fills = [self.fill('15:50:00', 'Buy', 3, 1.00)]
+        public, _, skipped = derive_trade_sections.derive(fills)
+        self.assertEqual(public, [])
+        self.assertIn('still open', skipped[0]['reason'])
+
+    def test_another_underlying_never_reaches_a_spy_chart(self):
+        fills = [self.fill('10:00:00', 'Buy', 1, 5.00, 'AAPL 230 call'),
+                 self.fill('10:30:00', 'Sell', 1, 6.00, 'AAPL 230 call')]
+        public, _, skipped = derive_trade_sections.derive(fills)
+        self.assertEqual(public, [])
+        self.assertIn('may not colour', skipped[0]['reason'])
+
+    def test_breakeven_is_recorded_but_not_coloured(self):
+        fills = [self.fill('10:00:00', 'Buy', 2, 1.00), self.fill('10:10:00', 'Sell', 2, 1.00)]
+        public, private, skipped = derive_trade_sections.derive(fills)
+        self.assertEqual(public, [])
+        self.assertEqual(private[0]['outcome'], 'flat')
+        self.assertIn('breakeven', skipped[0]['reason'])
+
+    def test_a_result_small_enough_for_fees_to_flip_is_flagged(self):
+        fills = [self.fill('10:00:00', 'Buy', 1, 1.00), self.fill('10:10:00', 'Sell', 1, 1.01)]
+        _, private, _ = derive_trade_sections.derive(fills)
+        self.assertTrue(private[0]['feeSensitive'], 'a one dollar gross result must be flagged')
+
+    def test_derived_sections_satisfy_the_public_schema(self):
+        fills = [self.fill('11:25:02', 'Buy', 7, 0.99), self.fill('11:29:20', 'Sell', 7, 1.18)]
+        public, _, _ = derive_trade_sections.derive(fills)
+        self.assertEqual(trade_overlays.validate(public), public)
 
 
 if __name__ == '__main__': unittest.main()

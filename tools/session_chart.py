@@ -209,9 +209,9 @@ def trade_lines(bars, trade_sections=(), low=None, high=None):
 
 
 def document(day, bars, sections=(), title='', detail='', low=None, high=None, trade_sections=(),
-             resolution=None):
+             resolution=None, coverage=None):
     from trade_overlays import note
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {WIDTH} {HEIGHT}" role="img" '
             f'aria-labelledby="t d"><title id="t">{title or f"SPY {day}"}</title>'
-            f'<desc id="d">{detail} {note(trade_sections, resolution)}</desc>'
+            f'<desc id="d">{detail} {note(trade_sections, resolution, coverage)}</desc>'
             f'{trade_lines(bars, trade_sections, low, high)}</svg>')

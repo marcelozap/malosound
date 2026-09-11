@@ -65,10 +65,11 @@ def redraw_archive_charts(data, trades):
             session['date'], bars, performance['executionSections'],
             title=f'SPY {session["date"]} {"hourly" if hourly else "minute"} line',
             detail=detail, trade_sections=performance['tradeSections'],
-            resolution='hourly' if hourly else 'minute'))
+            resolution='hourly' if hourly else 'minute',
+            coverage=performance['tradeCoverage']))
         chart['alt'] = (f'SPY {"hourly" if hourly else "minute"} line for {session["date"]}, '
                         f'09:30 to 16:00 ET. '
-                        f'{trade_overlay_note(performance["tradeSections"], "hourly" if hourly else "minute")}')
+                        f'{trade_overlay_note(performance["tradeSections"], "hourly" if hourly else "minute", performance["tradeCoverage"])}')
         if hourly:
             chart['gapNote'] = ('The line joins the session open and each hourly bar’s close — '
                                 'eight points in all. Bar timestamps mark interval starts; the '
@@ -123,7 +124,7 @@ def refresh():
         # and a boundary point is drawn in both runs so the line stays unbroken.
         drawn = session_chart.trade_lines(session_chart.bars_from(source),
                                           performance['tradeSections'], lo, hi)
-        colour_note = trade_overlay_note(performance['tradeSections'])
+        colour_note = trade_overlay_note(performance['tradeSections'], 'minute', performance['tradeCoverage'])
         svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 340" role="img" aria-labelledby="title desc"><title id="title">SPY line for {day}, 09:30 to 16:00 ET</title><desc id="desc">A thin line joins the session open and every observed minute close, 09:30 to 16:00 ET, without smoothing. {'Breaks mark missing source intervals: '+gap_times+'.' if gaps else 'All 390 minute bars are present.'} No axes; vertical scale is relative to this session. {colour_note} Marcelo's net result that day: {performance['label']}.</desc>{drawn}</svg>'''
         line_path = f'assets/charts/{day}-line.svg'
         timeline_path = f'assets/charts/{day}-timeline.json'

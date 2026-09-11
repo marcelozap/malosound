@@ -37,6 +37,55 @@ def validate(raw):
     return sorted(out, key=lambda row: minute(row['startTime']))
 
 
+COVERAGE_KEYS = {'timed', 'untimed'}
+# A source is a broker name. Digits are refused so an account number cannot
+# arrive here by habit or by a copied fixture; identifiers stay private.
+SOURCE_NAME = re.compile(r'[A-Za-z][A-Za-z ]{1,19}')
+
+
+def validate_coverage(raw):
+    """Which sources supplied timed trades for a day, and which could not.
+
+    This is one trading record drawn from more than one broker, so a source
+    that cannot supply execution times leaves the record incomplete rather
+    than making the day a different day.
+    """
+    if raw is None:
+        return None
+    if not isinstance(raw, dict) or not raw or set(raw) - COVERAGE_KEYS:
+        raise ValueError('tradeCoverage accepts only timed and untimed source lists.')
+    out = {}
+    for key in ('timed', 'untimed'):
+        names = raw.get(key)
+        if names is None:
+            continue
+        if not isinstance(names, (list, tuple)) or not names:
+            raise ValueError(f'tradeCoverage {key} must be a non-empty list of source names.')
+        for name in names:
+            if not isinstance(name, str) or not SOURCE_NAME.fullmatch(name):
+                raise ValueError('A trade source is a broker name without digits; '
+                                 'account identifiers stay in the private record.')
+        out[key] = list(names)
+    if not out:
+        raise ValueError('tradeCoverage must name at least one source.')
+    return out
+
+
+def coverage_note(coverage):
+    """The sentence that keeps an uncoloured stretch from reading as idle."""
+    if not coverage:
+        return ''
+    timed, untimed = coverage.get('timed') or [], coverage.get('untimed') or []
+    if not untimed:
+        return ''
+    parts = []
+    if timed:
+        parts.append(', '.join(timed) + ' timed trades')
+    parts.append(', '.join(untimed) + ' timing unavailable')
+    return (' Partial coverage: ' + '; '.join(parts) + '. Uncoloured time means this record is '
+            'incomplete there, not that no trading happened.')
+
+
 def intervals(sections):
     spans = [(minute(s['startTime']), minute(s['endTime']), s['outcome']) for s in validate(sections)]
     edges = sorted({0, 390} | {t for a, b, _ in spans for t in (a, b)})
@@ -48,7 +97,7 @@ def intervals(sections):
     return result
 
 
-def note(sections, resolution=None):
+def note(sections, resolution=None, coverage=None):
     """One sentence explaining what the line's color does, or why it does nothing.
 
     The empty case says which piece of evidence is absent rather than repeating
@@ -64,8 +113,9 @@ def note(sections, resolution=None):
         if resolution == 'hourly':
             missing += (' This session is drawn from hourly observations only, so it carries no '
                         'minute-level path for a trade window to sit on.')
-        return missing
+        return missing + coverage_note(coverage)
     return ('Gold marks profitable trades and blue losing trades, only between supplied entry and exit times. '
             'Color shows the completed trade outcome, not running profit, price direction, or execution quality. '
             'Breakeven, unknown outcomes, conflicting overlapping trades, and time outside supplied trades stay neutral. '
-            'Boundaries clip the displayed line; they do not add price observations.')
+            'Boundaries clip the displayed line; they do not add price observations.'
+            + coverage_note(coverage))
