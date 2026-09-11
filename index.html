@@ -7,7 +7,8 @@
   <title>MaloSound — price, played back.</title>
   <meta name="description" content="An audiovisual project exploring market price through music, color, and motion. By Marcelo Zapata.">
   <link rel="canonical" href="https://malosound.ai/">
-  <link rel="stylesheet" href="/site.css">
+  <link rel="stylesheet" href="/journal.css?v=orbit-journal-1">
+  <link rel="stylesheet" href="/site.css?v=orbit-journal-1">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="MaloSound">
   <meta property="og:title" content="MaloSound — price, played back.">
@@ -22,25 +23,40 @@
   <meta name="twitter:description" content="An audiovisual project exploring market price through music, color, and motion.">
   <meta name="twitter:image" content="https://malosound.ai/assets/brand/malosound-violet-ice-cover.png">
 </head>
-<body>
-  <a class="skip-link" href="#about">About the project</a>
-  <main>
-    <section class="hero" aria-labelledby="wordmark">
+<body class="trading-room orbit-home">
+  <a class="skip-link" href="#journal">Skip to sessions</a>
+  <main id="main">
+    <section class="identity-hero" aria-labelledby="wordmark">
       <div class="art" aria-hidden="true">
         <img src="/assets/brand/orbit-violet-ice.png" width="1672" height="941" alt="" fetchpriority="high">
       </div>
       <div class="signature">
         <h1 id="wordmark">malosound</h1>
         <p class="tagline">price, played back.</p>
+        <nav class="identity-actions" aria-label="Explore MaloSound"><a href="#journal">Open sessions <span aria-hidden="true">&#8595;</span></a><a href="#about">About</a></nav>
       </div>
     </section>
-    <section class="about" id="about" aria-label="About MaloSound">
-      <p>MaloSound is an audiovisual project in development, translating market price movement into music, color, and motion. A fixed set of rules connects price to musical notes and a visual orbit—the same data shapes what you hear and see.</p>
+    <div class="wrap">
+      <header class="room-nav">
+        <nav aria-label="Journal navigation"><a class="room-tab" href="#journal">Sessions</a><a class="room-tab" href="#ahead">Ahead</a></nav>
+        <a class="room-writing" href="https://www.marcelozapata.dev/">Writing &#8599;</a>
+      </header>
+      <section id="journal" class="room-journal" aria-label="Trading sessions">
+        <div id="current-editions" class="journal-layout"><p class="publishing-note" role="status">Opening the journal...</p></div>
+        <noscript><p><a href="reports/2026-09-04-spy-song.html">September 4 chart and recording</a>. Enable JavaScript for the calendar.</p></noscript>
+      </section>
+      <section id="ahead" class="room-ahead" aria-labelledby="ahead-heading"><div class="ahead-heading"><h2 id="ahead-heading">Ahead</h2><span>Scheduled / ET</span></div><div id="scheduled-events"><p class="room-muted">Schedule not loaded.</p></div></section>
+      <footer class="room-footer"><details><summary>About this record</summary><p>My trading record across Schwab and Webull. Missing data stays missing.</p><p>Gold: winning trades. Blue: losing trades. Outcomes are not execution grades. Only documented entry and exit times colour a trade window.</p><p>XIV is my options trading and market research initiative. Software and AI support the work; I make the decisions.</p><p>Music is my interpretation. Simulated examples are not trading records.</p></details><a href="market-map.html">Research &#8599;</a></footer>
+    </div>
+    <section class="identity-about" id="about" aria-label="About MaloSound">
+      <p>Market movement, charts, and original music. Explore the recorded sessions below the cover. The orbit is artwork; data-driven orbit playback is still in development.</p>
       <footer>
         <span>By Marcelo Zapata</span>
         <a href="https://www.marcelozapata.dev/">Writing &amp; projects <span aria-hidden="true">↗</span></a>
       </footer>
     </section>
   </main>
+  <script src="/session-playhead.js?v=orbit-journal-1" defer></script>
+  <script src="/journal.js?v=orbit-journal-1" defer></script>
 </body>
 </html>

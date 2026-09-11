@@ -1,28 +1,28 @@
-# MaloSound website — September 11, 2026
+# MaloSound: cover and journal
 
-The user explicitly selected: “MaloSound.ai — publish the new look and description.”
+September 11, 2026: Marcelo approved restoring the existing journal beneath the
+new orbit cover. This supersedes the earlier instruction to retire public journal
+routes. Preserve both the visual identity and the working archive.
 
-- Black ground, fine silver/violet/ice-blue filaments, one large lowercase wordmark.
-- The current approved phrase is **price, played back.** The later user clarification
-  restored this phrase; do not replace it with “bad sound. good price action.”
-- One project description, a Marcelo Zapata credit, and a “Writing & projects” link
-  to https://www.marcelozapata.dev/.
-- The public page is read-only. No forms, settings, calendar, session journal,
-  performance data, or cadence promises.
-- Artwork is generated visual identity. It must not be labeled live or presented
-  as a measured market session. The automatic audiovisual generator remains a
-  separate implementation; the page says the project is in development.
-- All retired journal, report, and trade-data routes are omitted from the build.
+- Keep the black ground, violet/ice-blue orbit, lowercase wordmark and
+  "price, played back." The cover remains artwork, not measured market data.
+- Open sessions leads directly to the calendar on the same page. Calendar browsing
+  stays primary; no All sessions list or blocking introduction.
+- The selected date's actual chart leads its entry. Recordings are optional.
+  September 3 and 4 are the two recorded dates in this release.
+- Keep hourly history distinct from minute data. Never invent points to make older
+  charts detailed. No entry and no drawable chart are different states.
+- Gold and blue denote documented winning and losing trade windows, not execution
+  quality. Neutral and conflicting windows stay neutral. Account coverage gaps
+  remain explicit. Execution assessments require Marcelo's separate review.
+- The orbit does not react to audio yet. That is a separate future feature, not a
+  promise of this release. Do not simulate activity or autoplay audio.
+- Preserve the writing link to https://www.marcelozapata.dev/.
+- Short copy; no opinions feed, signals-service framing or performance claims.
+  XIV is Marcelo's options trading and market research initiative.
+- Preserve original entries, chart provenance, recordings and publishing tools.
+- Public journal URLs are restored. Studio/music-lab pages remain retired.
 
-The art uses the approved violet/ice cover. The image-only edit removed its three
-text blocks while preserving the filaments and framing. The page renders the
-wordmark and phrase as selectable HTML text that scales for mobile screens.
-
-The built-in image generation tool produced the artwork. Its edit prompt was:
-
-> Remove all typography: small malosound.ai at top left, large malosound at bottom
-> left, and the tagline. Fill those areas with the same black. Preserve the fine
-> silver/white filaments, violet/indigo/cyan accents, asymmetric looping geometry,
-> framing, and artwork placement. No new trails, colors, or lettering.
-
-See `DEPLOY.md` for the exact public deployment command.
+The sanitized publication ledger stays tracked so public overlays can be rebuilt.
+Raw broker evidence, private reviews and audio masters need separate backups.
+See DEPLOY.md for production and publication boundaries.
