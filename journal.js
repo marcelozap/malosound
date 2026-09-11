@@ -447,16 +447,23 @@
       const events = data.events.filter(e => e.kind === 'scheduled' && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && e.date >= today && e.name && e.sourceUrl && e.retrievedAt)
         .sort((a,b) => (a.date + (a.time || '99:99')).localeCompare(b.date + (b.time || '99:99')));
       const fragment = document.createDocumentFragment();
-      events.slice(0,12).forEach(event => {
+      events.forEach(event => {
         const url = new URL(event.sourceUrl); if (url.protocol !== 'https:') return;
         const row = document.createElement('div'); row.className = 'room-event';
         const date = document.createElement('time'); date.dateTime = event.date; date.textContent = new Date(event.date+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
         const time = document.createElement('time'); time.textContent = event.timeKnown && event.time ? event.time + (event.timezone === 'America/New_York' ? '' : ' '+event.timezone) : 'TBA';
         const detail = document.createElement('div'); const source = document.createElement('a'); source.href = url.href; source.textContent = event.name + ' \u2197';
         const meta = document.createElement('small'); meta.textContent = [event.sourceOrg,event.status === 'confirmed' && event.official ? 'Scheduled' : 'Tentative','Checked '+event.retrievedAt.slice(0,10)].filter(Boolean).join(' / ');
-        detail.append(source,meta); row.append(date,time,detail); fragment.append(row);
+        detail.append(source,meta);
+        if (event.notes) { const note = document.createElement('small'); note.textContent = event.notes; detail.append(note); }
+        row.append(date,time,detail); fragment.append(row);
       });
       eventsRoot.replaceChildren(fragment);
+      if (eventsRoot.children.length) {
+        const coverage = document.createElement('p'); coverage.className = 'room-muted';
+        coverage.textContent = `${eventsRoot.children.length} supplied events. Times ET; tentative items labelled. Not a complete market calendar.`;
+        eventsRoot.prepend(coverage);
+      }
       if (!eventsRoot.children.length) eventsRoot.textContent = 'No upcoming events supplied. This is not a complete calendar.';
     }).catch(() => { eventsRoot.textContent = 'Schedule not available yet.'; eventsRoot.classList.add('room-muted'); });
 })();

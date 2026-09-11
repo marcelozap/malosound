@@ -14,6 +14,7 @@ from website_audio import stage_audio
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
+    'content/scheduled-events.json',
     'index.html', 'journal.css', 'journal.js', 'session-playhead.js', 'content/editions.json', 'content/trading-journal.json',
     'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
@@ -151,6 +152,26 @@ def validate_links():
 
 
 def main():
+    events = json.loads((ROOT / 'content/scheduled-events.json').read_text(encoding='utf-8'))
+    require(events.get('schemaVersion') == 1 and isinstance(events.get('events'), list), 'Invalid scheduled-events document')
+    event_ids = set()
+    for event in events['events']:
+        require(event.get('id') and event['id'] not in event_ids, 'Event IDs must be unique')
+        event_ids.add(event['id'])
+        require(date.fromisoformat(event['date']).isoformat() == event['date'], 'Invalid event date')
+        require(event.get('kind') == 'scheduled', 'Events cannot contain forecasts or results')
+        require(event.get('status') in ('confirmed', 'tentative') and event.get('official') is True, 'Primary-source event status required')
+        require(event.get('category') in ('fed', 'economic', 'earnings', 'treasury', 'exchange'), 'Unknown event category')
+        require(event.get('name') and event.get('sourceOrg') and event.get('retrievedAt'), 'Event provenance required')
+        date.fromisoformat(event['retrievedAt'][:10])
+        source = urlsplit(event.get('sourceUrl', ''))
+        require(source.scheme == 'https' and source.hostname and not source.username and not source.password, 'Safe HTTPS event source required')
+        require(type(event.get('timeKnown')) is bool and event.get('timezone') == 'America/New_York', 'Explicit ET time precision required')
+        if event['timeKnown']:
+            hour, minute = event['time'].split(':')
+            require(0 <= int(hour) <= 23 and 0 <= int(minute) <= 59 and f'{int(hour):02}:{int(minute):02}' == event['time'], 'Invalid event time')
+        else:
+            require('time' not in event, 'Unknown time must be omitted')
     # Regenerate the drawings and the archive first, then read what it wrote.
     # This used to run at import time, which made importing the builder edit
     # the checkout; a test that only wants check_day_audio should not do that.
