@@ -2,6 +2,130 @@
   "schemaVersion": 2,
   "days": [
     {
+      "date": "2026-06-01",
+      "outcome": "unrecorded",
+      "setupRating": null,
+      "ratingAsOf": null,
+      "recordedAt": "2026-09-11T13:07:12+00:00",
+      "sourceKind": "imported_result",
+      "executionSections": null,
+      "executionAssessedAt": null,
+      "tradeSections": [
+        {
+          "startTime": "09:45:57",
+          "endTime": "09:55:40",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "10:45:53",
+          "endTime": "10:53:52",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "11:07:42",
+          "endTime": "11:11:34",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "12:56:33",
+          "endTime": "13:03:43",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "13:31:58",
+          "endTime": "13:32:15",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "13:42:03",
+          "endTime": "13:43:23",
+          "outcome": "loss",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "13:43:50",
+          "endTime": "15:33:41",
+          "outcome": "loss",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "14:53:07",
+          "endTime": "15:49:04",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        }
+      ],
+      "tradeCoverage": {
+        "timed": [
+          "Webull"
+        ],
+        "untimed": [
+          "Schwab"
+        ]
+      }
+    },
+    {
+      "date": "2026-06-02",
+      "outcome": "unrecorded",
+      "setupRating": null,
+      "ratingAsOf": null,
+      "recordedAt": "2026-09-11T13:07:12+00:00",
+      "sourceKind": "imported_result",
+      "executionSections": null,
+      "executionAssessedAt": null,
+      "tradeSections": [
+        {
+          "startTime": "10:17:35",
+          "endTime": "10:19:55",
+          "outcome": "loss",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "10:59:21",
+          "endTime": "11:01:48",
+          "outcome": "loss",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "13:27:10",
+          "endTime": "13:27:45",
+          "outcome": "profit",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        },
+        {
+          "startTime": "15:39:51",
+          "endTime": "15:48:45",
+          "outcome": "loss",
+          "underlying": "SPY",
+          "sourceKind": "imported_result"
+        }
+      ],
+      "tradeCoverage": {
+        "timed": [
+          "Webull"
+        ],
+        "untimed": [
+          "Schwab"
+        ]
+      }
+    },
+    {
       "date": "2026-06-03",
       "outcome": "unrecorded",
       "setupRating": null,
