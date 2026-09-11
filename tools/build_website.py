@@ -1,22 +1,94 @@
 #!/usr/bin/env python3
-"""Validate and stage the exact public MaloSound project page. No data intake."""
+"""Validate the journal and stage only public website files for static hosting."""
+from datetime import date
 from html.parser import HTMLParser
+from html import escape
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+import json
 import shutil
+from urllib.parse import unquote, urlsplit
+from journal_pages import archive, refresh
+from trade_journal import validate as validate_trades
+from website_audio import stage_audio
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
-    'index.html', 'site.css', '404.html',
-    'assets/brand/orbit-violet-ice.png',
-    'assets/brand/malosound-violet-ice-cover.png',
+    # The visual identity published in a11c902 stays in the build alongside the journal.
+    'site.css', '404.html', 'assets/brand/orbit-violet-ice.png', 'assets/brand/malosound-violet-ice-cover.png',
+    'content/scheduled-events.json',
+    'index.html', 'journal.css', 'journal.js', 'session-playhead.js', 'content/editions.json', 'content/trading-journal.json',
+    'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
+    'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
+    'assets/brand/malosound-square.png',
+    'assets/brand/market-melody-v5.png',
+    'gateway/sample-01.audioanalysis.v1.json', 'gateway/sample-02.audioanalysis.v1.json',
 )
+PUBLIC_FILES += tuple(json.loads((ROOT / 'content/market-assets.json').read_text()))
 
 
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def validate_journal(data):
+    require(isinstance(data, dict), 'The journal must be a JSON object.')
+    sessions = data.get('sessions')
+    duration = data.get('songDurationSeconds')
+    require(isinstance(sessions, list), 'sessions must be a list.')
+    require(duration is None or (type(duration) is int and duration > 0),
+            'songDurationSeconds must be null or a positive integer.')
+    dates = set()
+    for session in sessions:
+        require(isinstance(session, dict), 'Each session must be an object.')
+        day = session.get('date', '')
+        parsed = date.fromisoformat(day)
+        require(parsed.isoformat() == day, 'Use YYYY-MM-DD session dates.')
+        # Recaps can be dated on weekends and exchange holidays.
+        require(day not in dates, f'{day}: duplicate session date.')
+        dates.add(day)
+        require(session.get('morning') or session.get('closing'), f'{day}: add at least one edition.')
+        if session.get('lineChart'):
+            for field in ('url', 'dataUrl'):
+                require(session['lineChart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: missing line asset')
+            require(session['lineChart'].get('alt') and session['lineChart'].get('caption'), f'{day}: line needs context')
+            if session['lineChart'].get('playheadUrl'):
+                require(session['lineChart']['playheadUrl'].lstrip('/') in PUBLIC_FILES, f'{day}: missing timeline')
+        for kind in ('preOpen', 'morning', 'closing', 'originalSong'):
+            entry = session.get(kind)
+            if entry is None:
+                continue
+            require(isinstance(entry, dict), f'{day}: {kind} must be an object.')
+            for key in ('title', 'summary'):
+                require(isinstance(entry.get(key), str) and entry[key].strip(),
+                        f'{day}: {kind}.{key} needs text.')
+            paragraphs = entry.get('paragraphs', [])
+            require(isinstance(paragraphs, list) and all(isinstance(p, str) and p.strip() for p in paragraphs),
+                    f'{day}: {kind}.paragraphs must contain nonempty strings.')
+            for field in ('reportUrl', 'mapUrl'):
+                if entry.get(field):
+                    require(entry[field].startswith('/') and '..' not in entry[field], f'{day}: safe local {field} required')
+                    require(entry[field].split('?')[0].lstrip('/') in PUBLIC_FILES, f'{day}: missing published {field}')
+            if entry.get('chart'):
+                for field in ('url','dataUrl'):
+                    require(entry['chart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: chart asset missing')
+                require(entry['chart'].get('alt') and entry['chart'].get('caption'), f'{day}: chart description required')
+            if entry.get('song'):
+                require(urlsplit(entry['song']['url']).scheme == 'https', f'{day}: HTTPS listening link required')
+                require(all(entry['song'].get(k) for k in ('title','artist','reason')), f'{day}: song metadata required')
+            if kind in ('closing', 'originalSong') and entry.get('audioUrl'):
+                require(duration is not None, 'Choose songDurationSeconds before publishing a song.')
+                require(type(entry.get('durationSeconds')) is int and entry['durationSeconds'] == duration,
+                        f'{day}: every song must have the series duration of {duration} seconds.')
+                require(isinstance(entry.get('audioUrl'), str), f'{day}: add an external audioUrl.')
+                audio = urlsplit(entry['audioUrl'])
+                require(audio.scheme == 'https' and audio.hostname and not audio.username and not audio.password,
+                        f'{day}: use a public HTTPS audio URL without embedded credentials.')
+
+            if kind in ('closing', 'originalSong'):
+                require(session.get('lineChart') or entry.get('audioUrl') or entry.get('song') or entry.get('marketClosed') is True or entry.get('songPending') is True,
+                        f'{day}: recording, reference song, marketClosed, or explicit songPending required')
 
 
 class Page(HTMLParser):
@@ -32,62 +104,116 @@ class Page(HTMLParser):
     def handle_starttag(self, tag, attrs):
         attrs = dict(attrs)
         if 'id' in attrs:
-            require(attrs['id'] not in self.ids, f'Duplicate id: {attrs["id"]}')
+            require(attrs['id'] not in self.ids, f'Duplicate HTML id: {attrs["id"]}')
             self.ids.add(attrs['id'])
         self.h1s += tag == 'h1'
         self.title |= tag == 'title'
         self.description |= tag == 'meta' and attrs.get('name') == 'description'
         self.viewport |= tag == 'meta' and attrs.get('name') == 'viewport'
-        require(tag not in ('script', 'iframe', 'form', 'input'), f'Unexpected active element: {tag}')
-        if tag == 'img':
-            require('alt' in attrs, 'Images need alt text.')
         for key in ('href', 'src'):
             if attrs.get(key):
                 self.links.append(attrs[key])
-        if tag == 'meta' and attrs.get('property') == 'og:image':
-            self.links.append(attrs.get('content', ''))
+        if tag == 'img':
+            require('alt' in attrs, 'Images need alt text.')
 
 
-def validate():
-    paths = {(ROOT / name).resolve() for name in PUBLIC_FILES}
+def check_day_audio(output, replacements):
+    """Each built day file's audioUrl, with whether it resolves to a staged local file."""
+    staged = set(replacements.values())
+    for path in sorted((output / 'content/days').glob('*.json')):
+        session = json.loads(path.read_text(encoding='utf-8'))
+        for kind in ('closing', 'originalSong'):
+            url = (session.get(kind) or {}).get('audioUrl')
+            if url:
+                yield path.name, url in staged
+
+
+def validate_links():
     pages = {}
     for name in PUBLIC_FILES:
         path = ROOT / name
-        require(path.is_file() and not path.is_symlink(), f'Missing or linked public file: {name}')
+        require(path.is_file(), f'Missing public file: {name}')
         if path.suffix == '.html':
             page = Page()
-            page.feed(path.read_text(encoding='utf-8'))
+            page.feed(path.read_text())
             require(page.h1s == 1 and page.title and page.description and page.viewport,
-                    f'{name}: requires one heading, title, description and viewport.')
+                    f'{name}: requires one h1, a title, description, and viewport.')
             pages[path.resolve()] = page
+    public_paths = {(ROOT / p).resolve() for p in PUBLIC_FILES}
     for path, page in pages.items():
         for raw in page.links:
             url = urlsplit(raw)
-            if url.netloc and url.hostname not in ('malosound.ai', 'www.malosound.ai'):
-                require(url.scheme == 'https', f'External links must use HTTPS: {raw}')
+            if url.scheme or url.netloc:
                 continue
-            require(not url.scheme or url.scheme == 'https', f'Unsupported URL: {raw}')
-            base = ROOT if url.path.startswith('/') else path.parent
-            target = (base / unquote(url.path).lstrip('/')).resolve() if url.path else path
+            target = ((ROOT if url.path.startswith('/') else path.parent) / unquote(url.path).lstrip('/')).resolve() if url.path else path
             if target.is_dir():
                 target /= 'index.html'
-            require(target in paths, f'Link omitted from public build: {raw}')
+            require(target in public_paths, f'{path.name}: link omitted from public build: {raw}')
             if url.fragment and target in pages:
-                require(unquote(url.fragment) in pages[target].ids, f'Missing anchor: {raw}')
+                require(unquote(url.fragment) in pages[target].ids, f'{path.name}: missing anchor: {raw}')
 
 
 def main():
-    validate()
-    require(not OUTPUT.is_symlink(), 'Refusing to replace a linked build directory.')
+    events = json.loads((ROOT / 'content/scheduled-events.json').read_text(encoding='utf-8'))
+    require(events.get('schemaVersion') == 1 and isinstance(events.get('events'), list), 'Invalid scheduled-events document')
+    event_ids = set()
+    for event in events['events']:
+        require(event.get('id') and event['id'] not in event_ids, 'Event IDs must be unique')
+        event_ids.add(event['id'])
+        require(date.fromisoformat(event['date']).isoformat() == event['date'], 'Invalid event date')
+        require(event.get('kind') == 'scheduled', 'Events cannot contain forecasts or results')
+        require(event.get('status') in ('confirmed', 'tentative') and event.get('official') is True, 'Primary-source event status required')
+        require(event.get('category') in ('fed', 'economic', 'earnings', 'treasury', 'exchange'), 'Unknown event category')
+        require(event.get('name') and event.get('sourceOrg') and event.get('retrievedAt'), 'Event provenance required')
+        date.fromisoformat(event['retrievedAt'][:10])
+        source = urlsplit(event.get('sourceUrl', ''))
+        require(source.scheme == 'https' and source.hostname and not source.username and not source.password, 'Safe HTTPS event source required')
+        require(type(event.get('timeKnown')) is bool and event.get('timezone') == 'America/New_York', 'Explicit ET time precision required')
+        if event['timeKnown']:
+            hour, minute = event['time'].split(':')
+            require(0 <= int(hour) <= 23 and 0 <= int(minute) <= 59 and f'{int(hour):02}:{int(minute):02}' == event['time'], 'Invalid event time')
+        else:
+            require('time' not in event, 'Unknown time must be omitted')
+    # Regenerate the drawings and the archive first, then read what it wrote.
+    # This used to run at import time, which made importing the builder edit
+    # the checkout; a test that only wants check_day_audio should not do that.
+    refresh()
+    data = json.loads((ROOT / 'content/editions.json').read_text())
+    validate_journal(data)
+    validate_links()
+    marker = OUTPUT / '.malosound-website-build'
     if OUTPUT.exists():
+        require(OUTPUT.resolve() == ROOT.resolve() / 'build', 'Refuse deletion outside the intended build directory.')
+        require(marker.exists() or not any(OUTPUT.iterdir()),
+                'build/ contains other work; preserve it before choosing a website output directory.')
         shutil.rmtree(OUTPUT)
     for name in PUBLIC_FILES:
-        target = OUTPUT / name
-        target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(ROOT / name, target)
-    actual = {str(p.relative_to(OUTPUT)) for p in OUTPUT.rglob('*') if p.is_file()}
-    require(actual == set(PUBLIC_FILES), 'Public output differs from the allowlist.')
-    print(f'Validated and staged {len(actual)} public files in {OUTPUT}')
+        destination = OUTPUT / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, destination)
+    marker.touch()
+    replacements = stage_audio(data, OUTPUT)
+    (OUTPUT / 'content/editions.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    # The archive is regenerated here, from the same object stage_audio just
+    # rewrote. The copies taken above still point at the external release URLs;
+    # the browser reads a day file, not editions.json, so without this the
+    # player would reach off-origin for audio that is already staged locally.
+    trades = validate_trades(json.loads((ROOT / 'content/trading-journal.json').read_text(encoding='utf-8')))
+    for name, text in archive(data, trades).items():
+        destination = OUTPUT / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(text, encoding='utf-8')
+    for name, local in check_day_audio(OUTPUT, replacements):
+        require(local, f'{name}: still points at an external recording after staging.')
+    for name in PUBLIC_FILES:
+        if name.endswith('.html'):
+            page = OUTPUT / name
+            text = page.read_text(encoding='utf-8')
+            for source, local in replacements.items():
+                text = text.replace(f'src="{escape(source, quote=True)}"', f'src="{local}"')
+            page.write_text(text, encoding='utf-8')
+    print(f'Website ready: {len(PUBLIC_FILES)} public files; journal and local links validated.')
+    print(f'{len(replacements)} verified MP3 recordings staged for same-origin playback.')
 
 
 if __name__ == '__main__':
