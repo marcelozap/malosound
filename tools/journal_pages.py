@@ -64,9 +64,11 @@ def redraw_archive_charts(data, trades):
         write(url.lstrip('/'), session_chart.document(
             session['date'], bars, performance['executionSections'],
             title=f'SPY {session["date"]} {"hourly" if hourly else "minute"} line',
-            detail=detail, trade_sections=performance['tradeSections']))
+            detail=detail, trade_sections=performance['tradeSections'],
+            resolution='hourly' if hourly else 'minute'))
         chart['alt'] = (f'SPY {"hourly" if hourly else "minute"} line for {session["date"]}, '
-                        f'09:30 to 16:00 ET. {trade_overlay_note(performance["tradeSections"])}')
+                        f'09:30 to 16:00 ET. '
+                        f'{trade_overlay_note(performance["tradeSections"], "hourly" if hourly else "minute")}')
         if hourly:
             chart['gapNote'] = ('The line joins the session open and each hourly bar’s close — '
                                 'eight points in all. Bar timestamps mark interval starts; the '

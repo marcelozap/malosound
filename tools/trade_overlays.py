@@ -19,7 +19,9 @@ def minute(value):
 def validate(raw):
     if raw is None:
         return []
-    if not isinstance(raw, list):
+    # A tuple is accepted because every renderer defaults to an empty one; a
+    # string or mapping is still refused, which is what this guard is for.
+    if not isinstance(raw, (list, tuple)):
         raise ValueError('tradeSections must be a list.')
     out = []
     for row in raw:
@@ -46,9 +48,23 @@ def intervals(sections):
     return result
 
 
-def note(sections):
+def note(sections, resolution=None):
+    """One sentence explaining what the line's color does, or why it does nothing.
+
+    The empty case says which piece of evidence is absent rather than repeating
+    one flat sentence on every date. A colored span needs three things at once —
+    an entry time, an exit time, and a settled outcome — and an hourly session
+    has a fourth problem on top, so the two cases read differently.
+    """
     if not sections:
-        return 'No timed trade outcomes supplied. The market line stays neutral; this does not mean no trades occurred.'
+        missing = ('No trade outcome is drawn on this line. Coloring a span needs all three of an entry '
+                   'time, an exit time, and a settled outcome from the broker record; where any one is '
+                   'missing, or where two sources disagree about the same trade, the span stays neutral. '
+                   'Neutral never means no trades occurred.')
+        if resolution == 'hourly':
+            missing += (' This session is drawn from hourly observations only, so it carries no '
+                        'minute-level path for a trade window to sit on.')
+        return missing
     return ('Gold marks profitable trades and blue losing trades, only between supplied entry and exit times. '
             'Color shows the completed trade outcome, not running profit, price direction, or execution quality. '
             'Breakeven, unknown outcomes, conflicting overlapping trades, and time outside supplied trades stay neutral. '

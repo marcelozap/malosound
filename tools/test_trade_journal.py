@@ -16,6 +16,7 @@ import trade_journal
 import reconcile_xiv_archive
 import verify_published_charts
 import session_chart
+import trade_overlays
 from record_trading_day import normalize, stage
 from trade_journal import EXECUTION, execution_summary, presentation, segments, validate
 
@@ -235,9 +236,22 @@ class TradeJournalTests(unittest.TestCase):
 
     # --------------------------------------------------------- rendered output
 
-    def test_market_path_gaps_and_audio_unchanged_across_execution_reviews(self):
+    def test_market_path_gaps_and_audio_unchanged_across_trade_overlays(self):
+        """A trade overlay may move colour and nothing else.
+
+        The day line is coloured by trade outcome, not by execution review:
+        gold profit, blue loss, grey everywhere else. Execution quality is a
+        separate axis and deliberately does not touch this line, so that gold
+        can mean exactly one thing.
+        """
         root = journal_pages.ROOT
         editions = json.loads((root/'content/editions.json').read_text(encoding='utf-8'))
+        GREY, GOLD, BLUE = '#81929e', '#e5b657', '#50b8f5'
+
+        def trade(start, end, outcome):
+            return dict(startTime=start, endTime=end, outcome=outcome,
+                        underlying='SPY', sourceKind='imported_result')
+
         with tempfile.TemporaryDirectory() as tmp:
             fixture = Path(tmp)
             (fixture/'content').mkdir()
@@ -249,55 +263,57 @@ class TradeJournalTests(unittest.TestCase):
                     dest = fixture/relative; dest.parent.mkdir(parents=True, exist_ok=True)
                     dest.write_bytes((root/relative).read_bytes())
             cases = [
-                ('none', {}, ['#50b8f5']),
-                ('one_good', reviewed(('10:00', '11:00', 'good')), ['#50b8f5', '#58dfa4', '#50b8f5']),
-                ('mixed', reviewed(('09:30', '10:00', 'sat_out'), ('10:00', '11:00', 'misplayed')),
-                 ['#e5b657', '#ff7188', '#50b8f5']),
+                ('none', None, {GREY}),
+                ('one_profit', [trade('10:00', '11:00', 'profit')], {GREY, GOLD}),
+                ('profit_and_loss', [trade('10:00', '11:00', 'profit'),
+                                     trade('13:00', '13:30', 'loss')], {GREY, GOLD, BLUE}),
             ]
             # The invariant is compared between the cases themselves rather than
-            # against a committed drawing. A review must move colour and nothing
+            # against a committed drawing. An overlay must move colour and nothing
             # else, and stating it that way means the test does not have to be
             # regenerated every time the drawing legitimately changes shape.
-            geometry, path_counts = {}, {}
-            for name, review, expected in cases:
+            geometry, run_counts = {}, {}
+            for name, sections, expected_colours in cases:
                 with self.subTest(case=name):
                     rows = [dict(date=s['date'], outcome='profit', setupRating=14,
                                  ratingAsOf='2026-09-03T09:00:00-04:00', recordedAt=NOW,
                                  sourceKind='user_reported',
-                                 executionSections=review.get('executionSections'),
-                                 executionAssessedAt=(f"{s['date']}T17:30:00-04:00" if review else None))
+                                 executionSections=None, executionAssessedAt=None,
+                                 **({'tradeSections': sections} if sections else {}))
                             for s in editions['sessions']]
                     (fixture/'content/trading-journal.json').write_text(json.dumps(dict(schemaVersion=2, days=rows)), encoding='utf-8')
                     (fixture/'content/editions.json').write_text(json.dumps(editions), encoding='utf-8')
                     with patch.object(journal_pages, 'ROOT', fixture): journal_pages.refresh()
                     for day in ('2026-09-03', '2026-09-04'):
                         svg = (fixture/f'assets/charts/{day}-line.svg').read_text(encoding='utf-8')
-                        # Every observed point across every run, colour stripped out.
-                        # A boundary point is drawn at the end of one run and the
-                        # start of the next, so consecutive duplicates collapse to one.
-                        points = []
-                        for d in re.findall(r'<path d="([^"]+)"', svg):
-                            for point in re.findall(r'[ML]([\d.]+,[\d.]+)', d):
-                                if not points or points[-1] != point:
-                                    points.append(point)
-                        self.assertTrue(points, f'{day} drew no line')
-                        geometry.setdefault(day, {})[name] = points
+                        # Distinct drawn geometry. A clipped overlay repeats the
+                        # base path verbatim, so the set of shapes must not grow.
+                        shapes = sorted(set(re.findall(r'<path d="([^"]+)"', svg)))
+                        self.assertTrue(shapes, f'{day} drew no line')
+                        geometry.setdefault(day, {})[name] = shapes
                         if name == 'none':
-                            path_counts[day] = svg.count('<path ')
-                        fills = re.findall(r'stroke="(#[0-9a-f]{6})"', svg)
-                        transitions = [c for i, c in enumerate(fills) if i == 0 or c != fills[i-1]]
-                        self.assertEqual(transitions, expected, f'{day} colour did not follow the review')
-                        # Music timing and the playhead map never move with a review.
-                        self.assertEqual(json.loads((fixture/f'assets/charts/{day}-timeline.json').read_text()),
-                                         json.loads((root/f'assets/charts/{day}-timeline.json').read_text()))
+                            run_counts[day] = len(shapes)
+                        self.assertEqual(set(re.findall(r'stroke="(#[0-9a-f]{6})"', svg)), expected_colours,
+                                         f'{day} colour did not follow the trade outcomes')
+                        # Music timing and the playhead map never move with an
+                        # overlay. The timeline may gain a tradeSections key so
+                        # playback can mark the window, but every geometry and
+                        # timing field must stay exactly where it was.
+                        built = json.loads((fixture/f'assets/charts/{day}-timeline.json').read_text())
+                        committed = json.loads((root/f'assets/charts/{day}-timeline.json').read_text())
+                        self.assertEqual({k: v for k, v in built.items() if k != 'tradeSections'},
+                                         {k: v for k, v in committed.items() if k != 'tradeSections'},
+                                         f'{day} playback geometry moved with the overlay')
+                        self.assertEqual(built.get('tradeSections', []), sections or [],
+                                         f'{day} timeline did not carry the supplied trades')
             for day, by_case in geometry.items():
                 shapes = list(by_case.values())
                 for other in shapes[1:]:
-                    self.assertEqual(shapes[0], other, f'{day} geometry moved when the review changed')
-            # 2026-09-03 carries one real source gap, so unreviewed it draws one
-            # more separate run than the gapless 2026-09-04. The hole is left
-            # open — the line breaks there, never bridged.
-            self.assertEqual(path_counts['2026-09-03'], path_counts['2026-09-04'] + 1)
+                    self.assertEqual(shapes[0], other, f'{day} geometry moved when the overlay changed')
+            # 2026-09-03 carries one real source gap, so it draws one more
+            # separate run than the gapless 2026-09-04. The hole is left open —
+            # the line breaks there, never bridged.
+            self.assertEqual(run_counts['2026-09-03'], run_counts['2026-09-04'] + 1)
 class ChartOnlySourceTests(unittest.TestCase):
     def test_source_without_music_builds_a_day_and_preserves_gaps(self):
         root = journal_pages.ROOT
@@ -1142,6 +1158,108 @@ class SessionLineTests(unittest.TestCase):
             self.assertIn('<path', svg)
             self.assertNotIn('<rect', svg)
             self.assertNotIn('<line', svg)
+
+
+class TradeOverlayTests(unittest.TestCase):
+    """Gold profit, blue loss, neutral everything else — and never an inference."""
+
+    GREY, GOLD, BLUE = '#81929e', '#e5b657', '#50b8f5'
+
+    def trade(self, start, end, outcome='profit', **changes):
+        value = dict(startTime=start, endTime=end, outcome=outcome,
+                     underlying='SPY', sourceKind='imported_result')
+        value.update(changes)
+        return value
+
+    # --- what may enter the ledger -------------------------------------------
+
+    def test_only_spy_may_colour_a_spy_chart(self):
+        # The whole reason this field exists: an AAPL-only trading day must not
+        # paint a window onto the SPY line.
+        with self.assertRaises(ValueError):
+            trade_overlays.validate([self.trade('10:00', '11:00', underlying='AAPL')])
+        self.assertEqual(len(trade_overlays.validate([self.trade('10:00', '11:00')])), 1)
+
+    def test_outcome_and_source_must_be_explicit(self):
+        for changes in (dict(outcome='win'), dict(outcome=None), dict(sourceKind='guessed'),
+                        dict(sourceKind='inferred_from_pnl')):
+            with self.subTest(changes=changes), self.assertRaises(ValueError):
+                trade_overlays.validate([self.trade('10:00', '11:00', **changes)])
+
+    def test_exit_must_follow_entry(self):
+        # No guessing an overnight hold or a half-filled span.
+        for start, end in (('11:00', '10:00'), ('10:00', '10:00')):
+            with self.subTest(span=(start, end)), self.assertRaises(ValueError):
+                trade_overlays.validate([self.trade(start, end)])
+
+    def test_times_must_sit_inside_the_regular_session(self):
+        for start, end in (('09:00', '10:00'), ('15:00', '16:30'), ('08:15', '09:00')):
+            with self.subTest(span=(start, end)), self.assertRaises(ValueError):
+                trade_overlays.validate([self.trade(start, end)])
+
+    def test_seconds_are_accepted_and_ordered(self):
+        rows = trade_overlays.validate([self.trade('12:44:35', '12:47:13'),
+                                        self.trade('09:48:48', '09:51:01')])
+        self.assertEqual([r['startTime'] for r in rows], ['09:48:48', '12:44:35'])
+
+    def test_unexpected_fields_are_refused(self):
+        with self.assertRaises(ValueError):
+            trade_overlays.validate([self.trade('10:00', '11:00', netPnl=412.0)])
+
+    # --- what the colours actually say ----------------------------------------
+
+    def test_time_outside_any_trade_is_neutral(self):
+        spans = trade_overlays.intervals([self.trade('10:00', '11:00')])
+        self.assertEqual([o for _, _, o in spans], ['unrecorded', 'profit', 'unrecorded'])
+
+    def test_conflicting_overlapping_trades_go_neutral(self):
+        # One profitable and one losing trade covering the same minute cannot
+        # both colour it, so that stretch says nothing rather than picking one.
+        spans = trade_overlays.intervals([self.trade('10:00', '12:00', 'profit'),
+                                          self.trade('10:30', '11:00', 'loss')])
+        covered = [o for a, b, o in spans if 60 <= a and b <= 90]
+        self.assertTrue(covered)
+        self.assertEqual(set(covered), {'unrecorded'})
+
+    def test_agreeing_overlapping_trades_keep_their_colour(self):
+        spans = trade_overlays.intervals([self.trade('10:00', '12:00', 'profit'),
+                                          self.trade('10:30', '11:00', 'profit')])
+        covered = [o for a, b, o in spans if 60 <= a and b <= 90]
+        self.assertEqual(set(covered), {'profit'})
+
+    def test_breakeven_never_takes_a_colour(self):
+        svg = session_chart.trade_lines([dict(startMinute=0, durationMinutes=390,
+                                              open=1, high=2, low=0, close=1)],
+                                        [self.trade('10:00', '11:00', 'flat')])
+        self.assertIn(self.GREY, svg)
+        for colour in (self.GOLD, self.BLUE):
+            self.assertNotIn(colour, svg)
+
+    def test_an_overlay_clips_and_never_adds_a_price_point(self):
+        bars = [dict(startMinute=m, durationMinutes=1, open=1, high=2, low=0, close=1)
+                for m in range(390)]
+        plain = session_chart.trade_lines(bars)
+        overlaid = session_chart.trade_lines(bars, [self.trade('10:00', '11:00')])
+        self.assertEqual(sorted(set(re.findall(r'<path d="([^"]+)"', plain))),
+                         sorted(set(re.findall(r'<path d="([^"]+)"', overlaid))),
+                         'an overlay must reuse the drawn path, not add geometry')
+        self.assertIn('clipPath', overlaid)
+        self.assertIn(self.GOLD, overlaid)
+
+    # --- the empty state ------------------------------------------------------
+
+    def test_empty_state_names_the_missing_evidence(self):
+        text = trade_overlays.note([])
+        for needed in ('entry time', 'exit time', 'settled outcome', 'disagree'):
+            self.assertIn(needed, text)
+        self.assertIn('Neutral never means no trades occurred.', text)
+
+    def test_hourly_empty_state_adds_its_own_limitation(self):
+        hourly = trade_overlays.note([], 'hourly')
+        minute = trade_overlays.note([], 'minute')
+        self.assertIn('hourly observations', hourly)
+        self.assertNotIn('hourly observations', minute)
+        self.assertNotEqual(hourly, minute, 'the empty state should not read identically everywhere')
 
 
 if __name__ == '__main__': unittest.main()
