@@ -1,3 +1,9 @@
+> **Current website:** MaloSound.ai — price, played back. The public site is the
+> new artwork and project description. The session generator is in development.
+> The journal is retired from the public build. See [website direction](docs/WEBSITE_DIRECTION.md)
+> and [exact deployment instructions](docs/DEPLOY.md). Older studio and journal
+> documentation below describes retained source, not active public pages.
+
 # MaloSound.ai
 
 **How I hear the market.**

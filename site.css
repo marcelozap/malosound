@@ -1,0 +1,38 @@
+:root { color-scheme: dark; font-family: Arial, Helvetica, sans-serif; color: #f7f7f5; background: #000; font-synthesis: none; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; text-underline-offset: .25em; }
+a:focus-visible { outline: 2px solid #a6b8ff; outline-offset: 6px; }
+.skip-link { position: absolute; z-index: 2; top: 1rem; left: 1rem; padding: .75rem 1rem; background: #000; transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+main { max-width: 1920px; margin-inline: auto; }
+.hero { position: relative; isolation: isolate; aspect-ratio: 16 / 9; min-height: 34rem; }
+.art { position: absolute; inset: 0; z-index: -1; overflow: hidden; }
+.art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.signature { position: absolute; left: 3%; right: 3%; bottom: 5.8%; }
+h1 { margin: 0; font-size: clamp(3.3rem, 11.8vw, 14rem); font-weight: 800; line-height: .92; letter-spacing: -.065em; }
+.tagline { margin: .16em 0 0; font-size: clamp(1.6rem, 3.7vw, 4.45rem); line-height: 1.15; letter-spacing: -.045em; }
+.about { padding: clamp(2.75rem, 6vw, 6rem) max(1.5rem, 6%) clamp(2rem, 4vw, 4rem); }
+.about > p { margin: 0; max-width: 48rem; color: #d5d5db; font-size: clamp(1.125rem, 1.65vw, 1.5rem); line-height: 1.55; }
+footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1.25rem 2rem; margin-top: 3rem; font-size: 1rem; line-height: 1.5; color: #a5a5af; }
+footer a { color: #e7e7ec; }
+.not-found { max-width: 44rem; margin: 0 auto; padding: 20vh 1.5rem; }
+.not-found h1 { font-size: clamp(3rem, 10vw, 6rem); }
+.not-found p { margin: 2rem 0; font-size: 1.125rem; line-height: 1.6; color: #d5d5db; }
+@media (max-width: 700px) {
+  .hero { aspect-ratio: auto; min-height: 35rem; min-height: min(44rem, 90svh); }
+  .art { bottom: 7.5rem; }
+  .art img { object-fit: cover; object-position: 45% top; }
+  .signature { left: 1.5rem; right: 1.5rem; bottom: 2rem; }
+  h1 { font-size: clamp(3.25rem, 13vw, 5.7rem); }
+  .tagline { font-size: clamp(1.55rem, 6.1vw, 2.7rem); }
+  .about { padding-top: 2rem; }
+  footer { margin-top: 2.5rem; flex-direction: column; gap: .75rem; }
+}
+@media (max-width: 380px) {
+  .signature { left: 1.125rem; right: 1.125rem; }
+  h1 { font-size: 13vw; }
+}
+@media (max-height: 450px) and (min-width: 701px) {
+  .hero { min-height: 30rem; }
+}

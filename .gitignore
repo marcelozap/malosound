@@ -110,3 +110,9 @@ data/receipts.jsonl
 # Internal-only operating brief: names the retired brand, the internal working
 # title, and internal verification rules. Keep it local, never on the public repo.
 docs/CREATIVE_TECH_PROOF_LANE.md
+
+# Private trading records never enter the public website or future commits.
+content/trades.json
+content/trading-journal.json
+private/
+.sites-runtime/
