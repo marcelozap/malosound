@@ -61,7 +61,73 @@
       "model": "oklch",
       "lightness": 0.8,
       "chroma": 0.16,
-      "note": "fixed constants; a renderer never chooses these per session"
+      "note": "fixed constants; a renderer never chooses these per session",
+      "palette": [
+        {
+          "landmark": 0,
+          "note": "A",
+          "semitone": 0,
+          "hue": 0,
+          "oklch": "oklch(0.8 0.16 0)",
+          "srgbFallback": "#ff8eb9"
+        },
+        {
+          "landmark": 1,
+          "note": "B",
+          "semitone": 2,
+          "hue": 60,
+          "oklch": "oklch(0.8 0.16 60)",
+          "srgbFallback": "#ffa242"
+        },
+        {
+          "landmark": 2,
+          "note": "C",
+          "semitone": 3,
+          "hue": 90,
+          "oklch": "oklch(0.8 0.16 90)",
+          "srgbFallback": "#e6b816"
+        },
+        {
+          "landmark": 3,
+          "note": "D",
+          "semitone": 5,
+          "hue": 150,
+          "oklch": "oklch(0.8 0.16 150)",
+          "srgbFallback": "#66da85"
+        },
+        {
+          "landmark": 4,
+          "note": "E",
+          "semitone": 7,
+          "hue": 210,
+          "oklch": "oklch(0.8 0.16 210)",
+          "srgbFallback": "#00d8f6"
+        },
+        {
+          "landmark": 5,
+          "note": "F",
+          "semitone": 8,
+          "hue": 240,
+          "oklch": "oklch(0.8 0.16 240)",
+          "srgbFallback": "#43c9ff"
+        },
+        {
+          "landmark": 6,
+          "note": "G",
+          "semitone": 10,
+          "hue": 300,
+          "oklch": "oklch(0.8 0.16 300)",
+          "srgbFallback": "#cea4ff"
+        },
+        {
+          "landmark": 7,
+          "note": "A",
+          "semitone": 12,
+          "hue": 0,
+          "oklch": "oklch(0.8 0.16 0)",
+          "srgbFallback": "#ff8eb9"
+        }
+      ]
     },
     "tieRule": "an exact midpoint selects the higher landmark",
     "flatRule": "high == low gives the tonic everywhere and a stationary orbit",

@@ -28,9 +28,12 @@ MARGIN = 80
 STROKE = 1.4
 
 
-def colour(document, hue):
-    c = document['method']['colour']
-    return f"oklch({c['lightness']} {c['chroma']} {hue})"
+def style(document):
+    """One class per note: the sRGB fallback first, then the exact OKLCH where supported."""
+    palette = document['method']['colour']['palette']
+    fallback = ''.join(f'.n{p["landmark"]}{{stroke:{p["srgbFallback"]}}}' for p in palette)
+    exact = ''.join(f'.n{p["landmark"]}{{stroke:{p["oklch"]}}}' for p in palette)
+    return f'<style>{fallback}@supports (color: oklch(0.5 0.1 0)){{{exact}}}</style>'
 
 
 def scale(document):
@@ -57,7 +60,7 @@ def render(document):
         ends.append(point(points[-1]))
         for a, b in zip(points, points[1:]):
             (x1, y1), (x2, y2) = point(a), point(b)
-            segments.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{colour(document, b["hue"])}"/>')
+            segments.append(f'<line class="n{b["landmark"]}" x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}"/>')
             drawn += 1
     method = document['method']['smoothing']
     missing = document['source']['missingMinutes']
@@ -75,7 +78,7 @@ def render(document):
              f'font-size="18" letter-spacing="1">SPY · {document["date"]} · velocity × acceleration · '
              f'{document["derivedObservations"]} observations · preview scaling</text>')
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {SIZE} {SIZE}" role="img" aria-labelledby="t d">'
-            f'<title id="t">SPY {document["date"]} orbit</title><desc id="d">{desc}</desc>'
+            f'<title id="t">SPY {document["date"]} orbit</title><desc id="d">{desc}</desc>{style(document)}'
             f'<rect width="{SIZE}" height="{SIZE}" fill="#000"/>'
             f'<g fill="none" stroke-width="{STROKE}" stroke-linecap="round" opacity="0.92">{"".join(segments)}</g>'
             f'{marks}{label}</svg>\n'), drawn

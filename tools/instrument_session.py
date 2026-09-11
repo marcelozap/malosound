@@ -30,6 +30,7 @@ output names that file and its source hash. Usage:
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 import numpy as np
@@ -119,6 +120,39 @@ def hue_of(index):
     return (SEMITONES[index] * HUE_PER_SEMITONE) % 360
 
 
+def oklch_to_srgb_hex(lightness, chroma, hue):
+    """An sRGB fallback for an OKLCH colour, gamut-clipped per channel.
+
+    Browsers that understand oklch() use the exact colour; this hex exists so a
+    renderer that does not is still visibly the right hue, and so the palette
+    can be checked numerically. The clip is the one approximation, and it only
+    matters where the fixed chroma leaves the sRGB gamut.
+    """
+    a = chroma * math.cos(math.radians(hue))
+    b = chroma * math.sin(math.radians(hue))
+    l_ = lightness + 0.3963377774 * a + 0.2158037573 * b
+    m_ = lightness - 0.1055613458 * a - 0.0638541728 * b
+    s_ = lightness - 0.0894841775 * a - 1.2914855480 * b
+    l, m, s = l_ ** 3, m_ ** 3, s_ ** 3
+    linear = (4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+              -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+              -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s)
+
+    def encode(value):
+        value = min(1.0, max(0.0, value))
+        value = 12.92 * value if value <= 0.0031308 else 1.055 * value ** (1 / 2.4) - 0.055
+        return round(value * 255)
+    return '#%02x%02x%02x' % tuple(encode(v) for v in linear)
+
+
+def palette():
+    """The eight notes as colours: exact OKLCH plus the sRGB fallback, fixed for every session."""
+    return [dict(landmark=i, note=NOTES[i], semitone=SEMITONES[i], hue=hue_of(i),
+                 oklch=f'oklch({OKLCH_LIGHTNESS} {OKLCH_CHROMA} {hue_of(i)})',
+                 srgbFallback=oklch_to_srgb_hex(OKLCH_LIGHTNESS, OKLCH_CHROMA, hue_of(i)))
+            for i in range(len(NOTES))]
+
+
 def note_events(runs):
     """Run-length encode the landmark sequence: one event per held note, per run."""
     events = []
@@ -185,7 +219,8 @@ def analyse(history, source_path=None):
             landmarks=list(LANDMARKS), notes=list(NOTES), semitones=list(SEMITONES),
             hueDegreesPerSemitone=HUE_PER_SEMITONE,
             colour=dict(model='oklch', lightness=OKLCH_LIGHTNESS, chroma=OKLCH_CHROMA,
-                        note='fixed constants; a renderer never chooses these per session'),
+                        note='fixed constants; a renderer never chooses these per session',
+                        palette=palette()),
             tieRule='an exact midpoint selects the higher landmark',
             flatRule='high == low gives the tonic everywhere and a stationary orbit',
             orbit=dict(x='velocity, price units per minute', y='acceleration, price units per minute squared',

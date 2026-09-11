@@ -122,5 +122,31 @@ class Sources(unittest.TestCase):
         json.dumps(doc)
 
 
+class Palette(unittest.TestCase):
+    def test_eight_entries_seven_colours_both_a_identical(self):
+        palette = inst.palette()
+        self.assertEqual([p['note'] for p in palette], list(inst.NOTES))
+        self.assertEqual(palette[0]['srgbFallback'], palette[7]['srgbFallback'])
+        self.assertEqual(len({p['srgbFallback'] for p in palette}), 7)
+        for p in palette:
+            self.assertRegex(p['srgbFallback'], r'^#[0-9a-f]{6}$')
+            self.assertEqual(p['oklch'], f"oklch({inst.OKLCH_LIGHTNESS} {inst.OKLCH_CHROMA} {p['hue']})")
+
+    def test_fallback_hues_point_the_right_way(self):
+        def rgb(hex_colour):
+            return tuple(int(hex_colour[i:i + 2], 16) for i in (1, 3, 5))
+        by_note = {p['hue']: rgb(p['srgbFallback']) for p in inst.palette()}
+        r, g, b = by_note[0]
+        self.assertTrue(r > g and r > b)          # A: red-pink
+        r, g, b = by_note[150]
+        self.assertTrue(g > r and g > b)          # D: green
+        r, g, b = by_note[240]
+        self.assertTrue(b > r and b > g)          # F: blue
+
+    def test_document_carries_the_palette(self):
+        doc = inst.analyse(history([100 + i * 0.1 for i in range(30)]))
+        self.assertEqual(doc['method']['colour']['palette'], inst.palette())
+
+
 if __name__ == '__main__':
     unittest.main()
