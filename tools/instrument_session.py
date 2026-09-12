@@ -3,27 +3,38 @@
 
 Marcelo's instrument draws an orbit from price velocity (x) and price
 acceleration (y), plays one of eight notes chosen by where the smoothed price
-sits between the window's lowest and highest close, and colours the line by
-that note's pitch. Everything here is fixed across sessions so that a tangled,
-awkward session stays tangled and awkward: nothing is tuned per day.
+sits between two frozen anchors, and colours the line by that note's pitch.
+Everything here is fixed across sessions so that a tangled, awkward session
+stays tangled and awkward: nothing is tuned per day.
 
-Smoothing is a centred Savitzky-Golay fit: eleven observations, cubic
-polynomial, one-minute spacing. The first and second derivatives come from the
-fitted polynomial. Five observations are lost at each edge of every contiguous
-run and are not extrapolated; a missing observation ends a run, so an overnight
-gap or a source gap is never bridged as if the minutes were adjacent.
+Two windows are computed from price and nothing else:
 
-The mapping anchors are the window's lowest and highest close, frozen once. The
-session open is not an anchor. Smoothed price is quantised to the nearest of
-eight landmarks; an exact midpoint tie selects the higher landmark. A flat
-window (high == low) produces the tonic everywhere and a stationary orbit.
+* The session: its 390 one-minute closes. Smoothing is a centred
+  Savitzky-Golay fit, eleven observations, cubic, one-minute spacing; the
+  first and second derivatives come from the fitted polynomial; five
+  observations are lost at each edge of every contiguous run and are never
+  extrapolated. A missing minute ends a run; nothing is bridged.
+* The parent window: the trailing five trading sessions ending with the
+  session, each sampled as five-minute closes (the close of each five-minute
+  block, at session minutes 4, 9, ..., 389). The same eleven-observation cubic
+  fit at five-minute spacing, five lost at each edge of each run. Each session
+  is its own run, so an overnight gap is never treated as five adjacent
+  minutes. A session that should exist but has no public minute file is
+  recorded as missing, never invented.
+
+The session is normalised against the parent window: the anchors are the
+lowest and highest five-minute close across the parent's observed sessions,
+frozen once. The session open is not an anchor. Smoothed price is quantised
+to the nearest of eight landmarks; an exact midpoint tie selects the higher
+landmark. A flat parent (high == low) gives the tonic everywhere and a
+stationary orbit. Changing what is visible never refits the mapping.
 
 Colour: A = 0 degrees, plus 30 degrees per semitone, modulo 360, so both A
 octaves share a hue. Lightness and chroma are fixed OKLCH constants carried in
-the output so a renderer never chooses them per session.
+the output beside a computed sRGB fallback, so a renderer never chooses them.
 
-Nothing here reads broker records. Input is a public minute history file;
-output names that file and its source hash. Usage:
+Nothing here reads broker records. Input is the public minute history; output
+names every source file and its hash. Usage:
 
     python -X utf8 tools/instrument_session.py --date 2026-09-04 [--write]
 """
@@ -31,17 +42,21 @@ import argparse
 import hashlib
 import json
 import math
+from datetime import date as date_type, timedelta
 from pathlib import Path
 
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 WINDOW = 11
 DEGREE = 3
 SPACING_MINUTES = 1
 EDGE_LOSS = WINDOW // 2
+SESSION_MINUTES = 390
+PARENT_SESSIONS = 5
+PARENT_SPACING_MINUTES = 5
 LANDMARKS = (0.0, 0.236, 0.382, 0.5, 0.618, 0.786, 0.886, 1.0)
 NOTES = ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'A')
 SEMITONES = (0, 2, 3, 5, 7, 8, 10, 12)
@@ -50,15 +65,37 @@ OKLCH_LIGHTNESS = 0.80
 OKLCH_CHROMA = 0.16
 # Two landmark distances that differ by less than this are a tie.
 TIE_TOLERANCE = 1e-12
+# NYSE full-day closures in 2026. Used only to count back trading sessions for
+# the parent window. A session the calendar expects but no public minute file
+# covers is recorded as missing, never skipped and never filled.
+EXCHANGE_HOLIDAYS_2026 = ('2026-01-01', '2026-01-19', '2026-02-16', '2026-04-03', '2026-05-25',
+                          '2026-06-19', '2026-07-03', '2026-09-07', '2026-11-26', '2026-12-25')
+
+
+def is_trading_day(day):
+    return day.weekday() < 5 and day.isoformat() not in EXCHANGE_HOLIDAYS_2026
+
+
+def sessions_ending(date_text, count=PARENT_SESSIONS):
+    """The parent window's trading sessions, oldest first, ending with the given date."""
+    day = date_type.fromisoformat(date_text)
+    if not is_trading_day(day):
+        raise ValueError(f'{date_text} is not a trading day.')
+    found = [day]
+    while len(found) < count:
+        day -= timedelta(days=1)
+        if is_trading_day(day):
+            found.append(day)
+    return [d.isoformat() for d in reversed(found)]
 
 
 def savitzky_golay_rows(window=WINDOW, degree=DEGREE):
     """Least-squares rows that turn one window of samples into polynomial coefficients.
 
     Row k gives the coefficient of t**k for the cubic fitted to the window, with
-    t running -5..5 around the centre. The value at the centre is row 0, the
-    slope is row 1 and the curvature term is row 2; the second derivative is
-    twice that term.
+    t running -5..5 around the centre in units of the spacing. The value at the
+    centre is row 0, the slope is row 1 and the curvature term is row 2; the
+    second derivative is twice that term.
     """
     half = window // 2
     t = np.arange(-half, half + 1, dtype=float)
@@ -82,11 +119,21 @@ def observations(history):
     return sorted(found.items())
 
 
-def contiguous_runs(pairs):
-    """Split observations wherever a minute is missing. Runs are never bridged."""
+def parent_observations(history):
+    """Five-minute closes: the close of each five-minute block, at minutes 4, 9, ..., 389.
+
+    A block whose closing minute is missing has no observation, so the parent's
+    run breaks there exactly as the session's does.
+    """
+    closes = dict(observations(history))
+    return [(m, closes[m]) for m in range(PARENT_SPACING_MINUTES - 1, SESSION_MINUTES, PARENT_SPACING_MINUTES) if m in closes]
+
+
+def contiguous_runs(pairs, step=1):
+    """Split observations wherever the next one is not exactly one step later. Runs are never bridged."""
     runs, current = [], []
     for minute, close in pairs:
-        if current and minute != current[-1][0] + 1:
+        if current and minute != current[-1][0] + step:
             runs.append(current)
             current = []
         current.append((minute, close))
@@ -98,8 +145,9 @@ def contiguous_runs(pairs):
 def normalise(smoothed, low, high):
     """Where a smoothed price sits between the frozen anchors, clamped to [0, 1].
 
-    A least-squares fit can overshoot the raw closes slightly at a sharp turn;
-    the clamp keeps that inside the mapping rather than inventing a ninth note.
+    A least-squares fit can overshoot the observed closes at a sharp turn, and a
+    session's one-minute closes can sit outside its parent's five-minute closes;
+    the clamp keeps both inside the mapping rather than inventing a ninth note.
     """
     if high == low:
         return 0.0
@@ -153,55 +201,91 @@ def palette():
             for i in range(len(NOTES))]
 
 
-def note_events(runs):
-    """Run-length encode the landmark sequence: one event per held note, per run."""
+def derive(run, spacing, low, high, flat):
+    """Smoothed points for one contiguous run, mapped against the frozen anchors."""
+    rows = savitzky_golay_rows()
+    values = np.array([close for _, close in run], dtype=float)
+    points = []
+    for centre in range(EDGE_LOSS, len(run) - EDGE_LOSS):
+        coefficients = rows @ values[centre - EDGE_LOSS:centre + EDGE_LOSS + 1]
+        smoothed = float(coefficients[0])
+        if flat:
+            velocity = acceleration = 0.0
+        else:
+            velocity = float(coefficients[1]) / spacing
+            acceleration = 2.0 * float(coefficients[2]) / spacing ** 2
+        position = normalise(smoothed, low, high)
+        index = quantize(position)
+        points.append(dict(minute=run[centre][0], close=run[centre][1],
+                           smoothed=round(smoothed, 6), velocity=round(velocity, 6),
+                           acceleration=round(acceleration, 6), position=round(position, 6),
+                           landmark=index, note=NOTES[index], semitone=SEMITONES[index], hue=hue_of(index)))
+    return points
+
+
+def run_document(run, points):
+    if len(run) < WINDOW:
+        return dict(startMinute=run[0][0], endMinute=run[-1][0], observations=len(run),
+                    points=[], note='shorter than the smoothing window; nothing derived')
+    return dict(startMinute=run[0][0], endMinute=run[-1][0], observations=len(run),
+                derivedFrom=run[EDGE_LOSS][0], derivedTo=run[-1 - EDGE_LOSS][0], points=points)
+
+
+def note_events(runs, span=1):
+    """Run-length encode the landmark sequence: one event per held note, per run.
+
+    An observation at minute m covers the `span` minutes ending at m, so a
+    parent event starts at the first minute of its first block and ends at the
+    closing minute of its last.
+    """
     events = []
     for run in runs:
         current = None
         for point in run['points']:
             if current and current['landmark'] == point['landmark']:
                 current['endMinute'] = point['minute']
-                current['minutes'] += 1
+                current['minutes'] += span
                 continue
-            current = dict(startMinute=point['minute'], endMinute=point['minute'], minutes=1,
+            current = dict(startMinute=point['minute'] - (span - 1), endMinute=point['minute'], minutes=span,
                            landmark=point['landmark'], note=point['note'],
                            semitone=point['semitone'], hue=point['hue'])
             events.append(current)
     return events
 
 
-def analyse(history, source_path=None):
+def analyse(history, source_path=None, parent=None):
+    """The instrument document for one session.
+
+    `parent` maps each of the parent window's session dates, oldest first, to
+    its history or to None when no public minute file exists. When omitted the
+    parent is the session alone, which is what a test wants and what a session
+    with no observed neighbours degrades to.
+    """
     pairs = observations(history)
     if not pairs:
         raise ValueError('No observations to analyse.')
-    closes = [close for _, close in pairs]
-    low, high = min(closes), max(closes)
+    day = history.get('date')
+    if parent is None:
+        parent = {day: history}
+    require_day = day in parent and parent[day] is not None
+    if not require_day:
+        raise ValueError('The parent window must end with the session itself.')
+
+    parent_closes = [close for hist in parent.values() if hist is not None for _, close in parent_observations(hist)]
+    if not parent_closes:
+        raise ValueError('The parent window has no observations.')
+    low, high = min(parent_closes), max(parent_closes)
     flat = high == low
-    rows = savitzky_golay_rows()
-    runs_out = []
-    for run in contiguous_runs(pairs):
-        if len(run) < WINDOW:
-            runs_out.append(dict(startMinute=run[0][0], endMinute=run[-1][0], observations=len(run),
-                                 points=[], note='shorter than the smoothing window; nothing derived'))
+
+    parent_runs = []
+    for session_date, hist in parent.items():
+        if hist is None:
             continue
-        values = np.array([close for _, close in run], dtype=float)
-        points = []
-        for centre in range(EDGE_LOSS, len(run) - EDGE_LOSS):
-            coefficients = rows @ values[centre - EDGE_LOSS:centre + EDGE_LOSS + 1]
-            smoothed = float(coefficients[0])
-            if flat:
-                velocity = acceleration = 0.0
-            else:
-                velocity = float(coefficients[1]) / SPACING_MINUTES
-                acceleration = 2.0 * float(coefficients[2]) / SPACING_MINUTES ** 2
-            position = normalise(smoothed, low, high)
-            index = quantize(position)
-            points.append(dict(minute=run[centre][0], close=run[centre][1],
-                               smoothed=round(smoothed, 6), velocity=round(velocity, 6),
-                               acceleration=round(acceleration, 6), position=round(position, 6),
-                               landmark=index, note=NOTES[index], semitone=SEMITONES[index], hue=hue_of(index)))
-        runs_out.append(dict(startMinute=run[0][0], endMinute=run[-1][0], observations=len(run),
-                             derivedFrom=run[EDGE_LOSS][0], derivedTo=run[-1 - EDGE_LOSS][0], points=points))
+        for run in contiguous_runs(parent_observations(hist), step=PARENT_SPACING_MINUTES):
+            parent_runs.append(dict(date=session_date, **run_document(run, derive(run, PARENT_SPACING_MINUTES, low, high, flat))))
+    parent_day_runs = [run for run in parent_runs if run['date'] == day]
+
+    runs_out = [run_document(run, derive(run, SPACING_MINUTES, low, high, flat)) for run in contiguous_runs(pairs)]
     all_points = [p for run in runs_out for p in run['points']]
     present = {minute for minute, _ in pairs}
     missing = [m for m in range(pairs[0][0], pairs[-1][0] + 1) if m not in present]
@@ -209,22 +293,38 @@ def analyse(history, source_path=None):
                   observations=len(pairs), firstMinute=pairs[0][0], lastMinute=pairs[-1][0], missingMinutes=missing)
     return dict(
         schemaVersion=SCHEMA_VERSION,
-        date=history.get('date'), symbol=history.get('symbol'),
+        date=day, symbol=history.get('symbol'),
         source=source,
         method=dict(
             smoothing=dict(kind='savitzky_golay', window=WINDOW, degree=DEGREE, spacingMinutes=SPACING_MINUTES,
                            edgeLossEachSide=EDGE_LOSS, derivatives='first and second derivatives of the fitted cubic',
                            gaps='a missing observation ends a run; runs are never bridged and edges are never extrapolated'),
-            anchors=dict(low=low, high=high, frozen=True, sessionOpenIsAnchor=False),
+            anchors=dict(low=low, high=high, frozen=True, sessionOpenIsAnchor=False,
+                         source='lowest and highest five-minute close across the observed sessions of the parent window'),
             landmarks=list(LANDMARKS), notes=list(NOTES), semitones=list(SEMITONES),
             hueDegreesPerSemitone=HUE_PER_SEMITONE,
             colour=dict(model='oklch', lightness=OKLCH_LIGHTNESS, chroma=OKLCH_CHROMA,
                         note='fixed constants; a renderer never chooses these per session',
                         palette=palette()),
             tieRule='an exact midpoint selects the higher landmark',
-            flatRule='high == low gives the tonic everywhere and a stationary orbit',
+            flatRule='a flat parent window (high == low) gives the tonic everywhere and a stationary orbit',
             orbit=dict(x='velocity, price units per minute', y='acceleration, price units per minute squared',
                        path='chronological polyline within each run; the last point is not joined to the first'),
+        ),
+        parent=dict(
+            definition='the trailing five trading sessions ending with this session, each sampled as five-minute closes',
+            sessions=list(parent.keys()),
+            observedSessions=[d for d, h in parent.items() if h is not None],
+            missingSessions=[d for d, h in parent.items() if h is None],
+            samplingMinutes=PARENT_SPACING_MINUTES,
+            observationMinutes='the close of each five-minute block: session minutes 4, 9, ..., 389',
+            observationsPerSession=SESSION_MINUTES // PARENT_SPACING_MINUTES,
+            smoothing=dict(kind='savitzky_golay', window=WINDOW, degree=DEGREE, spacingMinutes=PARENT_SPACING_MINUTES,
+                           edgeLossEachSide=EDGE_LOSS, gaps='each session is its own run; overnight is never bridged'),
+            runs=parent_runs,
+            derivedObservations=sum(len(run['points']) for run in parent_runs),
+            sessionDay=dict(date=day, derivedObservations=sum(len(run['points']) for run in parent_day_runs),
+                            noteEvents=note_events(parent_day_runs, span=PARENT_SPACING_MINUTES)),
         ),
         flat=flat,
         derivedObservations=len(all_points),
@@ -235,12 +335,31 @@ def analyse(history, source_path=None):
     )
 
 
-def history_path(date):
+def history_path(date_text):
     """The public minute file for a date, whichever pipeline wrote it."""
-    for candidate in (ROOT / f'content/history/{date}-minute.json', ROOT / f'assets/charts/{date}-spy-data.json'):
+    for candidate in (ROOT / f'content/history/{date_text}-minute.json', ROOT / f'assets/charts/{date_text}-spy-data.json'):
         if candidate.is_file():
             return candidate
-    raise FileNotFoundError(f'No minute history for {date}; hourly days carry too few observations for this mapping.')
+    raise FileNotFoundError(f'No minute history for {date_text}; hourly days carry too few observations for this mapping.')
+
+
+def load_history(path):
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
+def public_path(path):
+    return '/' + path.relative_to(ROOT).as_posix() if path.is_relative_to(ROOT) else str(path)
+
+
+def parent_histories(date_text):
+    """Histories for the parent window's sessions, None where no public minute file exists."""
+    found = {}
+    for session_date in sessions_ending(date_text):
+        try:
+            found[session_date] = load_history(history_path(session_date))
+        except FileNotFoundError:
+            found[session_date] = None
+    return found
 
 
 def render_json(document):
@@ -250,16 +369,22 @@ def render_json(document):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--date', required=True)
-    parser.add_argument('--history', type=Path, help='override the minute file')
+    parser.add_argument('--history', type=Path, help='override the minute file for the session itself')
     parser.add_argument('--write', action='store_true', help='write content/instrument/<date>.json')
     args = parser.parse_args(argv)
     path = args.history or history_path(args.date)
-    history = json.loads(path.read_text(encoding='utf-8'))
-    document = analyse(history, source_path='/' + path.relative_to(ROOT).as_posix() if path.is_relative_to(ROOT) else str(path))
+    history = load_history(path)
+    parent = parent_histories(args.date)
+    parent[args.date] = history
+    document = analyse(history, source_path=public_path(path), parent=parent)
     text = render_json(document)
+    p = document['parent']
     print(f"{args.date}: {document['source']['observations']} observations, {document['derivedObservations']} derived, "
           f"{len(document['runs'])} run(s), {len(document['noteEvents'])} note events, "
-          f"missing minutes {document['source']['missingMinutes'] or 'none'}, flat={document['flat']}")
+          f"missing minutes {document['source']['missingMinutes'] or 'none'}, flat={document['flat']}; "
+          f"parent {len(p['observedSessions'])}/{len(p['sessions'])} sessions observed, "
+          f"anchors {document['method']['anchors']['low']:.2f}-{document['method']['anchors']['high']:.2f}, "
+          f"{len(p['sessionDay']['noteEvents'])} parent events on the day")
     if args.write:
         target = ROOT / f'content/instrument/{args.date}.json'
         target.parent.mkdir(parents=True, exist_ok=True)

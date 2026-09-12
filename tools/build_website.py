@@ -7,8 +7,7 @@ from pathlib import Path
 import json
 import shutil
 from urllib.parse import unquote, urlsplit
-from journal_pages import archive, refresh
-from trade_journal import validate as validate_trades
+from journal_pages import refresh
 from website_audio import stage_audio
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,20 +15,53 @@ OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
     # The visual identity published in a11c902 stays in the build alongside the journal.
     'site.css', '404.html', 'assets/brand/orbit-violet-ice.png', 'assets/brand/malosound-violet-ice-cover.png',
-    'content/scheduled-events.json',
-    'index.html', 'journal.css', 'journal.js', 'session-playhead.js', 'content/editions.json', 'content/trading-journal.json',
-    'market-map.html', 'market-map.js', 'content/market-map.json', 'content/market-assets.json',
+    'index.html', 'journal.css', 'journal.js', 'session-playhead.js',
+    'market-map.html', 'market-map.js',
     'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
     'assets/brand/malosound-square.png',
     'assets/brand/market-melody-v5.png',
     'gateway/sample-01.audioanalysis.v1.json', 'gateway/sample-02.audioanalysis.v1.json',
 )
-PUBLIC_FILES += tuple(json.loads((ROOT / 'content/market-assets.json').read_text()))
+# Under content/ only the instrument documents are public. Everything else there
+# (editions, the day archive, minute and hourly history, the ledger, the events
+# snapshot, the map) stays in the repository and never reaches the output.
+PUBLIC_CONTENT_PREFIX = 'content/instrument/'
+PUBLIC_FILES += tuple(sorted(PUBLIC_CONTENT_PREFIX + p.name for p in (ROOT / 'content/instrument').glob('*.json')))
+PUBLIC_FILES += tuple(p for p in json.loads((ROOT / 'content/market-assets.json').read_text()) if not p.startswith('content/'))
 
 
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def available(path):
+    """A journal reference is satisfied by a public file, or by a repository file under content/.
+
+    content/ is not public apart from the instrument documents, so the journal's
+    own data files are checked for existence in the checkout, not for
+    publication. Anything outside content/ must still be in the allowlist.
+    """
+    name = path.split('?')[0].lstrip('/')
+    if name.startswith('content/'):
+        return (ROOT / name).is_file()
+    return name in PUBLIC_FILES
+
+
+def check_content_boundary(output):
+    """Prove that under content/ only the instrument documents were staged.
+
+    The allowlist is the first line; this is the second, so that a future entry
+    in market-assets.json or a stray write cannot put a day file, a history
+    file, the ledger or any trade record into the public output.
+    """
+    staged = sorted(p.relative_to(output).as_posix() for p in (output / 'content').rglob('*') if p.is_file())
+    expected = sorted(n for n in PUBLIC_FILES if n.startswith('content/'))
+    require(staged == expected, f'content/ boundary violated: {sorted(set(staged) ^ set(expected))}')
+    require(all(n.startswith(PUBLIC_CONTENT_PREFIX) for n in staged), 'Only content/instrument/*.json may be public.')
+    for path in output.rglob('*'):
+        require('trades' not in path.name and 'trading-journal' not in path.name, f'Trade record in public output: {path}')
+    return staged
 
 
 def validate_journal(data):
@@ -51,10 +83,10 @@ def validate_journal(data):
         require(session.get('morning') or session.get('closing'), f'{day}: add at least one edition.')
         if session.get('lineChart'):
             for field in ('url', 'dataUrl'):
-                require(session['lineChart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: missing line asset')
+                require(available(session['lineChart'][field]), f'{day}: missing line asset')
             require(session['lineChart'].get('alt') and session['lineChart'].get('caption'), f'{day}: line needs context')
             if session['lineChart'].get('playheadUrl'):
-                require(session['lineChart']['playheadUrl'].lstrip('/') in PUBLIC_FILES, f'{day}: missing timeline')
+                require(available(session['lineChart']['playheadUrl']), f'{day}: missing timeline')
         for kind in ('preOpen', 'morning', 'closing', 'originalSong'):
             entry = session.get(kind)
             if entry is None:
@@ -69,10 +101,10 @@ def validate_journal(data):
             for field in ('reportUrl', 'mapUrl'):
                 if entry.get(field):
                     require(entry[field].startswith('/') and '..' not in entry[field], f'{day}: safe local {field} required')
-                    require(entry[field].split('?')[0].lstrip('/') in PUBLIC_FILES, f'{day}: missing published {field}')
+                    require(available(entry[field]), f'{day}: missing published {field}')
             if entry.get('chart'):
                 for field in ('url','dataUrl'):
-                    require(entry['chart'][field].lstrip('/') in PUBLIC_FILES, f'{day}: chart asset missing')
+                    require(available(entry['chart'][field]), f'{day}: chart asset missing')
                 require(entry['chart'].get('alt') and entry['chart'].get('caption'), f'{day}: chart description required')
             if entry.get('song'):
                 require(urlsplit(entry['song']['url']).scheme == 'https', f'{day}: HTTPS listening link required')
@@ -193,18 +225,11 @@ def main():
         shutil.copy2(ROOT / name, destination)
     marker.touch()
     replacements = stage_audio(data, OUTPUT)
-    (OUTPUT / 'content/editions.json').write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    # The archive is regenerated here, from the same object stage_audio just
-    # rewrote. The copies taken above still point at the external release URLs;
-    # the browser reads a day file, not editions.json, so without this the
-    # player would reach off-origin for audio that is already staged locally.
-    trades = validate_trades(json.loads((ROOT / 'content/trading-journal.json').read_text(encoding='utf-8')))
-    for name, text in archive(data, trades).items():
-        destination = OUTPUT / name
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(text, encoding='utf-8')
-    for name, local in check_day_audio(OUTPUT, replacements):
-        require(local, f'{name}: still points at an external recording after staging.')
+    # Nothing under content/ is written into the output beyond the copied
+    # instrument documents: no editions.json, no day archive, no ledger. The
+    # journal is still regenerated and validated in the checkout above; it is
+    # simply not published.
+    staged_content = check_content_boundary(OUTPUT)
     for name in PUBLIC_FILES:
         if name.endswith('.html'):
             page = OUTPUT / name
@@ -212,7 +237,8 @@ def main():
             for source, local in replacements.items():
                 text = text.replace(f'src="{escape(source, quote=True)}"', f'src="{local}"')
             page.write_text(text, encoding='utf-8')
-    print(f'Website ready: {len(PUBLIC_FILES)} public files; journal and local links validated.')
+    print(f'Website ready: {len(PUBLIC_FILES)} public files; journal and local links validated; '
+          f'content/ limited to {len(staged_content)} instrument documents.')
     print(f'{len(replacements)} verified MP3 recordings staged for same-origin playback.')
 
 
