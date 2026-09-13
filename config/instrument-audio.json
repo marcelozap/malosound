@@ -1,0 +1,58 @@
+[
+  {
+    "date": "2026-08-31",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-08-31-house.mp3",
+    "sha256": "ee567eb55757bb12c59ef84c5484b11db8bf80bfade8de8621bffaadece9a6dd",
+    "bytes": 3901171,
+    "documentSha256": "202530570a659735dfe50a9e6f5db15ff436e0c90db5bc93aa9793874bb440e4"
+  },
+  {
+    "date": "2026-09-01",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-01-house.mp3",
+    "sha256": "86560b947f1f38136e831dccc11130f67eefab9ebc4a0bfe5a9b9b90a2461d70",
+    "bytes": 3901171,
+    "documentSha256": "ff488449c62c6a3bc490b231e0371454907b317d09bc1d8e0a285b19735f0811"
+  },
+  {
+    "date": "2026-09-02",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-02-house.mp3",
+    "sha256": "b13e95260ce02e7f20d13a5f2ce834f63a940f04bf1d88cddc6860326ce9fab2",
+    "bytes": 3901171,
+    "documentSha256": "e32907e76b6cf82a960e8875a470b531f8159c4c5fc4839cb7eec331fdc1b1e8"
+  },
+  {
+    "date": "2026-09-03",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-03-house.mp3",
+    "sha256": "fa7b37665b319a7133c8d69d003bb80d2252f9f5d34b2747cab57dc8b71c08e2",
+    "bytes": 3901171,
+    "documentSha256": "b50b573d93836dafa4a97ef459a336bc0f4463f10cac0e3af2cb1e0ae47b5f8d"
+  },
+  {
+    "date": "2026-09-04",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-04-house.mp3",
+    "sha256": "b7c497b0faa47553732634d3088133ed07b65e07a445c56aab423ca1bcc67155",
+    "bytes": 3901171,
+    "documentSha256": "e551577f715d2002eed50ff3e647022b5ce5a7ab5daa2c14659015ff08bca99f"
+  },
+  {
+    "date": "2026-09-08",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-08-house.mp3",
+    "sha256": "257c5003f0121282d2db12ddfa47b25319aa8c475ee23cf2918cd3756f10daae",
+    "bytes": 3901171,
+    "documentSha256": "271ca67c7adb1c4148312d249c2752dd8b42b583b777d07e27a1d62183db33cc"
+  },
+  {
+    "date": "2026-09-09",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-09-house.mp3",
+    "sha256": "ad9f3e7de4c9a7c10778e927e85096c7b274c9a5418399e390b9da293dc1b79f",
+    "bytes": 3901171,
+    "documentSha256": "bd9decc88ae398aef7c8be354ce939e9f579b320dc387fc932919ed7ec091afe"
+  },
+  {
+    "date": "2026-09-10",
+    "url": "https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/2026-09-10-house.mp3",
+    "sha256": "39d4119aad59385117e503b0afb5f1f0ca425963ee10ed6a4a63fceb75e9ae89",
+    "bytes": 3901171,
+    "documentSha256": "c304cf9dc66079f4b2914453f5ec3f68bfab74c9449188b9ff3969b327a5a936"
+  }
+]

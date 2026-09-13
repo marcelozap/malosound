@@ -3,60 +3,469 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#101c43">
   <title>MaloSound — price, played back.</title>
-  <meta name="description" content="An audiovisual project exploring market price through music, color, and motion. By Marcelo Zapata.">
+  <meta name="description" content="Market movement performed as two synchronized voices and a price-derived orbit.">
   <link rel="canonical" href="https://malosound.ai/">
-  <link rel="stylesheet" href="/journal.css?v=orbit-journal-1">
-  <link rel="stylesheet" href="/site.css?v=orbit-journal-1">
+  <link rel="stylesheet" href="/site.css?v=instrument-release-20260913">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="MaloSound">
   <meta property="og:title" content="MaloSound — price, played back.">
-  <meta property="og:description" content="An audiovisual project exploring market price through music, color, and motion. By Marcelo Zapata.">
+  <meta property="og:description" content="Market movement through sound, color, and motion.">
   <meta property="og:url" content="https://malosound.ai/">
   <meta property="og:image" content="https://malosound.ai/assets/brand/malosound-violet-ice-cover.png">
-  <meta property="og:image:width" content="1672">
-  <meta property="og:image:height" content="941">
-  <meta property="og:image:alt" content="MaloSound — price, played back. Silver, violet, and ice-blue light trails on black.">
+  <meta property="og:image:alt" content="MaloSound visual identity: luminous filaments on black. Artwork, not a measured session.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MaloSound — price, played back.">
-  <meta name="twitter:description" content="An audiovisual project exploring market price through music, color, and motion.">
   <meta name="twitter:image" content="https://malosound.ai/assets/brand/malosound-violet-ice-cover.png">
 </head>
-<body class="trading-room orbit-home">
-  <a class="skip-link" href="#journal">Skip to sessions</a>
-  <main id="main">
-    <section class="identity-hero" aria-labelledby="wordmark">
-      <div class="art" aria-hidden="true">
-        <img src="/assets/brand/orbit-violet-ice.png" width="1672" height="941" alt="" fetchpriority="high">
-      </div>
-      <div class="signature">
-        <h1 id="wordmark">malosound</h1>
-        <p class="tagline">price, played back.</p>
-        <nav class="identity-actions" aria-label="Explore MaloSound"><a href="#journal">Open sessions <span aria-hidden="true">&#8595;</span></a><a href="#about">About</a></nav>
-      </div>
-    </section>
-    <div class="wrap">
-      <header class="room-nav">
-        <nav aria-label="Journal navigation"><a class="room-tab" href="#journal">Sessions</a><a class="room-tab" href="#ahead">Ahead</a></nav>
-        <a class="room-writing" href="https://www.marcelozapata.dev/">Writing &#8599;</a>
-      </header>
-      <section id="journal" class="room-journal" aria-label="Trading sessions">
-        <div id="current-editions" class="journal-layout"><p class="publishing-note" role="status">Opening the journal...</p></div>
-        <noscript><p><a href="reports/2026-09-04-spy-song.html">September 4 chart and recording</a>. Enable JavaScript for the calendar.</p></noscript>
+<body>
+  <a class="skip-link" href="#transport">Skip to playback</a>
+  <main>
+    <div class="player-shell">
+      <header class="stage-identity"><div class="brand"><div class="brand-signature"><h1>malosound</h1></div><p>price, played back.</p></div><div class="tracker" role="group" aria-label="Session, recorded price and note at the playhead"><span id="session-label">Loading session</span><span class="tracker-reading"><span id="live-price" aria-live="off" title="Recorded one-minute close, not a live quote">--</span><span id="live-note" title="Note at the playhead">—</span></span></div></header>
+      <figure class="instrument" aria-labelledby="session-label">
+        <canvas id="orbit" role="img" aria-label="Price-derived orbit. Loading session." aria-describedby="orbit-description"></canvas>
+        <p class="sr-only" id="orbit-description">Horizontal movement is price velocity; vertical movement is acceleration. Line color follows musical pitch. Paths stay open and never bridge missing observations.</p>
+      </figure>
+      <section id="transport" class="transport" aria-label="Playback">
+        <button id="listen" title="Play / pause" type="button" aria-pressed="false" disabled>Listen</button>
+        <span id="clock" role="timer" aria-label="Elapsed time and duration">0:00 / 3:15</span>
+        <progress id="progress" max="195" value="0" aria-hidden="true"></progress>
+        <div class="sound-choices" role="group" aria-label="Sound">
+          <button type="button" data-sound="pure" title="Notes: two price voices" aria-label="Notes: two price voices" aria-pressed="true" disabled>Notes</button>
+          <button type="button" data-sound="house" title="House: the same notes, arranged with a beat" aria-label="House: the same notes, arranged with a beat" aria-pressed="false" disabled>House</button>
+        </div>
+        <select id="sound" aria-label="Sound" hidden disabled><option value="pure">Notes</option><option value="house">House</option></select>
+        <button id="mute" title="Mute / unmute" type="button" aria-pressed="false" disabled>Mute</button>
+        <p id="status" class="sr-only" role="status" aria-live="polite">Opening the instrument...</p>
       </section>
-      <section id="ahead" class="room-ahead" aria-labelledby="ahead-heading"><div class="ahead-heading"><h2 id="ahead-heading">Ahead</h2><span>Scheduled / ET</span></div><div id="scheduled-events"><p class="room-muted">Schedule not loaded.</p></div></section>
-      <footer class="room-footer"><details><summary>About this record</summary><p>My trading record across Schwab and Webull. Missing data stays missing.</p><p>Gold: winning trades. Blue: losing trades. Outcomes are not execution grades. Only documented entry and exit times colour a trade window.</p><p>XIV is my options trading and market research initiative. Software and AI support the work; I make the decisions.</p><p>Music is my interpretation. Simulated examples are not trading records.</p></details><a href="market-map.html">Research &#8599;</a></footer>
+      <nav class="dates" aria-label="Choose a session">
+        <a id="2026-08-31" href="#2026-08-31" aria-label="August 31, 2026"><span>Aug</span>31</a>
+        <a id="2026-09-01" href="#2026-09-01" aria-label="September 1, 2026"><span>Sep</span>1</a>
+        <a id="2026-09-02" href="#2026-09-02" aria-label="September 2, 2026">2</a>
+        <a id="2026-09-03" href="#2026-09-03" aria-label="September 3, 2026">3</a>
+        <a id="2026-09-04" href="#2026-09-04" aria-label="September 4, 2026">4</a>
+        <a id="2026-09-08" href="#2026-09-08" aria-label="September 8, 2026">8</a>
+        <a id="2026-09-09" href="#2026-09-09" aria-label="September 9, 2026">9</a>
+        <a id="2026-09-10" href="#2026-09-10" aria-label="September 10, 2026">10</a>
+      </nav>
     </div>
-    <section class="identity-about" id="about" aria-label="About MaloSound">
-      <p>Market movement, charts, and original music. Explore the recorded sessions below the cover. The orbit is artwork; data-driven orbit playback is still in development.</p>
-      <footer>
-        <span>By Marcelo Zapata</span>
-        <a href="https://www.marcelozapata.dev/">Writing &amp; projects <span aria-hidden="true">↗</span></a>
-      </footer>
-    </section>
+    <p class="bridge-caption">Price sets pitch. Pitch sets color.</p>
+    <details class="method">
+      <summary>Mapping</summary>
+      <p>Low price, low note. High price, high note.</p>
+      <ol class="pitch-key" aria-label="Pitch colors from low to high">
+        <li style="--pitch:#ff8eb9"><b>A</b><span>0%</span></li>
+        <li style="--pitch:#ffa242"><b>B</b><span>23.6%</span></li>
+        <li style="--pitch:#e6b816"><b>C</b><span>38.2%</span></li>
+        <li style="--pitch:#66da85"><b>D</b><span>50%</span></li>
+        <li style="--pitch:#00d8f6"><b>E</b><span>61.8%</span></li>
+        <li style="--pitch:#43c9ff"><b>F</b><span>78.6%</span></li>
+        <li style="--pitch:#cea4ff"><b>G</b><span>88.6%</span></li>
+        <li style="--pitch:#ff8eb9"><b>A <small>+1 octave</small></b><span>100%</span></li>
+      </ol>
+      <p>Steps within the observed five-session range, including this day. Smoothed prices; gaps stay gaps.</p>
+      <p>Orbit: velocity and acceleration.<br>Notes: two price voices. House: the same notes, arranged.<br>Colors show pitch, not trade outcomes.</p>
+      <p id="coverage" class="coverage"></p><p id="voices" class="sr-only" aria-hidden="true">Session / Context</p>
+    </details>
+    <noscript><p>This instrument needs JavaScript for local sound and drawing. Nothing plays automatically.</p></noscript>
   </main>
-  <script src="/session-playhead.js?v=orbit-journal-1" defer></script>
-  <script src="/journal.js?v=orbit-journal-1" defer></script>
+  <script>
+  (() => {
+    'use strict';
+    const DURATION = 195, RATE = 44100, SECONDS_PER_MINUTE = 0.5;
+    const SEMITONES = [0, 2, 3, 5, 7, 8, 10, 12];
+    const LANDMARKS = [0, .236, .382, .5, .618, .786, .886, 1];
+    const links = [...document.querySelectorAll('.dates a')];
+    const dates = links.map(link => link.hash.slice(1));
+    const canvas = document.querySelector('#orbit'), pen = canvas.getContext('2d');
+    const play = document.querySelector('#listen'), mute = document.querySelector('#mute');
+    const status = document.querySelector('#status'), label = document.querySelector('#session-label');
+    const clock = document.querySelector('#clock'), voices = document.querySelector('#voices');
+    const coverage = document.querySelector('#coverage');
+    const supportsOKLCH = CSS.supports('color', 'oklch(0.8 0.16 0)');
+    let data = null, buffers = null, context = null, master = null, sources = [];
+    let playing = false, muted = false, preparing = false, loading = false;
+    let offset = 0, started = 0, frame = 0, generation = 0, request = null;
+    let size = 1, background = null;
+    const sound = document.querySelector('#sound');
+    const houseFiles = {
+      '2026-08-31': 'ee567eb55757bb12c59ef84c5484b11db8bf80bfade8de8621bffaadece9a6dd',
+      '2026-09-01': '86560b947f1f38136e831dccc11130f67eefab9ebc4a0bfe5a9b9b90a2461d70',
+      '2026-09-02': 'b13e95260ce02e7f20d13a5f2ce834f63a940f04bf1d88cddc6860326ce9fab2',
+      '2026-09-03': 'fa7b37665b319a7133c8d69d003bb80d2252f9f5d34b2747cab57dc8b71c08e2',
+      '2026-09-04': 'b7c497b0faa47553732634d3088133ed07b65e07a445c56aab423ca1bcc67155',
+      '2026-09-08': '257c5003f0121282d2db12ddfa47b25319aa8c475ee23cf2918cd3756f10daae',
+      '2026-09-09': 'ad9f3e7de4c9a7c10778e927e85096c7b274c9a5418399e390b9da293dc1b79f',
+      '2026-09-10': '39d4119aad59385117e503b0afb5f1f0ca425963ee10ed6a4a63fceb75e9ae89'
+    };
+    const soundButtons = [...document.querySelectorAll('[data-sound]')];
+    function syncSoundChoices() {
+      soundButtons.forEach(button => {
+        button.disabled = sound.disabled || (button.dataset.sound === 'house' && sound.options[1].disabled);
+        button.setAttribute('aria-pressed', String(button.dataset.sound === sound.value));
+      });
+    }
+    soundButtons.forEach(button => button.addEventListener('click', () => {
+      if (button.disabled || sound.value === button.dataset.sound) return;
+      sound.value = button.dataset.sound;
+      sound.dispatchEvent(new Event('change'));
+      syncSoundChoices();
+    }));
+    let soundMode = 'pure', houseBuffers = null;
+    const fail = message => { throw new Error(message); };
+    const finite = n => typeof n === 'number' && Number.isFinite(n);
+    const integer = n => Number.isInteger(n) && n >= 0 && n < 390;
+    const same = (a, b) => Array.isArray(a) && a.length === b.length && a.every((n, i) => n === b[i]);
+
+    function validate(doc, date) {
+      if (!doc || doc.schemaVersion !== 2 || doc.date !== date || doc.symbol !== 'SPY') fail('Unsupported session.');
+      const method = doc.method;
+      if (!method || !same(method.landmarks, LANDMARKS) || !same(method.semitones, SEMITONES) ||
+          method.smoothing?.window !== 11 || method.smoothing.degree !== 3 ||
+          method.smoothing.spacingMinutes !== 1 || method.smoothing.edgeLossEachSide !== 5 ||
+          method.anchors?.frozen !== true || method.anchors.sessionOpenIsAnchor !== false ||
+          !finite(method.anchors.low) || !finite(method.anchors.high) || method.anchors.high < method.anchors.low ||
+          method.colour?.lightness !== .8 || method.colour.chroma !== .16) fail('Unsupported mapping.');
+      if (!doc.bounds || !finite(doc.bounds.maxAbsVelocity) || !finite(doc.bounds.maxAbsAcceleration) ||
+          doc.bounds.maxAbsVelocity < 0 || doc.bounds.maxAbsAcceleration < 0) fail('Invalid orbit bounds.');
+      const palette = method.colour.palette;
+      if (!Array.isArray(palette) || palette.length !== 8) fail('Invalid pitch palette.');
+      palette.forEach((p, i) => {
+        if (p.landmark !== i || p.semitone !== SEMITONES[i] || p.hue !== SEMITONES[i] * 30 % 360 ||
+            p.oklch !== `oklch(0.8 0.16 ${p.hue})` || !/^#[0-9a-f]{6}$/i.test(p.srgbFallback)) fail('Invalid pitch color.');
+      });
+      if (!Array.isArray(doc.runs) || doc.runs.length > 390) fail('Invalid orbit runs.');
+      let previous = -1, count = 0;
+      doc.runs.forEach(run => {
+        if (!Array.isArray(run.points)) fail('Invalid orbit points.');
+        run.points.forEach((p, i) => {
+          if (!integer(p.minute) || p.minute <= previous || (i && p.minute !== previous + 1) ||
+              !finite(p.velocity) || !finite(p.acceleration) ||
+              Math.abs(p.velocity) > doc.bounds.maxAbsVelocity + .000001 ||
+              Math.abs(p.acceleration) > doc.bounds.maxAbsAcceleration + .000001 ||
+              !Number.isInteger(p.landmark) || p.landmark < 0 || p.landmark > 7 ||
+              p.semitone !== SEMITONES[p.landmark]) fail('Invalid orbit observation.');
+          previous = p.minute; count++;
+        });
+      });
+      if (count !== doc.derivedObservations || count > 390) fail('Inconsistent observations.');
+      if (!Array.isArray(doc.source?.missingMinutes) || !doc.source.missingMinutes.every(integer) ||
+          !Array.isArray(doc.parent?.missingSessions) || !Array.isArray(doc.parent.observedSessions) ||
+          doc.parent.samplingMinutes !== 5 || doc.parent.sessionDay?.date !== date) fail('Invalid source coverage.');
+      [doc.noteEvents, doc.parent.sessionDay.noteEvents].forEach((events, stem) => {
+        if (!Array.isArray(events) || events.length > 390) fail('Invalid note events.');
+        let end = -1;
+        events.forEach(event => {
+          if (!integer(event.startMinute) || !integer(event.endMinute) || event.startMinute <= end ||
+              event.endMinute < event.startMinute || event.minutes !== event.endMinute - event.startMinute + 1 ||
+              !Number.isInteger(event.landmark) || event.landmark < 0 || event.landmark > 7 ||
+              event.semitone !== SEMITONES[event.landmark] ||
+              (stem === 1 && (event.startMinute % 5 !== 0 || event.endMinute % 5 !== 4))) fail('Invalid note interval.');
+          end = event.endMinute;
+        });
+      });
+      return doc;
+    }
+
+    function colour(landmark) {
+      const p = data.method.colour.palette[landmark];
+      return supportsOKLCH ? p.oklch : p.srgbFallback;
+    }
+    function position(p) {
+      const radius = size * .435;
+      return [size / 2 + p.velocity / (data.bounds.maxAbsVelocity || 1) * radius,
+              size / 2 - p.acceleration / (data.bounds.maxAbsAcceleration || 1) * radius];
+    }
+    function makeBackground() {
+      if (!pen) return;
+      const ratio = Math.min(devicePixelRatio || 1, 3);
+      size = canvas.getBoundingClientRect().width || 1;
+      canvas.width = Math.round(size * ratio); canvas.height = canvas.width;
+      pen.setTransform(ratio, 0, 0, ratio, 0, 0);
+      background = document.createElement('canvas');
+      background.width = canvas.width; background.height = canvas.height;
+      const g = background.getContext('2d');
+      g.setTransform(ratio, 0, 0, ratio, 0, 0);
+      g.clearRect(0, 0, size, size);
+      if (data) {
+        g.lineWidth = 1.25; g.lineCap = 'round'; g.lineJoin = 'round';
+        for (const run of data.runs) {
+          for (let i = 1; i < run.points.length; i++) {
+            const a = position(run.points[i - 1]), b = position(run.points[i]);
+            g.strokeStyle = colour(run.points[i].landmark);
+            g.shadowColor = g.strokeStyle; g.shadowBlur = 3;
+            g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke();
+          }
+          if (run.points.length && data.flat) {
+            g.shadowBlur = 0; g.fillStyle = colour(run.points[0].landmark);
+            g.beginPath(); g.arc(size / 2, size / 2, 2, 0, Math.PI * 2); g.fill();
+          }
+        }
+      }
+      draw(offset);
+    }
+    function pointAt(minute) {
+      if (!data) return null;
+      for (const run of data.runs) {
+        const points = run.points;
+        if (!points.length || minute < points[0].minute || minute > points[points.length - 1].minute) continue;
+        const a = points[Math.floor(minute - points[0].minute)];
+        const b = points[Math.min(points.length - 1, Math.floor(minute - points[0].minute) + 1)];
+        const t = b.minute === a.minute ? 0 : (minute - a.minute) / (b.minute - a.minute);
+        return {velocity: a.velocity + (b.velocity - a.velocity) * t,
+          acceleration: a.acceleration + (b.acceleration - a.acceleration) * t, landmark: a.landmark};
+      }
+      return null;
+    }
+    function noteAt(events, minute) {
+      const event = events.find(e => minute >= e.startMinute && minute < e.endMinute + 1);
+      return event ? (event.landmark === 7 ? 'A′' : data.method.notes[event.landmark]) : '—';
+    }
+    function draw(seconds) {
+      if (!pen || !background) return;
+      pen.clearRect(0, 0, size, size);
+      // The full measured path is a faint reference, not an invented curve.
+      pen.globalAlpha = .10;
+      pen.drawImage(background, 0, 0, size, size);
+      pen.globalAlpha = 1;
+      const minute = seconds / SECONDS_PER_MINUTE;
+      let priceSample = null;
+      if (data) {
+        pen.lineWidth = 1.35; pen.lineCap = 'round'; pen.lineJoin = 'round';
+        for (const run of data.runs) {
+          const points = run.points;
+          if (!points.length) continue;
+          if (minute >= points[0].minute && minute <= points[points.length - 1].minute) {
+            for (const sample of points) {
+              if (sample.minute > minute) break;
+              priceSample = sample;
+            }
+          }
+          for (let i = 1; i < points.length; i++) {
+            const a = points[i - 1], b = points[i];
+            if (a.minute >= minute) break;
+            const fraction = Math.min(1, (minute - a.minute) / (b.minute - a.minute));
+            const [ax, ay] = position(a), [bx, by] = position(b);
+            pen.strokeStyle = colour(b.landmark);
+            pen.shadowColor = pen.strokeStyle; pen.shadowBlur = 3;
+            pen.beginPath(); pen.moveTo(ax, ay);
+            pen.lineTo(ax + (bx - ax) * fraction, ay + (by - ay) * fraction); pen.stroke();
+            if (fraction < 1) break;
+          }
+        }
+      }
+      pen.shadowBlur = 0;
+      const p = pointAt(minute);
+      if (p) {
+        const [x, y] = position(p);
+        pen.shadowColor = colour(p.landmark); pen.shadowBlur = 10;
+        pen.fillStyle = colour(p.landmark); pen.beginPath(); pen.arc(x, y, 4, 0, Math.PI * 2); pen.fill();
+        pen.shadowBlur = 0; pen.strokeStyle = '#fff'; pen.lineWidth = 1;
+        pen.beginPath(); pen.arc(x, y, 5.5, 0, Math.PI * 2); pen.stroke();
+      }
+      // Top-right tracker: the recorded close and the note at the playhead,
+      // the note in its own pitch colour. Both go blank where nothing was derived.
+      const price = document.querySelector('#live-price'), note = document.querySelector('#live-note');
+      const event = data ? data.noteEvents.find(e => minute >= e.startMinute && minute < e.endMinute + 1) : null;
+      if (priceSample && Number.isFinite(priceSample.close)) {
+        price.textContent = priceSample.close.toFixed(2);
+        const marketMinute = 570 + priceSample.minute;
+        price.title = `Recorded one-minute close at ${Math.floor(marketMinute / 60)}:${String(marketMinute % 60).padStart(2, '0')} ET. Not a live quote.`;
+      } else {
+        price.textContent = '--';
+        price.title = 'No derived observation here. Not a live quote.';
+      }
+      if (event) {
+        note.textContent = event.landmark === 7 ? 'A′' : data.method.notes[event.landmark];
+        note.style.color = colour(event.landmark);
+        note.title = `Note ${note.textContent} at the playhead`;
+      } else {
+        note.textContent = '—'; note.style.color = ''; note.title = 'No note here';
+      }
+      document.querySelector('#progress').value = seconds;
+      play.setAttribute('aria-pressed', String(playing));
+      const whole = Math.floor(seconds);
+      clock.textContent = `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')} / 3:15`;
+      if (data) voices.textContent = `Session ${noteAt(data.noteEvents, minute)} / Context ${noteAt(data.parent.sessionDay.noteEvents, minute)}`;
+    }
+    function now() { return playing ? Math.min(DURATION, Math.max(offset, context.currentTime - started + offset)) : offset; }
+    let redrawTimer = null;
+    function disposeSources() {
+      clearInterval(redrawTimer); redrawTimer = null;
+      for (const source of sources) { source.onended = null; try { source.stop(); } catch (_) {} source.disconnect(); }
+      sources = [];
+    }
+    function pause() {
+      offset = now(); playing = false; cancelAnimationFrame(frame); disposeSources();
+      play.textContent = offset >= DURATION ? 'Replay' : offset > 0 ? 'Resume' : 'Listen';
+      canvas.dataset.state = 'paused'; draw(offset);
+    }
+    function updatePlayback() {
+      if (!playing) return;
+      const seconds = now(); draw(seconds);
+      if (seconds >= DURATION) { offset = DURATION; pause(); status.textContent = 'Session complete.'; return; }
+    }
+    function tick() {
+      updatePlayback();
+      if (playing) frame = requestAnimationFrame(tick);
+    }
+    function startRedraw() {
+      clearInterval(redrawTimer);
+      redrawTimer = setInterval(updatePlayback, 250);
+      tick();
+    }
+    function envelope(offline, event, base, attack, release) {
+      const start = event.startMinute * SECONDS_PER_MINUTE;
+      const end = (event.endMinute + 1) * SECONDS_PER_MINUTE;
+      const oscillator = offline.createOscillator(), gain = offline.createGain();
+      oscillator.setPeriodicWave(offline.createPeriodicWave(new Float32Array(4), new Float32Array([0, 1, .35, .15]), {disableNormalization: true}));
+      oscillator.frequency.value = base * 2 ** (event.semitone / 12);
+      const up = new Float32Array(128), down = new Float32Array(128);
+      for (let i = 0; i < 128; i++) { up[i] = .5 * Math.sin(Math.PI / 2 * i / 127) ** 2; down[i] = .5 * Math.cos(Math.PI / 2 * i / 127) ** 2; }
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.setValueCurveAtTime(up, start, attack);
+      gain.gain.setValueAtTime(.5, end - release);
+      gain.gain.setValueCurveAtTime(down, end - release, release);
+      oscillator.connect(gain); gain.connect(offline.destination);
+      oscillator.start(start); oscillator.stop(end);
+    }
+    async function renderStem(events, base, attack, release) {
+      const Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      if (!Offline) fail('Offline audio is unavailable.');
+      const offline = new Offline(1, DURATION * RATE, RATE);
+      for (const event of events) envelope(offline, event, base, attack, release);
+      return offline.startRendering();
+    }
+    async function renderAudio(doc) {
+      const stems = await Promise.all([
+        renderStem(doc.noteEvents, 220, .02, .08),
+        renderStem(doc.parent.sessionDay.noteEvents, 110, .15, .40)
+      ]);
+      const a = stems[0].getChannelData(0), b = stems[1].getChannelData(0);
+      let peak = 0;
+      for (let i = 0; i < a.length; i++) peak = Math.max(peak, Math.abs(a[i] + b[i]));
+      const gain = peak ? 10 ** (-1 / 20) / peak : 1;
+      for (let i = 0; i < a.length; i++) { a[i] *= gain; b[i] *= gain; }
+      return stems;
+    }
+    soundButtons.forEach((button, index) => button.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      const other = soundButtons[(index + 1) % soundButtons.length];
+      if (!other.disabled) other.focus();
+    }));
+    async function renderHouse(date) {
+      if (!houseFiles[date]) fail('House recording not available for this date.');
+      const response = await fetch(`/assets/instrument/${date}-house.mp3`, {signal: AbortSignal.timeout(15000)});
+      if (!response.ok) fail('House recording unavailable.');
+      const bytes = await response.arrayBuffer();
+      const digest = await crypto.subtle.digest('SHA-256', bytes);
+      const hash = [...new Uint8Array(digest)].map(n => n.toString(16).padStart(2, '0')).join('');
+      if (hash !== houseFiles[date]) fail('House recording does not match the approved file.');
+      const buffer = await context.decodeAudioData(bytes);
+      if (Math.abs(buffer.duration - DURATION) > .15) fail('House duration does not match the session.');
+      return [buffer];
+    }
+    sound.addEventListener('change', () => {
+      if (preparing || loading || !data) return;
+      const resume = playing;
+      pause(); soundMode = sound.value;
+      status.textContent = soundMode === 'house' ? 'House. The same notes, arranged with a beat.' : 'Notes. Two voices from the same price data.';
+      if (resume) play.click();
+    });
+    play.addEventListener('click', async () => {
+      if (loading || preparing || !data) return;
+      if (playing) { pause(); status.textContent = 'Paused.'; return; }
+      const token = generation;
+      preparing = true; play.disabled = true; sound.disabled = true; syncSoundChoices();
+      status.textContent = soundMode === 'house' ? 'Loading house recording…' : 'Preparing two voices…';
+      try {
+        const Audio = window.AudioContext || window.webkitAudioContext;
+        if (!Audio) fail('Web Audio is unavailable.');
+        if (!context) {
+          context = new Audio({sampleRate: RATE}); master = context.createGain();
+          master.gain.value = muted ? 0 : 1; master.connect(context.destination);
+          context.addEventListener('statechange', () => {
+            if (playing && context.state !== 'running') { pause(); status.textContent = 'Playback interrupted. Press Resume.'; }
+          });
+        }
+        await context.resume();
+        if (token !== generation) return;
+        const rendered = soundMode === 'house' ? (houseBuffers || await renderHouse(data.date)) : (buffers || await renderAudio(data));
+        if (token !== generation) return;
+        if (soundMode === 'house') houseBuffers = rendered; else buffers = rendered;
+        if (offset >= DURATION) offset = 0;
+        started = context.currentTime + .035;
+        sources = rendered.map(buffer => {
+          const source = context.createBufferSource(); source.buffer = buffer;
+          source.connect(master); source.start(started, offset); return source;
+        });
+        playing = true; canvas.dataset.state = 'playing'; play.textContent = 'Pause';
+        status.textContent = soundMode === 'house' ? 'House and movement share one clock.' : 'Two voices. One price-derived movement.'; startRedraw();
+      } catch (error) {
+        if (token === generation) { disposeSources(); playing = false; status.textContent = 'Sound could not start. Press Listen to retry.'; }
+      } finally {
+        if (token === generation) { preparing = false; play.disabled = loading || !data; sound.disabled = loading || !data; syncSoundChoices(); }
+      }
+    });
+    mute.addEventListener('click', () => {
+      muted = !muted; mute.setAttribute('aria-pressed', String(muted));
+      mute.textContent = muted ? 'Unmute' : 'Mute';
+      if (master) master.gain.setTargetAtTime(muted ? 0 : 1, context.currentTime, .01);
+    });
+    async function select(date) {
+      const token = ++generation;
+      pause(); offset = 0; preparing = false; loading = true;
+      play.disabled = true; mute.disabled = true; sound.disabled = true; syncSoundChoices(); play.textContent = 'Listen';
+      request?.abort(); request = new AbortController();
+      const timer = setTimeout(() => request.abort(), 12000);
+      status.textContent = `Opening ${date}…`;
+      try {
+        const response = await fetch(`/content/instrument/${date}.json`, {signal: request.signal});
+        if (!response.ok) fail('Session unavailable.');
+        const next = validate(await response.json(), date);
+        if (token !== generation) return;
+        data = next; buffers = null; houseBuffers = null; offset = 0;
+        soundMode = 'pure'; sound.value = 'pure';
+        sound.options[1].disabled = !houseFiles[date];
+        sound.options[1].textContent = houseFiles[date] ? 'House' : 'House (not available yet)';
+        label.textContent = `${data.symbol} / ${data.date}`;
+        canvas.setAttribute('aria-label', `${data.symbol}, ${data.date}. Price velocity by acceleration; note-colored open paths.`);
+        canvas.dataset.session = date; canvas.dataset.state = 'ready';
+        links.forEach(link => { if (link.hash === `#${date}`) link.setAttribute('aria-current', 'date'); else link.removeAttribute('aria-current'); });
+        const missing = data.source.missingMinutes.length;
+        coverage.textContent = `Five-session range · ${data.parent.observedSessions.length}/5 sessions observed${missing ? ` · ${missing} missing minute${missing === 1 ? '' : 's'}` : ''}.`;
+        makeBackground();
+        status.textContent = data.derivedObservations ? 'Ready. Two voices from the same price data.' : 'No derived observations. This session is silent.';
+      } catch (error) {
+        if (token !== generation) return;
+        if (data) {
+          draw(0); status.textContent = `${date} unavailable. Keeping ${data.date}; no newer data substituted.`;
+        } else {
+          label.textContent = 'No verified session available';
+          status.textContent = 'The instrument is in development. Session data could not load; choose a date to retry.';
+        }
+      } finally {
+        clearTimeout(timer);
+        if (token === generation) { loading = false; play.disabled = !data || !pen; mute.disabled = !data; sound.disabled = !data; syncSoundChoices(); }
+      }
+    }
+    const route = () => select(dates.includes(location.hash.slice(1)) ? location.hash.slice(1) : dates[dates.length - 1]);
+    links.forEach(link => link.addEventListener('click', event => {
+      event.preventDefault();
+      if (location.hash === link.hash) route();
+      else { history.replaceState(null, '', link.hash); route(); }
+    }));
+        links.forEach((link, index) => link.addEventListener('keydown', event => {
+      const next = event.key === 'ArrowRight' ? (index + 1) % links.length : event.key === 'ArrowLeft' ? (index + links.length - 1) % links.length : event.key === 'Home' ? 0 : event.key === 'End' ? links.length - 1 : -1;
+      if (next >= 0) { event.preventDefault(); links[next].focus(); }
+    }));
+    window.addEventListener('hashchange', route);
+    window.addEventListener('pagehide', () => { generation++; request?.abort(); pause(); context?.suspend(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && playing) pause(); });
+    new ResizeObserver(makeBackground).observe(canvas);
+    route();
+  })();
+  </script>
 </body>
 </html>

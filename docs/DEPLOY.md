@@ -1,69 +1,58 @@
-# Publish MaloSound.ai
+# MaloSound instrument deployment
 
-Production is https://malosound.ai on Vercel, from GitHub master at
-https://github.com/marcelozap/malosound.git. Vercel runs
-`python3 tools/build_website.py` and serves only `build/`.
+Production: https://malosound.ai, Vercel, GitHub repository marcelozap/malosound,
+production branch master. A local preview or Sites deployment is not production proof.
 
-## Integration and publishing
+## Reproducible build
 
-Use an isolated checkout when another agent is editing. Never stage all files in
-the shared music workspace. Coordinate source ownership through
-`C:\MaloSound\handoff\website\PARALLEL_WORK.md`.
+Python 3.10+ standard library; no npm install or audio synthesis is needed in CI.
 
-1. Fetch and review current production plus the intended commits.
-2. Integrate intended source in a separate worktree. Preserve the orbit cover and
-   journal. Do not include another agent's uncommitted data.
-3. Run `python -X utf8 tools/build_website.py` in that isolated checkout. It
-   regenerates chart/index files and downloads two checksum-verified recordings.
-   Inspect generated source changes before including them in a commit.
-4. Check the journal and desktop/mobile preview. Commit only intended paths.
-5. Record `git rev-parse HEAD` and push that exact SHA with
-   `git push origin <SHA>:master`. Never force-push production.
-6. Wait for Vercel success for that SHA, then check actual malosound.ai.
-
-A rejected push means production advanced: fetch and inspect before proceeding.
-A Git push or a separate Sites preview is not production verification.
-
-## Preview
-
-```sh
+```powershell
 python -X utf8 tools/build_website.py
-python -m http.server 4178 --bind 127.0.0.1 --directory build
+python -m http.server 4188 --bind 127.0.0.1 --directory build
 ```
 
-Open http://127.0.0.1:4178/. Use a fresh build, not another agent's output.
+The allowlist stages 22 public files: the player, CSS, 404 page, cover image,
+font and license, eight instrument documents, and eight House MP3s.
+The builder does not regenerate journal data. Notes synthesize in the browser.
 
-## Production checks
+House bytes are deliberately NOT committed. config/instrument-audio.json pins
+public release URLs, byte counts, SHA256s and corresponding document hashes.
+The build uses matching local assets/instrument MP3s when present; otherwise it
+fetches the release files and verifies them before staging. A missing/mismatched
+asset fails the build. Keep the source WAVs and manifests backed up separately.
 
-- Cover image, wordmark and Open sessions link load.
-- /#journal opens the calendar and a selected-date chart.
-- /content/journal-index.json, representative May/June/July/September day files,
-  their charts, both recorded-session reports and their local audio return 200.
-- /#session-2026-09-04 loads its chart and recording; play and seek on desktop and
-  mobile. Distinguish untested playback from a verified advancing audio clock.
-- An absent entry differs from an entry with no chart. Hourly data stays labelled.
-- /#ahead shows sourced scheduled events with dates and freshness; no automatic
-  ongoing feed is promised.
-- Retired studio/music-lab pages and /content/trades.json remain unavailable.
-- Artwork is not described as measured data or reactive playback.
+## Publishing
 
-## Publication boundary and recovery
+Commit only approved files. Never include another agent's unfinished journal
+changes. Push the release commit to the integration branch first.
 
-The explicit allowlist in tools/build_website.py stages journal assets and the
-visual identity. content/trading-journal.json is the sanitized publication ledger
-used to derive public overlays: dates, documented times, outcomes and coverage.
-It stays tracked for reproducible builds. Never add broker balances, quantities,
-account identifiers, raw statements or private reviews. Keep private evidence and
-raw fills outside the published build and Git.
+For the initial audio release, with GitHub credentials already available to Git:
 
-Git source does not contain MP3 bytes. The build fetches approved release URLs and
-checks their hashes. Back up original recordings, source music projects and their
-samples separately; they cannot be recovered from a source-only Git export. The
-private Sessions evidence archive also needs its own backup.
+```powershell
+pwsh -File tools/publish_instrument_audio.ps1
+```
 
-For a portable source snapshot, use `git archive --format=zip --output=<path> <SHA>`.
-Build from that same SHA to capture a separate deployable build including audio.
-Do not call a source ZIP an audio or private-evidence backup.
+The helper uploads only the eight manifest-pinned generated MP3s to the GitHub
+release instrument-audio-2026-09-13. It never replaces conflicting assets and
+does not store credentials. Publish those assets BEFORE pushing master so the
+Vercel build can retrieve them. On future data/audio changes, use a new immutable
+release tag and update the manifest plus builder release prefix together.
 
-`.openai/hosting.json` describes a separate private preview, not production. It
-must not replace the Vercel deployment above.
+Fast-forward the approved commit to master without force. Vercel runs the
+buildCommand/outputDirectory in vercel.json. Check the GitHub deployment status,
+then check https://malosound.ai itself, its CSS/font, all eight documents/MP3s,
+Notes/House switching and desktop/phone layouts. A successful build alone is
+not evidence of a working live deployment.
+
+## Scope and known limits
+
+Eight dates: Aug 31; Sep 1, 2, 3, 4, 8, 9, 10, 2026. No automatic data updates.
+390-minute sessions only; unknown/shortened session shapes must not be invented.
+Pitch reflects smoothed market-price position, not personal trading outcomes.
+
+Do not publish content/days, raw history, trading ledgers, broker files, private
+recordings, local paths or credentials. The instrument remains a historical
+interpretation. Data-use permission is a separate unresolved question, not
+established by test results. Output-device latency, audible ear-to-eye alignment,
+and Safari/iOS/Firefox behavior have not been established by Chromium UI checks.

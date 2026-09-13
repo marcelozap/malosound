@@ -1,33 +1,31 @@
 #!/usr/bin/env python3
-"""Validate the journal and stage only public website files for static hosting."""
+"""Stage the instrument player; retain journal validators for private-source tools."""
 from datetime import date
 from html.parser import HTMLParser
 from html import escape
 from pathlib import Path
 import json
+import hashlib
 import shutil
 from urllib.parse import unquote, urlsplit
-from journal_pages import refresh
-from website_audio import stage_audio
+from urllib.request import urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
-    # The visual identity published in a11c902 stays in the build alongside the journal.
-    'site.css', '404.html', 'assets/brand/orbit-violet-ice.png', 'assets/brand/malosound-violet-ice-cover.png',
-    'index.html', 'journal.css', 'journal.js', 'session-playhead.js',
-    'market-map.html', 'market-map.js',
-    'writings/one-song-one-session.html', 'assets/brand/market-into-music.png',
-    'assets/brand/malosound-square.png',
-    'assets/brand/market-melody-v5.png',
-    'gateway/sample-01.audioanalysis.v1.json', 'gateway/sample-02.audioanalysis.v1.json',
+    'index.html', 'site.css', '404.html',
+    'assets/brand/malosound-violet-ice-cover.png',
+    'assets/fonts/space-grotesk-latin.ttf',
+    'assets/fonts/OFL-SpaceGrotesk.txt',
 )
 # Under content/ only the instrument documents are public. Everything else there
 # (editions, the day archive, minute and hourly history, the ledger, the events
 # snapshot, the map) stays in the repository and never reaches the output.
 PUBLIC_CONTENT_PREFIX = 'content/instrument/'
 PUBLIC_FILES += tuple(sorted(PUBLIC_CONTENT_PREFIX + p.name for p in (ROOT / 'content/instrument').glob('*.json')))
-PUBLIC_FILES += tuple(p for p in json.loads((ROOT / 'content/market-assets.json').read_text()) if not p.startswith('content/'))
+AUDIO_RELEASE = 'https://github.com/marcelozap/malosound/releases/download/instrument-audio-2026-09-13/'
+AUDIO_INDEX = json.loads((ROOT / 'config/instrument-audio.json').read_text(encoding='utf-8'))
+PUBLIC_FILES += tuple('assets/instrument/' + entry['date'] + '-house.mp3' for entry in AUDIO_INDEX)
 
 
 def require(condition, message):
@@ -36,16 +34,10 @@ def require(condition, message):
 
 
 def available(path):
-    """A journal reference is satisfied by a public file, or by a repository file under content/.
-
-    content/ is not public apart from the instrument documents, so the journal's
-    own data files are checked for existence in the checkout, not for
-    publication. Anything outside content/ must still be in the allowlist.
-    """
+    """Validate a private journal's source reference, without publishing it."""
     name = path.split('?')[0].lstrip('/')
-    if name.startswith('content/'):
-        return (ROOT / name).is_file()
-    return name in PUBLIC_FILES
+    target = (ROOT / name).resolve()
+    return target.is_relative_to(ROOT.resolve()) and target.is_file()
 
 
 def check_content_boundary(output):
@@ -61,6 +53,13 @@ def check_content_boundary(output):
     require(all(n.startswith(PUBLIC_CONTENT_PREFIX) for n in staged), 'Only content/instrument/*.json may be public.')
     for path in output.rglob('*'):
         require('trades' not in path.name and 'trading-journal' not in path.name, f'Trade record in public output: {path}')
+        if path.is_file():
+            name = path.relative_to(output).as_posix()
+            require(name in PUBLIC_FILES or name == '.malosound-website-build', f'Unexpected public file: {name}')
+            if path.suffix in ('.html', '.css', '.js', '.json', '.svg'):
+                text = path.read_text(encoding='utf-8-sig')
+                require(not any(token in text for token in ('trades.json', 'trading-journal', 'tradeSections', 'executionSections')),
+                        f'Trade record reference in public output: {name}')
     return staged
 
 
@@ -163,11 +162,13 @@ def check_day_audio(output, replacements):
 def validate_links():
     pages = {}
     for name in PUBLIC_FILES:
+        if name.startswith('assets/instrument/'):
+            continue  # Ignored locally; CI stages hash-verified release assets.
         path = ROOT / name
         require(path.is_file(), f'Missing public file: {name}')
         if path.suffix == '.html':
             page = Page()
-            page.feed(path.read_text())
+            page.feed(path.read_text(encoding='utf-8-sig'))
             require(page.h1s == 1 and page.title and page.description and page.viewport,
                     f'{name}: requires one h1, a title, description, and viewport.')
             pages[path.resolve()] = page
@@ -185,33 +186,91 @@ def validate_links():
                 require(unquote(url.fragment) in pages[target].ids, f'{path.name}: missing anchor: {raw}')
 
 
+def validate_instrument(name):
+    """Only the documented price-derived schema may cross the public boundary."""
+    document = json.loads((ROOT / name).read_text(encoding='utf-8'))
+    require(isinstance(document, dict), f'{name}: document must be an object')
+    allowed = {'schemaVersion', 'date', 'symbol', 'source', 'method', 'parent',
+               'flat', 'derivedObservations', 'bounds', 'runs', 'noteEvents'}
+    require(set(document) == allowed, f'{name}: unexpected document fields')
+    require(document['schemaVersion'] == 2 and document['symbol'] == 'SPY', f'{name}: unsupported instrument')
+    day = date.fromisoformat(document['date']).isoformat()
+    require(Path(name).stem == day, f'{name}: filename/date mismatch')
+    require(type(document['flat']) is bool, f'{name}: invalid flat flag')
+    source = document['source']
+    require(set(source) == {'path', 'sha256', 'observations', 'firstMinute', 'lastMinute', 'missingMinutes'},
+            f'{name}: unexpected source fields')
+    require(isinstance(source['path'], str) and source['path'].startswith(("/assets/charts/", "/content/history/")) and '..' not in source['path'],
+            f'{name}: unsafe source reference')
+    require(isinstance(source['sha256'], str) and len(source['sha256']) == 64 and
+            all(c in '0123456789abcdef' for c in source['sha256']), f'{name}: invalid source hash')
+    require(source['firstMinute'] == 0 and source['lastMinute'] == 389,
+            f'{name}: player currently supports complete 390-minute windows only')
+    method = document['method']
+    require(method['landmarks'] == [0, .236, .382, .5, .618, .786, .886, 1] and
+            method['semitones'] == [0, 2, 3, 5, 7, 8, 10, 12], f'{name}: mapping changed')
+    require(method['smoothing']['window'] == 11 and method['smoothing']['degree'] == 3 and
+            method['smoothing']['spacingMinutes'] == 1 and method['smoothing']['edgeLossEachSide'] == 5,
+            f'{name}: smoothing changed')
+    require(method['anchors']['frozen'] is True and method['anchors']['sessionOpenIsAnchor'] is False,
+            f'{name}: anchors changed')
+    require(method['colour']['lightness'] == .8 and method['colour']['chroma'] == .16,
+            f'{name}: color mapping changed')
+    point_fields = {'minute', 'close', 'smoothed', 'velocity', 'acceleration', 'position',
+                    'landmark', 'note', 'semitone', 'hue'}
+    run_fields = {'startMinute', 'endMinute', 'observations', 'derivedFrom', 'derivedTo', 'points'}
+    for runs, parent in ((document['runs'], False), (document['parent']['runs'], True)):
+        require(isinstance(runs, list), f'{name}: runs must be a list')
+        for run in runs:
+            require(set(run) == run_fields | ({'date'} if parent else set()), f'{name}: unexpected run fields')
+            require(all(set(point) == point_fields for point in run['points']), f'{name}: unexpected observation fields')
+    event_fields = {'startMinute', 'endMinute', 'minutes', 'landmark', 'note', 'semitone', 'hue'}
+    for events in (document['noteEvents'], document['parent']['sessionDay']['noteEvents']):
+        require(isinstance(events, list) and all(set(event) == event_fields for event in events),
+                f'{name}: unexpected event fields')
+    require(sum(len(run['points']) for run in document['runs']) == document['derivedObservations'],
+            f'{name}: inconsistent observation count')
+
+
+def validate_audio_index(instrument_files):
+    require(isinstance(AUDIO_INDEX, list), 'Audio index must be a list')
+    days = [entry['date'] for entry in AUDIO_INDEX]
+    require(len(days) == len(set(days)), 'Duplicate audio dates')
+    require(set(days) == {Path(name).stem for name in instrument_files}, 'Audio/document date mismatch')
+    for entry in AUDIO_INDEX:
+        day = date.fromisoformat(entry['date']).isoformat()
+        require(set(entry) == {'date', 'url', 'sha256', 'bytes', 'documentSha256'}, 'Unexpected audio metadata')
+        require(entry['url'] == AUDIO_RELEASE + day + '-house.mp3', 'Unexpected audio origin')
+        for field in ('sha256', 'documentSha256'):
+            require(isinstance(entry[field], str) and len(entry[field]) == 64 and
+                    all(c in '0123456789abcdef' for c in entry[field]), 'Invalid audio provenance hash')
+        require(type(entry['bytes']) is int and 0 < entry['bytes'] <= 10000000, 'Invalid audio size')
+        document = ROOT / PUBLIC_CONTENT_PREFIX / (day + '.json')
+        require(hashlib.sha256(document.read_bytes()).hexdigest() == entry['documentSha256'],
+                f'{day}: House was rendered from a different instrument document')
+
+
+def stage_house(entry):
+    relative = 'assets/instrument/' + entry['date'] + '-house.mp3'
+    local = ROOT / relative
+    if local.is_file():
+        data = local.read_bytes()
+    else:
+        with urlopen(entry['url'], timeout=60) as response:
+            data = response.read(entry['bytes'] + 1)
+    require(len(data) == entry['bytes'], f'{relative}: audio size mismatch')
+    require(hashlib.sha256(data).hexdigest() == entry['sha256'], f'{relative}: audio hash mismatch')
+    target = OUTPUT / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_bytes(data)
+
+
 def main():
-    events = json.loads((ROOT / 'content/scheduled-events.json').read_text(encoding='utf-8'))
-    require(events.get('schemaVersion') == 1 and isinstance(events.get('events'), list), 'Invalid scheduled-events document')
-    event_ids = set()
-    for event in events['events']:
-        require(event.get('id') and event['id'] not in event_ids, 'Event IDs must be unique')
-        event_ids.add(event['id'])
-        require(date.fromisoformat(event['date']).isoformat() == event['date'], 'Invalid event date')
-        require(event.get('kind') == 'scheduled', 'Events cannot contain forecasts or results')
-        require(event.get('status') in ('confirmed', 'tentative') and event.get('official') is True, 'Primary-source event status required')
-        require(event.get('category') in ('fed', 'economic', 'earnings', 'treasury', 'exchange'), 'Unknown event category')
-        require(event.get('name') and event.get('sourceOrg') and event.get('retrievedAt'), 'Event provenance required')
-        date.fromisoformat(event['retrievedAt'][:10])
-        source = urlsplit(event.get('sourceUrl', ''))
-        require(source.scheme == 'https' and source.hostname and not source.username and not source.password, 'Safe HTTPS event source required')
-        require(type(event.get('timeKnown')) is bool and event.get('timezone') == 'America/New_York', 'Explicit ET time precision required')
-        if event['timeKnown']:
-            hour, minute = event['time'].split(':')
-            require(0 <= int(hour) <= 23 and 0 <= int(minute) <= 59 and f'{int(hour):02}:{int(minute):02}' == event['time'], 'Invalid event time')
-        else:
-            require('time' not in event, 'Unknown time must be omitted')
-    # Regenerate the drawings and the archive first, then read what it wrote.
-    # This used to run at import time, which made importing the builder edit
-    # the checkout; a test that only wants check_day_audio should not do that.
-    refresh()
-    data = json.loads((ROOT / 'content/editions.json').read_text())
-    validate_journal(data)
+    instrument_files = [name for name in PUBLIC_FILES if name.startswith(PUBLIC_CONTENT_PREFIX)]
+    require(instrument_files, 'No instrument documents available; preserve the last verified release.')
+    for name in instrument_files:
+        validate_instrument(name)
+    validate_audio_index(instrument_files)
     validate_links()
     marker = OUTPUT / '.malosound-website-build'
     if OUTPUT.exists():
@@ -220,26 +279,18 @@ def main():
                 'build/ contains other work; preserve it before choosing a website output directory.')
         shutil.rmtree(OUTPUT)
     for name in PUBLIC_FILES:
+        if name.startswith('assets/instrument/'):
+            continue
         destination = OUTPUT / name
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / name, destination)
     marker.touch()
-    replacements = stage_audio(data, OUTPUT)
-    # Nothing under content/ is written into the output beyond the copied
-    # instrument documents: no editions.json, no day archive, no ledger. The
-    # journal is still regenerated and validated in the checkout above; it is
-    # simply not published.
+    for entry in AUDIO_INDEX:
+        stage_house(entry)
+    # No journal regeneration, raw history, private recordings or trade overlays.
     staged_content = check_content_boundary(OUTPUT)
-    for name in PUBLIC_FILES:
-        if name.endswith('.html'):
-            page = OUTPUT / name
-            text = page.read_text(encoding='utf-8')
-            for source, local in replacements.items():
-                text = text.replace(f'src="{escape(source, quote=True)}"', f'src="{local}"')
-            page.write_text(text, encoding='utf-8')
-    print(f'Website ready: {len(PUBLIC_FILES)} public files; journal and local links validated; '
-          f'content/ limited to {len(staged_content)} instrument documents.')
-    print(f'{len(replacements)} verified MP3 recordings staged for same-origin playback.')
+    print(f'Instrument ready: {len(PUBLIC_FILES)} public files; local links validated; '
+          f'{len(staged_content)} instrument documents; {len(AUDIO_INDEX)} verified House files; no trading records.')
 
 
 if __name__ == '__main__':
