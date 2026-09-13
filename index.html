@@ -7,7 +7,7 @@
   <title>MaloSound — Music from Market Motion</title>
   <meta name="description" content="Market price movement translated into music, color, and motion.">
   <link rel="canonical" href="https://malosound.ai/">
-  <link rel="stylesheet" href="/site.css?v=instrument-gold-20260913">
+  <link rel="stylesheet" href="/site.css?v=instrument-finish-20260913">
   <meta property="og:type" content="website">
   <meta property="og:title" content="MaloSound — Music from Market Motion">
   <meta property="og:description" content="Market movement through sound, color, and motion.">
@@ -21,15 +21,27 @@
   <a class="skip-link" href="#transport">Skip to playback</a>
   <main>
     <div class="player-shell">
-      <header class="stage-identity"><div class="brand"><div class="brand-signature"><h1>malosound</h1></div><p>price, played back.</p></div><div class="tracker" role="group" aria-label="Session, recorded price and note at the playhead"><span id="session-label">Loading session</span><span class="tracker-reading"><span id="live-price" aria-live="off" title="Recorded one-minute close, not a live quote">--</span><span id="live-note" title="Note at the playhead">—</span></span></div></header>
+      <header class="stage-identity">
+        <div class="brand"><div class="brand-signature"><h1>malosound</h1></div><p>price, played back.</p></div>
+        <div class="tracker" role="group" aria-label="Recorded session at the playhead">
+          <div class="tracker-session"><span id="session-label">Loading session</span><span class="recorded-label">Recorded playback</span></div>
+          <dl class="tracker-reading">
+            <div><dt>SPY close</dt><dd id="live-price" title="Recorded one-minute close, not a live quote">Loading</dd></div>
+            <div><dt>Market time</dt><dd id="market-time" title="America/New_York">09:30 ET</dd></div>
+            <div><dt>Pitch</dt><dd id="live-note" title="Session note at the playhead">Silent</dd></div>
+          </dl>
+          <span id="observation-state" class="observation-state">Opening recorded data</span>
+        </div>
+      </header>
       <figure class="instrument" aria-labelledby="session-label">
         <canvas id="orbit" role="img" aria-label="Price-derived orbit. Loading session." aria-describedby="orbit-description"></canvas>
         <p class="sr-only" id="orbit-description">Horizontal movement is price velocity; vertical movement is acceleration. Line color follows musical pitch. Paths stay open and never bridge missing observations.</p>
+        <figcaption class="path-key" aria-label="Path legend"><span class="reference-key">Full session</span><span class="played-key">Played</span><span class="marker-key">Now</span></figcaption>
       </figure>
       <section id="transport" class="transport" aria-label="Playback">
         <button id="listen" title="Play / pause" type="button" aria-pressed="false" disabled>Listen</button>
-        <span id="clock" role="timer" aria-label="Elapsed time and duration">0:00 / 3:15</span>
-        <progress id="progress" max="195" value="0" aria-hidden="true"></progress>
+        <span class="audio-time"><span class="control-label">Audio</span><span id="clock" role="timer" aria-label="Elapsed audio time and duration">0:00 / 3:15</span></span>
+        <input id="progress" type="range" min="0" max="195" step="0.5" value="0" aria-label="Playback position" aria-valuetext="0:00 of 3:15 audio; 09:30 ET market time" disabled>
         <div class="sound-choices" role="group" aria-label="Sound">
           <button type="button" data-sound="pure" title="Notes: two price voices" aria-label="Notes: two price voices" aria-pressed="true" disabled>Notes</button>
           <button type="button" data-sound="house" title="House: the same notes, arranged with a beat" aria-label="House: the same notes, arranged with a beat" aria-pressed="false" disabled>House</button>
@@ -38,7 +50,9 @@
         <button id="mute" title="Mute / unmute" type="button" aria-pressed="false" disabled>Mute</button>
         <p id="status" class="sr-only" role="status" aria-live="polite">Opening the instrument...</p>
       </section>
-      <nav class="dates" aria-label="Choose a session">
+      <div class="session-selector">
+      <div class="session-heading" id="session-heading"><span>Sessions</span><span>2026</span></div>
+      <nav class="dates" aria-label="Choose a session" aria-describedby="session-heading">
         <a id="2026-08-31" href="#2026-08-31" aria-label="August 31, 2026"><span>Aug</span>31</a>
         <a id="2026-09-01" href="#2026-09-01" aria-label="September 1, 2026"><span>Sep</span>1</a>
         <a id="2026-09-02" href="#2026-09-02" aria-label="September 2, 2026">2</a>
@@ -48,11 +62,13 @@
         <a id="2026-09-09" href="#2026-09-09" aria-label="September 9, 2026">9</a>
         <a id="2026-09-10" href="#2026-09-10" aria-label="September 10, 2026">10</a>
       </nav>
+      </div>
     </div>
     <p class="bridge-caption">Price sets pitch. Pitch sets color.</p>
     <details class="method">
-      <summary>Mapping</summary>
-      <p>Low price, low note. High price, high note.</p>
+      <summary>Method</summary>
+      <div class="method-body">
+      <p class="method-intro">Price &rarr; pitch &rarr; color.<br>Velocity &rarr; horizontal position.<br>Acceleration &rarr; vertical position.</p>
       <ol class="pitch-key" aria-label="Pitch colors from low to high">
         <li style="--pitch:#ff8eb9"><b>A</b><span>0%</span></li>
         <li style="--pitch:#ffa242"><b>B</b><span>23.6%</span></li>
@@ -63,9 +79,21 @@
         <li style="--pitch:#cea4ff"><b>G</b><span>88.6%</span></li>
         <li style="--pitch:#ff8eb9"><b>A <small>+1 octave</small></b><span>100%</span></li>
       </ol>
-      <p>Steps within the observed five-session range, including this day. Smoothed prices; gaps stay gaps.</p>
-      <p>Orbit: velocity and acceleration.<br>Notes: two price voices. House: the same notes, arranged.<br>Colors show pitch, not trade outcomes.</p>
+      <p>Eight pitch landmarks, from low to high. Boundaries fall halfway between landmarks; an exact tie takes the higher note.</p>
+      <dl class="method-rules">
+        <div><dt>Range</dt><dd>The trailing five trading sessions, including this day. The lowest and highest observed five-minute closes are frozen as anchors. The open is not an anchor.</dd></div>
+        <div><dt>Price</dt><dd><code>clamp((smoothed close - low) / (high - low), 0, 1)</code><br>The nearest landmark sets the note. A flat range gives A and a stationary orbit.</dd></div>
+        <div><dt>Smoothing</dt><dd>A centered, 11-observation cubic Savitzky-Golay fit. One-minute spacing for the session; five-minute spacing for the context voice.</dd></div>
+        <div><dt>Motion</dt><dd>The fitted price's first derivative is velocity (price/minute); its second is acceleration (price/minute squared). Each axis is scaled to this session's own maximum absolute value. Similar shapes need not mean equal-sized moves.</dd></div>
+        <div><dt>Pitch</dt><dd>A minor: semitone offsets 0, 2, 3, 5, 7, 8, 10, 12. The session starts at A3 (220 Hz); context is an octave below, A2 (110 Hz). <code>frequency = base &times; 2^(semitone / 12)</code></dd></div>
+        <div><dt>Color</dt><dd>Hue is semitone &times; 30&deg;, modulo 360&deg;. OKLCH lightness 0.80 and chroma 0.16 stay fixed. Both A octaves share a color. Color means pitch, not profit.</dd></div>
+        <div><dt>Sound</dt><dd>Notes plays the two price voices. House is their pre-rendered arrangement with a 120 BPM beat. Both use one clock: a market minute takes 0.5 seconds; the session lasts 3:15.</dd></div>
+        <div><dt>Gaps</dt><dd>Five observations at each end of every run are omitted. Missing data splits the path; no gap or overnight interval is connected. Derived voices and the marker stop where their observations end; House drums may continue.</dd></div>
+        <div><dt>Playback</dt><dd>The price readout is the recorded, unsmoothed one-minute close available in the instrument document. Empty readouts identify missing data or smoothing edges. Reduced motion steps between recorded-minute positions.</dd></div>
+        <div><dt>Perspective</dt><dd>This is retrospective, not a live quote or signal. Centered smoothing uses later observations, and the anchors include the completed day. The faint path previews the whole recorded session.</dd></div>
+      </dl>
       <p id="coverage" class="coverage"></p><p id="voices" class="sr-only" aria-hidden="true">Session / Context</p>
+      </div>
     </details>
     <noscript><p>This instrument needs JavaScript for local sound and drawing. Nothing plays automatically.</p></noscript>
   </main>
@@ -82,6 +110,10 @@
     const status = document.querySelector('#status'), label = document.querySelector('#session-label');
     const clock = document.querySelector('#clock'), voices = document.querySelector('#voices');
     const coverage = document.querySelector('#coverage');
+    const seek = document.querySelector('#progress');
+    const marketTime = document.querySelector('#market-time'), observationState = document.querySelector('#observation-state');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let seeking = false, seekResume = false;
     const supportsOKLCH = CSS.supports('color', 'oklch(0.8 0.16 0)');
     let data = null, buffers = null, context = null, master = null, sources = [];
     let playing = false, muted = false, preparing = false, loading = false;
@@ -100,6 +132,7 @@
     };
     const soundButtons = [...document.querySelectorAll('[data-sound]')];
     function syncSoundChoices() {
+      seek.disabled = sound.disabled;
       soundButtons.forEach(button => {
         button.disabled = sound.disabled || (button.dataset.sound === 'house' && sound.options[1].disabled);
         button.setAttribute('aria-pressed', String(button.dataset.sound === sound.value));
@@ -188,12 +221,12 @@
       g.setTransform(ratio, 0, 0, ratio, 0, 0);
       g.clearRect(0, 0, size, size);
       if (data) {
-        g.lineWidth = 1.25; g.lineCap = 'round'; g.lineJoin = 'round';
+        g.lineWidth = 1.1; g.lineCap = 'round'; g.lineJoin = 'round';
         for (const run of data.runs) {
           for (let i = 1; i < run.points.length; i++) {
             const a = position(run.points[i - 1]), b = position(run.points[i]);
             g.strokeStyle = colour(run.points[i].landmark);
-            g.shadowColor = g.strokeStyle; g.shadowBlur = 3;
+            g.shadowBlur = 0;
             g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke();
           }
           if (run.points.length && data.flat) {
@@ -221,23 +254,32 @@
       const event = events.find(e => minute >= e.startMinute && minute < e.endMinute + 1);
       return event ? (event.landmark === 7 ? 'A′' : data.method.notes[event.landmark]) : '—';
     }
+    function marketStamp(seconds) {
+      const total = 570 + Math.min(390, Math.floor(seconds / SECONDS_PER_MINUTE));
+      return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')} ET`;
+    }
+    function audioStamp(seconds) {
+      const whole = Math.floor(seconds);
+      return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
+    }
     function draw(seconds) {
       if (!pen || !background) return;
       pen.clearRect(0, 0, size, size);
       // The full measured path is a faint reference, not an invented curve.
-      pen.globalAlpha = .10;
+      pen.globalAlpha = .38;
       pen.drawImage(background, 0, 0, size, size);
       pen.globalAlpha = 1;
-      const minute = seconds / SECONDS_PER_MINUTE;
+      const minute = reducedMotion.matches ? Math.floor(seconds / SECONDS_PER_MINUTE) : seconds / SECONDS_PER_MINUTE;
+      const recordedMinute = Math.floor(seconds / SECONDS_PER_MINUTE);
       let priceSample = null;
       if (data) {
-        pen.lineWidth = 1.35; pen.lineCap = 'round'; pen.lineJoin = 'round';
+        pen.lineWidth = 1.65; pen.lineCap = 'round'; pen.lineJoin = 'round';
         for (const run of data.runs) {
           const points = run.points;
           if (!points.length) continue;
-          if (minute >= points[0].minute && minute <= points[points.length - 1].minute) {
+          if (recordedMinute >= points[0].minute && recordedMinute <= points[points.length - 1].minute) {
             for (const sample of points) {
-              if (sample.minute > minute) break;
+              if (sample.minute > recordedMinute) break;
               priceSample = sample;
             }
           }
@@ -247,7 +289,7 @@
             const fraction = Math.min(1, (minute - a.minute) / (b.minute - a.minute));
             const [ax, ay] = position(a), [bx, by] = position(b);
             pen.strokeStyle = colour(b.landmark);
-            pen.shadowColor = pen.strokeStyle; pen.shadowBlur = 3;
+            pen.shadowColor = pen.strokeStyle; pen.shadowBlur = reducedMotion.matches ? 0 : 1.5;
             pen.beginPath(); pen.moveTo(ax, ay);
             pen.lineTo(ax + (bx - ax) * fraction, ay + (by - ay) * fraction); pen.stroke();
             if (fraction < 1) break;
@@ -258,34 +300,42 @@
       const p = pointAt(minute);
       if (p) {
         const [x, y] = position(p);
-        pen.shadowColor = colour(p.landmark); pen.shadowBlur = 10;
+        pen.shadowColor = colour(p.landmark); pen.shadowBlur = reducedMotion.matches ? 0 : 5;
         pen.fillStyle = colour(p.landmark); pen.beginPath(); pen.arc(x, y, 4, 0, Math.PI * 2); pen.fill();
-        pen.shadowBlur = 0; pen.strokeStyle = '#fff'; pen.lineWidth = 1;
+        pen.shadowBlur = 0; pen.strokeStyle = '#f1ede3'; pen.lineWidth = 1.25;
         pen.beginPath(); pen.arc(x, y, 5.5, 0, Math.PI * 2); pen.stroke();
       }
-      // Top-right tracker: the recorded close and the note at the playhead,
-      // the note in its own pitch colour. Both go blank where nothing was derived.
+      // Readouts share the audio clock. A gap never borrows an adjacent price.
       const price = document.querySelector('#live-price'), note = document.querySelector('#live-note');
       const event = data ? data.noteEvents.find(e => minute >= e.startMinute && minute < e.endMinute + 1) : null;
       if (priceSample && Number.isFinite(priceSample.close)) {
         price.textContent = priceSample.close.toFixed(2);
-        const marketMinute = 570 + priceSample.minute;
-        price.title = `Recorded one-minute close at ${Math.floor(marketMinute / 60)}:${String(marketMinute % 60).padStart(2, '0')} ET. Not a live quote.`;
+        price.title = `Recorded one-minute close at ${marketStamp(priceSample.minute * SECONDS_PER_MINUTE)}. Not a live quote.`;
+        observationState.textContent = '';
+        observationState.dataset.state = 'observed';
       } else {
-        price.textContent = '--';
-        price.title = 'No derived observation here. Not a live quote.';
+        price.textContent = data ? 'No sample' : 'Loading';
+        const missing = data?.source.missingMinutes.includes(recordedMinute);
+        const nearGap = data?.source.missingMinutes.some(m => Math.abs(m - recordedMinute) <= data.method.smoothing.edgeLossEachSide);
+        observationState.textContent = !data ? 'Opening recorded data' : recordedMinute >= 390 ? 'Session complete' : missing ? 'Missing source minute' : nearGap ? 'Gap in smoothing window' : 'Edge of smoothing window';
+        observationState.dataset.state = !data ? 'loading' : recordedMinute >= 390 ? 'complete' : missing ? 'missing' : nearGap ? 'gap' : 'edge';
+        price.title = observationState.textContent + '. No price substituted.';
       }
+      marketTime.textContent = marketStamp(seconds);
       if (event) {
-        note.textContent = event.landmark === 7 ? 'A′' : data.method.notes[event.landmark];
+        note.textContent = data.method.notes[event.landmark] + (3 + Math.floor((9 + event.semitone) / 12));
         note.style.color = colour(event.landmark);
-        note.title = `Note ${note.textContent} at the playhead`;
+        note.title = `Session note ${note.textContent}; context voice is anchored at A2`;
       } else {
-        note.textContent = '—'; note.style.color = ''; note.title = 'No note here';
+        note.textContent = 'Silent'; note.style.color = ''; note.title = 'No session note at this market minute';
       }
-      document.querySelector('#progress').value = seconds;
+      seek.value = String(seconds);
+      seek.style.setProperty('--played', `${seconds / DURATION * 100}%`);
+      seek.setAttribute('aria-valuetext', `${audioStamp(seconds)} of 3:15 audio; ${marketStamp(seconds)} market time`);
+      canvas.dataset.marker = p ? 'visible' : 'hidden';
+      canvas.dataset.minute = String(recordedMinute);
       play.setAttribute('aria-pressed', String(playing));
-      const whole = Math.floor(seconds);
-      clock.textContent = `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')} / 3:15`;
+      clock.textContent = `${audioStamp(seconds)} / 3:15`;
       if (data) voices.textContent = `Session ${noteAt(data.noteEvents, minute)} / Context ${noteAt(data.parent.sessionDay.noteEvents, minute)}`;
     }
     function now() { return playing ? Math.min(DURATION, Math.max(offset, context.currentTime - started + offset)) : offset; }
@@ -307,13 +357,34 @@
     }
     function tick() {
       updatePlayback();
-      if (playing) frame = requestAnimationFrame(tick);
+      if (playing && !reducedMotion.matches) frame = requestAnimationFrame(tick);
     }
     function startRedraw() {
       clearInterval(redrawTimer);
       redrawTimer = setInterval(updatePlayback, 250);
       tick();
     }
+    reducedMotion.addEventListener('change', () => {
+      cancelAnimationFrame(frame);
+      canvas.dataset.motion = reducedMotion.matches ? 'reduced' : 'full';
+      if (playing) tick(); else draw(offset);
+    });
+    canvas.dataset.motion = reducedMotion.matches ? 'reduced' : 'full';
+    seek.addEventListener('input', () => {
+      if (loading || preparing || !data) return;
+      const target = Math.max(0, Math.min(DURATION, Number(seek.value)));
+      if (!seeking) { seekResume = playing; pause(); seeking = true; }
+      offset = target;
+      play.textContent = offset >= DURATION ? 'Replay' : offset > 0 ? 'Resume' : 'Listen';
+      draw(offset);
+    });
+    seek.addEventListener('change', () => {
+      if (!seeking) return;
+      seeking = false;
+      const resume = seekResume; seekResume = false;
+      status.textContent = `Position ${audioStamp(offset)}. ${marketStamp(offset)} recorded market time.`;
+      if (resume && offset < DURATION) play.click();
+    });
     function envelope(offline, event, base, attack, release) {
       const start = event.startMinute * SECONDS_PER_MINUTE;
       const end = (event.endMinute + 1) * SECONDS_PER_MINUTE;
@@ -415,7 +486,7 @@
     });
     async function select(date) {
       const token = ++generation;
-      pause(); offset = 0; preparing = false; loading = true;
+      pause(); offset = 0; preparing = false; loading = true; seeking = false; seekResume = false;
       play.disabled = true; mute.disabled = true; sound.disabled = true; syncSoundChoices(); play.textContent = 'Listen';
       request?.abort(); request = new AbortController();
       const timer = setTimeout(() => request.abort(), 12000);
@@ -429,12 +500,12 @@
         soundMode = 'pure'; sound.value = 'pure';
         sound.options[1].disabled = !houseFiles[date];
         sound.options[1].textContent = houseFiles[date] ? 'House' : 'House (not available yet)';
-        label.textContent = `${data.symbol} / ${data.date}`;
+        label.textContent = new Intl.DateTimeFormat('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${data.date}T12:00:00Z`));
         canvas.setAttribute('aria-label', `${data.symbol}, ${data.date}. Price velocity by acceleration; note-colored open paths.`);
         canvas.dataset.session = date; canvas.dataset.state = 'ready';
         links.forEach(link => { if (link.hash === `#${date}`) link.setAttribute('aria-current', 'date'); else link.removeAttribute('aria-current'); });
         const missing = data.source.missingMinutes.length;
-        coverage.textContent = `Five-session range · ${data.parent.observedSessions.length}/5 sessions observed${missing ? ` · ${missing} missing minute${missing === 1 ? '' : 's'}` : ''}.`;
+        coverage.textContent = `${data.parent.observedSessions.length}/5 context sessions observed. ${data.derivedObservations} mapped observations${missing ? `; ${missing} missing source minute${missing === 1 ? '' : 's'}` : '; no internal missing minutes'}. Frozen range: ${data.method.anchors.low.toFixed(2)} to ${data.method.anchors.high.toFixed(2)}.${data.parent.missingSessions.length ? ` Missing sessions: ${data.parent.missingSessions.join(', ')}.` : ''}`;
         makeBackground();
         status.textContent = data.derivedObservations ? 'Ready. Two voices from the same price data.' : 'No derived observations. This session is silent.';
       } catch (error) {
