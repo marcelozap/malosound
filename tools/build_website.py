@@ -13,7 +13,7 @@ from urllib.request import urlopen
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
-    'index.html', 'site.css', '404.html',
+    'index.html', 'site.css', '404.html', 'beat-room.html',
     'assets/brand/malosound-violet-ice-cover.png',
     'assets/fonts/space-grotesk-latin.ttf',
     'assets/fonts/OFL-SpaceGrotesk.txt',

@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Make your own beats with editable drums and bass, voice recording, and WAV export. Built by MaloSound; sound stays in your browser.">
+  <link rel="canonical" href="https://malosound.ai/beat-room.html">
+  <title>MaloSound / Beat room</title>
+  <style>
+    :root{--paper:#eee9df;--soft:#a5abb8;--gold:#c7ac78;--blue:#304d9b;--line:#ffffff14;--bg:#0c1019;--panel:#111723;--red:#e09692;font-family:"Trebuchet MS",Verdana,sans-serif;color:var(--paper);background:var(--bg)}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% 0%,#1c2d4e70,transparent 55%),var(--bg);min-height:100vh}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}button,select{color:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}a{color:inherit}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:4px}button{border:1px solid var(--line);background:transparent;min-height:44px;border-radius:5px;padding:0 14px}button:hover:not(:disabled){border-color:#c7ac7870;background:#ffffff05}select{background:#151d2b;border:1px solid var(--line);border-radius:4px;padding:10px 28px 10px 10px;min-height:44px}input[type=range]{accent-color:var(--gold);width:100%;min-height:26px}input[type=number]{width:76px;min-height:44px;color:var(--paper);border:1px solid var(--line);border-radius:4px;background:#0c111b;padding:8px 10px;font-variant-numeric:tabular-nums}p{line-height:1.6}header,main,footer{max-width:1320px;margin:auto;padding-left:clamp(20px,4vw,60px);padding-right:clamp(20px,4vw,60px)}header{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-top:28px;padding-bottom:28px;border-bottom:1px solid var(--line)}.wordmark{text-decoration:none;font:italic 32px/1 Georgia,serif;letter-spacing:-1.5px}.local{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase}.local:before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold)}.intro{padding:42px 0 30px;display:flex;justify-content:space-between;align-items:end;gap:22px}.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin:0 0 12px}h1{font:400 clamp(46px,6vw,78px)/1 Georgia,serif;letter-spacing:-.06em;margin:0}.intro p:last-child{color:var(--soft);font-size:14px;margin:15px 0 0}.pulse-display{display:flex;gap:7px;align-items:end;height:48px;padding-bottom:3px}.pulse-display i{display:block;width:7px;height:15px;background:#8f9ab02b}.pulse-display i:nth-child(2){height:28px}.pulse-display i:nth-child(3){height:40px}.pulse-display i:nth-child(4){height:23px}.pulse-display i.active{background:var(--gold)}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 280px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#101620e0}.music{min-width:0}.transport{padding:22px 24px;display:flex;align-items:center;gap:22px;border-bottom:1px solid var(--line)}.play{background:var(--paper);color:#101620;border:0;width:54px;height:54px;padding:0;border-radius:50%;display:grid;place-items:center;flex-shrink:0}.play:hover:not(:disabled){background:var(--gold);color:#101620}.play svg{width:21px;height:21px;fill:currentColor}.timing{display:flex;gap:20px;align-items:end;flex-wrap:wrap}.control{display:grid;gap:7px}.control label,.control-label{font-size:10px;color:var(--soft);letter-spacing:.1em;text-transform:uppercase}.swing{width:94px}.position{margin-left:auto;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}.position strong{font-size:22px;font-weight:400}.position span{display:block;font-size:10px;color:var(--soft);letter-spacing:.1em;margin-top:4px}.pattern-tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:20px 24px 8px}.pattern-tools select{min-width:150px}.pattern-tools .key{min-width:74px}.pattern-tools label{color:var(--soft);font-size:12px}.quiet{border-color:transparent;font-size:12px;color:var(--soft);padding:0 8px}.pattern-tools .spacer{flex:1}.sequencer-scroll{overflow-x:auto;padding:14px 24px 22px;scrollbar-color:#4c5364 transparent;scrollbar-width:thin}.sequencer{min-width:638px}.step-head,.track{display:grid;grid-template-columns:94px repeat(16,minmax(25px,1fr));gap:5px;align-items:center}.step-head{margin-bottom:10px}.step-head>span{text-align:center;font-size:10px;color:#8690a3}.step-head>span.beat-number{color:var(--gold)}.track{margin-bottom:9px}.track-name{display:flex;flex-direction:column;gap:2px;align-items:flex-start;justify-content:center;border:0;padding:0 5px;min-height:42px;border-radius:0;font-size:12px;text-align:left}.track-name small{font-size:9px;color:var(--soft);font-variant-numeric:tabular-nums}.track-name[aria-pressed=false]{color:#6a7283;text-decoration:line-through}.pad{min-height:43px;height:43px;padding:0;border:1px solid #ffffff09;background:#1a2130;border-radius:3px;position:relative;font-size:9px;color:var(--paper);font-variant-numeric:tabular-nums}.pad.beat-start{border-left:2px solid #c7ac7838}.pad[aria-pressed=true]{background:var(--tone);border-color:#ffffff25}.pad.playhead:after{content:"";position:absolute;left:4px;right:4px;bottom:4px;height:2px;background:var(--paper);box-shadow:0 0 8px #ffffff80}.pad[aria-pressed=true]:hover:not(:disabled){background:var(--tone);filter:brightness(1.15)}.grid-hint{margin:0 24px 20px;color:var(--soft);font-size:11px}.mix{display:flex;gap:20px;align-items:center;padding:18px 24px;border-top:1px solid var(--line)}.mix .control{width:130px}.mix .sound-label{font-size:12px;color:var(--soft);margin-left:auto}.exports{border-top:1px solid var(--line);display:flex;gap:10px;padding:18px 24px;align-items:center;flex-wrap:wrap}.exports select{min-width:80px}.export{background:#c7ac7811;border-color:#c7ac7840;color:var(--gold);font-size:12px}.exports .quiet{margin-left:auto}.voice{padding:28px 24px;border-left:1px solid var(--line);background:#0c111b60;display:flex;flex-direction:column}.voice h2{font:400 32px/1.1 Georgia,serif;margin:0;letter-spacing:-.035em}.voice>p{color:var(--soft);font-size:12px;margin:14px 0 25px}.record{width:100%;display:flex;align-items:center;justify-content:center;gap:9px;font-size:12px}.record-dot{width:8px;height:8px;background:var(--red);border-radius:50%;flex-shrink:0}.record.is-recording{border-color:#e0969260;color:#edb7b4}.record.is-recording .record-dot{border-radius:1px}.record-clock{font-size:28px;font-variant-numeric:tabular-nums;letter-spacing:.03em;margin:22px 0 16px}.mic-control{margin:0 0 24px}.meter{height:3px;background:#ffffff0e;margin-top:10px;overflow:hidden}.meter-fill{height:100%;width:0;background:var(--gold)}.take{border-top:1px solid var(--line);padding:16px 0}.take-head{display:flex;justify-content:space-between;align-items:center;gap:5px;font-size:12px}.take audio{width:100%;height:36px;margin-top:12px}.take a{font-size:11px;color:var(--gold);text-underline-offset:4px}.take .quiet{min-height:30px}.takes-note{font-size:11px;color:var(--soft);line-height:1.7;margin-top:16px}.status{min-height:45px;padding:14px 0;color:var(--soft);font-size:12px;line-height:1.6}.fine-print{border-top:1px solid var(--line);padding:16px 0;margin-top:8px;color:var(--soft);font-size:11px;line-height:1.7}.fine-print summary{cursor:pointer;min-height:35px}.fine-print p{max-width:75ch}.scratch{margin-top:28px}.scratch label{font-size:10px;color:var(--soft);letter-spacing:.12em;text-transform:uppercase}.scratch textarea{font:16px/1.7 Georgia,serif;background:transparent;color:var(--paper);border:0;border-bottom:1px solid var(--line);width:100%;min-height:120px;resize:vertical;padding:12px 0;outline-offset:4px}.scratch textarea::placeholder{color:#72798a}.voice .scratch{margin-top:auto;padding-top:25px}footer{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-top:25px;padding-bottom:30px;color:var(--soft);font-size:11px}footer a{text-decoration:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}@media(max-width:1100px){.workspace{grid-template-columns:minmax(0,1fr)}.voice{border-left:0;border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:12px 35px}.voice>p{margin:0}.voice h2,.voice>p{grid-column:1/-1}.voice .record-clock{margin:0;text-align:right}.voice .scratch{grid-column:1/-1;margin-top:0;padding-top:0}.mic-control{margin-bottom:0}.takes{grid-column:1/-1}.takes-note{margin:0}.voice .record{max-width:270px}}@media(max-width:600px){header{padding-top:20px;padding-bottom:20px}.wordmark{font-size:28px}.local{font-size:9px}.intro{padding-top:30px}.intro p:last-child{font-size:12px;max-width:220px}.pulse-display{gap:5px}.transport{padding:17px 16px;gap:14px}.timing{gap:12px}.swing{width:70px}.position strong{font-size:18px}.position span{font-size:8px}.play{width:46px;height:46px}.pattern-tools{padding:15px 16px 4px;gap:8px}.pattern-tools select{min-width:134px}.pattern-tools .key{min-width:67px}.pattern-tools .spacer{display:none}.sequencer-scroll{padding:14px 16px 18px}.sequencer{min-width:712px}.grid-hint{margin-left:16px;margin-right:16px;font-size:10px}.mix,.exports{padding:16px;gap:10px}.mix .control{width:106px}.mix .sound-label{font-size:10px;max-width:100px;text-align:right}.exports .quiet{margin-left:0}.voice{padding:23px 18px;column-gap:16px}.voice>p{max-width:290px}.voice .record{padding:0 10px}.voice .record-clock{font-size:25px}.takes-note{font-size:10px}.pattern-tools label{font-size:10px}.control label,.control-label{font-size:9px}.status{font-size:11px}footer{font-size:10px}.exports select{min-width:73px}.exports .quiet{padding:0 4px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+  <header><a class="wordmark" href="index.html">malosound</a><span class="local">Your workspace</span></header>
+  <main>
+    <section class="intro" aria-labelledby="title"><div><p class="eyebrow">Make something yours</p><h1 id="title">Beat room.</h1><p>Build the groove. Leave room for your voice.</p></div><div class="pulse-display" aria-hidden="true"><i></i><i></i><i></i><i></i></div></section>
+    <div class="workspace">
+      <section class="music" aria-label="Beat maker">
+        <div class="transport">
+          <button class="play" id="play" aria-label="Play beat" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l14-8z"/></svg></button>
+          <div class="timing"><div class="control"><label for="bpm">Tempo</label><input data-edit id="bpm" type="number" min="40" max="200" value="92" inputmode="numeric"></div><div class="control swing"><label for="swing">Swing <output id="swing-value">8%</output></label><input data-edit id="swing" type="range" min="0" max="40" value="8"></div></div>
+          <div class="position"><strong id="bar">01 : 01</strong><span>Bar / Beat</span></div>
+        </div>
+        <div class="pattern-tools"><label class="sr-only" for="preset">Starting groove</label><select data-edit id="preset"><option value="pocket">Pocket / 92</option><option value="halftime">Half-time / 140</option><option value="fourfloor">Four-on-the-floor / 120</option><option value="empty">Empty pattern</option><option value="custom" disabled>Your pattern</option></select><label for="root">Bass</label><select data-edit class="key" id="root"><option value="33">A</option><option value="36">C</option><option value="38">D</option><option value="40">E</option><option value="43">G</option></select><span class="spacer"></span><button data-edit class="quiet" id="undo" disabled>Undo</button><button data-edit class="quiet" id="clear">Clear</button></div>
+        <div class="sequencer-scroll" tabindex="0" role="region" aria-label="Drum and bass steps. Scroll horizontally to see the full bar."><div class="sequencer" id="sequencer"></div></div>
+        <p class="grid-hint">Tap a step. Tap bass again to change its note. Track names mute. Arrow keys move between steps.</p>
+        <div class="mix"><div class="control"><label for="level">Beat level</label><input id="level" type="range" min="0" max="100" value="72"></div><div class="control"><label for="bass-level">Bass level</label><input data-edit id="bass-level" type="range" min="0" max="100" value="60"></div><span class="sound-label">One bar. Yours to change.</span></div>
+        <div class="exports"><label class="sr-only" for="length">Export length</label><select id="length"><option value="4">4 bars</option><option value="8" selected>8 bars</option><option value="16">16 bars</option><option value="32">32 bars</option></select><button class="export" id="export">Download beat / WAV</button><button class="quiet" id="save">Save sketch</button><button class="quiet" id="open">Open sketch</button><input id="file" type="file" accept="application/json,.json" hidden></div>
+      </section>
+      <aside class="voice" aria-labelledby="voice-title"><h2 id="voice-title">Your voice.</h2><p>Record your rap or guitar over the loop. Use headphones; microphone monitoring is off.</p><button class="record" id="record"><span class="record-dot" aria-hidden="true"></span><span id="record-label">Record voice + beat</span></button><div class="record-clock" id="record-clock" role="timer" aria-label="Recording time">0:00</div><div class="control mic-control"><label for="mic-level">Voice level</label><input id="mic-level" type="range" min="0" max="150" value="100"><div class="meter" aria-hidden="true"><div class="meter-fill" id="meter"></div></div></div><p class="takes-note">Takes stay in this tab. Download them before closing.</p><div class="takes" id="takes"></div><div class="scratch"><label for="words">A line to try</label><textarea id="words" placeholder="Write it how you would say it." spellcheck="true" aria-label="Your lyric ideas"></textarea></div></aside>
+    </div>
+    <div class="status" id="status" role="status" aria-live="polite">Press play, then make it yours. Nothing uploads.</div>
+    <details class="fine-print"><summary>About this sketch</summary><p>A local beat sketchpad, not a replacement for your recording software. Drum and bass sounds are synthesized in your browser, not generated by AI. WAV exports contain the beat; recorded takes contain your microphone and the beat together. Browser input latency can affect vocal timing. There is no automatic pitch correction or alignment.</p><p>Your pattern and lyric scratchpad are saved in this browser when storage is available. Recordings are not saved automatically. Microphone access starts only when you press Record and ends when you stop the take. Recording requires localhost or HTTPS. No libraries, accounts, subscriptions, or external audio services.</p></details>
+  </main>
+  <footer><span>MaloSound / Beat Room</span><a href="index.html">Back to the existing work &#8599;</a></footer>
+  <script>
+  (()=>{
+    'use strict';
+    const $=id=>document.getElementById(id), STORE='malosound-beat-room-v1';
+    const trackInfo=[['kick','Kick','#a28b64'],['snare','Snare','#667caa'],['hat','Hat','#42628c'],['perc','Rim','#7e7987'],['bass','Bass','#706c47']];
+    const bassSteps=[null,0,3,5,7,10,12], roots=[33,36,38,40,43];
+    const empty=()=>Object.fromEntries(trackInfo.map(([id])=>[id,Array(16).fill(id==='bass'?null:false)]));
+    function template(name){
+      const p=empty(), put=(id,steps)=>steps.forEach(i=>p[id][i]=true);
+      let bpm=92,swing=.08;
+      if(name==='pocket'){put('kick',[0,6,10]);put('snare',[4,12]);put('hat',[0,2,4,6,8,10,12,14]);put('perc',[7,15]);p.bass[0]=0;p.bass[6]=0;p.bass[10]=7;p.bass[14]=0;}
+      if(name==='halftime'){bpm=140;swing=0;put('kick',[0,7,11]);put('snare',[8]);put('hat',[0,2,4,6,7,8,10,12,14,15]);put('perc',[14]);p.bass[0]=0;p.bass[7]=0;p.bass[11]=7;}
+      if(name==='fourfloor'){bpm=120;swing=.04;put('kick',[0,4,8,12]);put('snare',[4,12]);put('hat',[2,6,10,14]);put('perc',[3,11,15]);p.bass[2]=0;p.bass[6]=0;p.bass[10]=7;p.bass[14]=3;}
+      return {version:1,preset:name,bpm,swing,root:33,level:.72,bassLevel:.6,muted:[],pattern:p,words:''};
+    }
+    function valid(x){
+      if(!x||x.version!==1||!Number.isFinite(x.bpm)||x.bpm<40||x.bpm>200||!Number.isFinite(x.swing)||x.swing<0||x.swing>.4||!roots.includes(x.root))return false;
+      if(!['pocket','halftime','fourfloor','empty','custom'].includes(x.preset)||!Array.isArray(x.muted)||x.muted.some(id=>!trackInfo.some(t=>t[0]===id)))return false;
+      if(![x.level,x.bassLevel].every(v=>Number.isFinite(v)&&v>=0&&v<=1)||typeof x.words!=='string'||x.words.length>100000)return false;
+      return trackInfo.every(([id])=>Array.isArray(x.pattern?.[id])&&x.pattern[id].length===16&&x.pattern[id].every(v=>id==='bass'?bassSteps.includes(v):typeof v==='boolean'));
+    }
+    let state=template('pocket');
+    try{const saved=JSON.parse(localStorage.getItem(STORE));if(valid(saved))state=saved;}catch{}
+    let audio=null,engine=null,playing=false,starting=false,nextTime=0,nextStep=0,nextBar=1,timer=0,painted=-1,queue=[],currentBar=1;
+    let recording=false,requestingMic=false,finishing=false,exporting=false,recorder=null,micStream=null,micNode=null,micGain=null,analyser=null,recordDest=null,recordStart=0,recordTimer=0,takeCount=0;
+    const undo=[], pads=[], muteButtons={}, heldNodes=new Set(), takeUrls=new Set();
+    const tell=message=>$('status').textContent=message;
+    const saveLocal=()=>{try{localStorage.setItem(STORE,JSON.stringify(state));}catch{tell('Browser storage is unavailable. Use Save sketch to keep this pattern.');}};
+    const remember=()=>{undo.push(JSON.stringify(state));if(undo.length>30)undo.shift();};
+    function noteName(semi){const names=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];return names[(state.root+semi)%12];}
+    function makeGrid(){
+      const head=document.createElement('div');head.className='step-head';head.setAttribute('aria-hidden','true');head.append(document.createElement('span'));
+      for(let i=0;i<16;i++){const s=document.createElement('span');s.textContent=i%4===0?String(i/4+1):'.';if(i%4===0)s.className='beat-number';head.append(s);}$('sequencer').append(head);
+      trackInfo.forEach(([id,name,tone],row)=>{
+        const line=document.createElement('div');line.className='track';line.style.setProperty('--tone',tone);line.setAttribute('role','group');line.setAttribute('aria-label',name);
+        const mute=document.createElement('button');mute.className='track-name';mute.dataset.edit='';mute.innerHTML=name+'<small>'+(id==='bass'?'cycle note':'mute / on')+'</small>';mute.setAttribute('aria-label',name+' enabled');muteButtons[id]=mute;line.append(mute);
+        mute.addEventListener('click',()=>{remember();state.muted=state.muted.includes(id)?state.muted.filter(x=>x!==id):[...state.muted,id];refresh();saveLocal();});
+        for(let i=0;i<16;i++){
+          const pad=document.createElement('button');pad.className='pad'+(i%4===0?' beat-start':'');pad.dataset.edit='';pad.tabIndex=row===0&&i===0?0:-1;pad.dataset.row=row;pad.dataset.step=i;
+          pad.addEventListener('focus',()=>{pads.forEach(p=>p.tabIndex=p===pad?0:-1);});
+          pad.addEventListener('keydown',e=>{const changes={ArrowRight:1,ArrowLeft:-1,ArrowDown:16,ArrowUp:-16};if(e.key in changes){e.preventDefault();const j=(row*16+i+changes[e.key]+80)%80;pads[j].focus();}});
+          pad.addEventListener('click',async()=>{
+            remember();if(id==='bass')state.pattern[id][i]=bassSteps[(bassSteps.indexOf(state.pattern[id][i])+1)%bassSteps.length];else state.pattern[id][i]=!state.pattern[id][i];state.preset='custom';refresh();saveLocal();
+            if(!playing&&!state.muted.includes(id)&&(id==='bass'?state.pattern[id][i]!==null:state.pattern[id][i])){try{await ready();hit(engine,id,audio.currentTime+.01,state.pattern[id][i],state,heldNodes);}catch(e){tell(e.message);}}
+          });line.append(pad);pads.push(pad);
+        }$('sequencer').append(line);
+      });
+    }
+    function refresh(){
+      $('bpm').value=state.bpm;$('swing').value=Math.round(state.swing*100);$('swing-value').textContent=Math.round(state.swing*100)+'%';$('root').value=state.root;$('preset').value=state.preset;$('level').value=Math.round(state.level*100);$('bass-level').value=Math.round(state.bassLevel*100);$('words').value=state.words;
+      trackInfo.forEach(([id,name],row)=>{muteButtons[id].setAttribute('aria-pressed',String(!state.muted.includes(id)));for(let i=0;i<16;i++){const value=state.pattern[id][i],on=id==='bass'?value!==null:value,pad=pads[row*16+i];pad.setAttribute('aria-pressed',String(on));pad.textContent=id==='bass'&&on?noteName(value):'';pad.setAttribute('aria-label',`${name}, step ${i+1}, ${on?(id==='bass'?noteName(value):'on'):'off'}`);}});
+      lock();
+    }
+    function lock(){
+      const busy=recording||requestingMic||finishing;
+      document.querySelectorAll('[data-edit]').forEach(el=>el.disabled=busy);$('undo').disabled=busy||!undo.length;$('play').disabled=busy||starting;$('record').disabled=requestingMic||finishing||exporting;$('export').disabled=busy||exporting;$('open').disabled=busy;$('file').disabled=busy;
+    }
+    function createEngine(ctx){
+      const bus=ctx.createGain(),compress=ctx.createDynamicsCompressor(),output=ctx.createGain();compress.threshold.value=-12;compress.knee.value=18;compress.ratio.value=4;compress.attack.value=.003;compress.release.value=.15;bus.connect(compress);compress.connect(output);output.connect(ctx.destination);output.gain.value=state.level;
+      const noise=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate), samples=noise.getChannelData(0);let seed=9377;for(let i=0;i<samples.length;i++){seed=(Math.imul(seed,1664525)+1013904223)|0;samples[i]=(seed>>>0)/2147483648-1;}
+      return {ctx,bus,output,noise};
+    }
+    async function ready(){
+      if(!audio){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw new Error('This browser does not support Web Audio. Try a current desktop browser.');audio=new AC();engine=createEngine(audio);audio.addEventListener('statechange',()=>{if(audio.state==='suspended'&&playing){if(recording)stopTake();else stopBeat();tell('Audio was interrupted. Press play to resume.');}});}
+      await audio.resume();if(audio.state!=='running')throw new Error('Audio is paused by the browser. Press play again.');
+    }
+    function trackSource(source,time,duration,set){source.start(time);source.stop(time+duration);if(set){set.add(source);source.onended=()=>set.delete(source);}}
+    function hit(e,id,time,note,s,set){
+      const c=e.ctx,beat=60/s.bpm;
+      const tone=(frequency,end,duration,volume,type='sine',filterHz=0)=>{
+        const osc=c.createOscillator(),g=c.createGain();osc.type=type;osc.frequency.setValueAtTime(frequency,time);if(end!==frequency)osc.frequency.exponentialRampToValueAtTime(end,time+duration*.8);g.gain.setValueAtTime(.0001,time);g.gain.exponentialRampToValueAtTime(Math.max(.0001,volume),time+.006);g.gain.exponentialRampToValueAtTime(.0001,time+duration);osc.connect(g);if(filterHz){const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=filterHz;g.connect(f);f.connect(e.bus);}else g.connect(e.bus);trackSource(osc,time,duration+.015,set);
+      };
+      const noise=(freq,duration,volume,type)=>{const n=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();n.buffer=e.noise;f.type=type;f.frequency.value=freq;f.Q.value=.7;g.gain.setValueAtTime(volume,time);g.gain.exponentialRampToValueAtTime(.0001,time+duration);n.connect(f);f.connect(g);g.connect(e.bus);trackSource(n,time,duration+.005,set);};
+      if(id==='kick'){tone(145,43,.30,.85);noise(1900,.022,.1,'lowpass');}
+      if(id==='snare'){tone(190,140,.12,.18,'triangle');noise(1800,.15,.38,'highpass');}
+      if(id==='hat')noise(7500,.05,.14,'highpass');
+      if(id==='perc'){tone(760,670,.04,.10,'triangle');tone(1290,1120,.024,.05,'square',3500);}
+      if(id==='bass'&&note!==null){const f=440*2**((s.root+note-69)/12);tone(f,f,beat*.58,s.bassLevel*.34,'triangle',700);tone(f,f,beat*.58,s.bassLevel*.23);}
+    }
+    function stepLength(step,s){return 60/s.bpm/4*(step%2===0?1+s.swing:1-s.swing);}
+    function scheduleStep(e,step,time,s,set){trackInfo.forEach(([id])=>{const v=s.pattern[id][step];if(!s.muted.includes(id)&&(id==='bass'?v!==null:v))hit(e,id,time,v,s,set);});}
+    function paint(step,bar){
+      if(step===painted&&bar===currentBar)return;painted=step;currentBar=bar;
+      pads.forEach(p=>p.classList.toggle('playhead',Number(p.dataset.step)===step));document.querySelectorAll('.pulse-display i').forEach((el,i)=>el.classList.toggle('active',step>=0&&i===Math.floor(step/4)));$('bar').textContent=String(bar).padStart(2,'0')+' : '+String(step<0?1:Math.floor(step/4)+1).padStart(2,'0');
+    }
+    function tick(){
+      if(!playing)return;const now=audio.currentTime;
+      if(nextTime<now-.15){let skipped=0;while(nextTime<now+.025&&skipped<10000){nextTime+=stepLength(nextStep,state);nextStep++;if(nextStep===16){nextStep=0;nextBar++;}skipped++;}queue=[];}
+      while(nextTime<now+.13){scheduleStep(engine,nextStep,nextTime,state,heldNodes);queue.push({step:nextStep,bar:nextBar,time:nextTime});nextTime+=stepLength(nextStep,state);nextStep++;if(nextStep===16){nextStep=0;nextBar++;}}
+      let current;while(queue.length&&queue[0].time<=now)current=queue.shift();if(current)paint(current.step,current.bar);
+    }
+    function startBeat(){
+      playing=true;nextTime=audio.currentTime+.06;nextStep=0;nextBar=1;queue=[];$('play').setAttribute('aria-pressed','true');$('play').setAttribute('aria-label','Stop beat');$('play').innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>';tick();timer=setInterval(tick,25);
+    }
+    function stopBeat(){
+      playing=false;clearInterval(timer);queue=[];heldNodes.forEach(n=>{try{n.stop();}catch{}});heldNodes.clear();paint(-1,1);$('play').setAttribute('aria-pressed','false');$('play').setAttribute('aria-label','Play beat');$('play').innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l14-8z"/></svg>';
+    }
+    async function toggleBeat(){if(starting||recording||requestingMic||finishing)return;if(playing){stopBeat();return;}starting=true;lock();try{await ready();startBeat();tell('Playing your loop. Change the steps while it plays.');}catch(e){tell(e.message);}finally{starting=false;lock();}}
+    function timestamp(seconds){return Math.floor(seconds/60)+':'+String(Math.floor(seconds%60)).padStart(2,'0');}
+    function cleanMic(){
+      clearInterval(recordTimer);if(micStream)micStream.getTracks().forEach(t=>t.stop());if(micNode)micNode.disconnect();if(micGain)micGain.disconnect();if(analyser)analyser.disconnect();if(recordDest){try{engine.output.disconnect(recordDest);}catch{}recordDest.stream.getTracks().forEach(t=>t.stop());}micStream=micNode=micGain=analyser=recordDest=null;$('meter').style.width='0%';
+    }
+    function recordingUI(){
+      $('record').classList.toggle('is-recording',recording);$('record-label').textContent=requestingMic?'Opening microphone...':finishing?'Saving take...':recording?'Stop take':'Record voice + beat';lock();
+    }
+    function stopTake(){if(!recording||!recorder)return;recording=false;finishing=true;clearInterval(recordTimer);if(recorder.state!=='inactive')recorder.stop();stopBeat();recordingUI();}
+    async function startTake(){
+      if(requestingMic||finishing||exporting)return;if(recording){stopTake();return;}
+      if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){tell('Microphone recording needs a supported browser on localhost or HTTPS. Beat making still works.');return;}
+      requestingMic=true;recordingUI();
+      try{
+        await ready();micStream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});await audio.resume();
+        if(playing)stopBeat();recordDest=audio.createMediaStreamDestination();engine.output.connect(recordDest);micNode=audio.createMediaStreamSource(micStream);micGain=audio.createGain();micGain.gain.value=Number($('mic-level').value)/100;analyser=audio.createAnalyser();analyser.fftSize=256;micNode.connect(micGain);micGain.connect(recordDest);micGain.connect(analyser);
+        const mime=['audio/webm;codecs=opus','audio/mp4','audio/ogg;codecs=opus'].find(x=>MediaRecorder.isTypeSupported(x));recorder=new MediaRecorder(recordDest.stream,mime?{mimeType:mime}:undefined);const chunks=[],began=new Date();let failed=false;
+        recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data);};
+        recorder.onerror=()=>{failed=true;tell('Recording stopped with a browser error. Any available audio will appear as a partial take.');if(recording)stopTake();};
+        recorder.onstop=()=>{
+          const type=recorder.mimeType||mime||'audio/webm',blob=new Blob(chunks,{type});cleanMic();recording=false;finishing=false;requestingMic=false;recordingUI();
+          if(blob.size){const url=URL.createObjectURL(blob);takeUrls.add(url);takeCount++;const card=document.createElement('div');card.className='take';const head=document.createElement('div');head.className='take-head';const title=document.createElement('span');title.textContent=(failed?'Partial take ':'Take ')+String(takeCount).padStart(2,'0');const remove=document.createElement('button');remove.className='quiet';remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+title.textContent);head.append(title,remove);const player=document.createElement('audio');player.controls=true;player.preload='metadata';player.src=url;const link=document.createElement('a');link.href=url;link.download='malosound-take-'+began.toISOString().replace(/[:.]/g,'-')+(type.includes('mp4')?'.m4a':type.includes('ogg')?'.ogg':'.webm');link.textContent='Download take';card.append(head,player,link);$('takes').prepend(card);remove.addEventListener('click',()=>{if(!confirm('Remove this take from the tab? Download it first if you want to keep it.'))return;player.pause();player.removeAttribute('src');URL.revokeObjectURL(url);takeUrls.delete(url);card.remove();});player.addEventListener('play',()=>{if(recording){player.pause();return;}if(playing)stopBeat();document.querySelectorAll('.take audio').forEach(a=>{if(a!==player)a.pause();});});tell(failed?'A partial take is available. Download it to inspect.':'Take ready. Download it before closing this tab.');}else tell('No audio was captured. Try another take.');
+        };
+        document.querySelectorAll('.take audio').forEach(a=>a.pause());recorder.start(250);requestingMic=false;recording=true;recordStart=audio.currentTime;$('record-clock').textContent='0:00';recordingUI();startBeat();tell('Recording microphone + beat locally. Monitoring is off.');const samples=new Uint8Array(analyser.fftSize);
+        recordTimer=setInterval(()=>{if(!recording)return;const elapsed=audio.currentTime-recordStart;$('record-clock').textContent=timestamp(elapsed);analyser.getByteTimeDomainData(samples);let energy=0;for(const n of samples)energy+=((n-128)/128)**2;$('meter').style.width=Math.min(100,Math.sqrt(energy/samples.length)*350)+'%';if(elapsed>=300){tell('Five-minute take limit reached. Saving your recording.');stopTake();}},100);
+        micStream.getAudioTracks().forEach(t=>t.addEventListener('ended',()=>{if(recording){stopTake();tell('Microphone disconnected. Saving the available take.');}}));
+      }catch(e){cleanMic();recording=false;requestingMic=false;finishing=false;recordingUI();tell(e.name==='NotAllowedError'?'Microphone permission was not granted. The beat maker still works.':'Could not start recording: '+e.message);}
+    }
+    function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}
+    function encodeWav(buffer){
+      const frames=buffer.length,channels=buffer.numberOfChannels,bytes=frames*channels*2,array=new ArrayBuffer(44+bytes),v=new DataView(array),write=(offset,text)=>{for(let i=0;i<text.length;i++)v.setUint8(offset+i,text.charCodeAt(i));};
+      write(0,'RIFF');v.setUint32(4,36+bytes,true);write(8,'WAVE');write(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,channels,true);v.setUint32(24,buffer.sampleRate,true);v.setUint32(28,buffer.sampleRate*channels*2,true);v.setUint16(32,channels*2,true);v.setUint16(34,16,true);write(36,'data');v.setUint32(40,bytes,true);
+      const data=Array.from({length:channels},(_,i)=>buffer.getChannelData(i));let peak=0;for(const channel of data)for(let i=0;i<frames;i++)peak=Math.max(peak,Math.abs(channel[i]));const scale=peak>.98?.98/peak:1;
+      for(let i=0;i<frames;i++)for(let c=0;c<channels;c++){const sample=Math.max(-1,Math.min(1,data[c][i]*scale));v.setInt16(44+(i*channels+c)*2,sample*(sample<0?32768:32767),true);}return new Blob([array],{type:'audio/wav'});
+    }
+    async function exportBeat(){
+      if(exporting||recording||requestingMic||finishing)return;exporting=true;lock();const oldText=$('export').textContent;$('export').textContent='Rendering WAV...';
+      try{
+        const s=JSON.parse(JSON.stringify(state)),bars=Number($('length').value),duration=bars*4*60/s.bpm,OC=window.OfflineAudioContext||window.webkitOfflineAudioContext;if(!OC)throw new Error('Offline audio export is unavailable in this browser.');
+        const c=new OC(2,Math.ceil((duration+.5)*44100),44100),e=createEngine(c);e.output.gain.value=s.level;let t=0;for(let b=0;b<bars;b++)for(let step=0;step<16;step++){scheduleStep(e,step,t,s);t+=stepLength(step,s);}const rendered=await c.startRendering();download(encodeWav(rendered),'malosound-'+s.bpm+'bpm-'+bars+'bars.wav');tell('Beat WAV prepared with a half-second sound tail. Import it into your recording software.');
+      }catch(e){tell('Could not export the beat: '+e.message);}finally{exporting=false;$('export').textContent=oldText;lock();}
+    }
+    makeGrid();refresh();
+    $('play').addEventListener('click',toggleBeat);$('record').addEventListener('click',startTake);$('export').addEventListener('click',exportBeat);
+    $('preset').addEventListener('change',()=>{remember();const next=template($('preset').value);next.words=state.words;next.level=state.level;state=next;refresh();saveLocal();});
+    $('clear').addEventListener('click',()=>{remember();state.pattern=empty();state.preset='empty';refresh();saveLocal();tell('Empty pattern. Undo restores the previous one.');});
+    $('undo').addEventListener('click',()=>{if(!undo.length)return;state=JSON.parse(undo.pop());refresh();if(engine)engine.output.gain.setTargetAtTime(state.level,audio.currentTime,.02);saveLocal();});
+    $('bpm').addEventListener('change',()=>{remember();state.bpm=Math.min(200,Math.max(40,Math.round(Number($('bpm').value)||92)));refresh();saveLocal();});
+    $('swing').addEventListener('input',()=>{state.swing=Number($('swing').value)/100;$('swing-value').textContent=$('swing').value+'%';saveLocal();});
+    $('root').addEventListener('change',()=>{remember();state.root=Number($('root').value);refresh();saveLocal();});
+    $('level').addEventListener('input',()=>{state.level=Number($('level').value)/100;if(engine)engine.output.gain.setTargetAtTime(state.level,audio.currentTime,.02);saveLocal();});
+    $('bass-level').addEventListener('input',()=>{state.bassLevel=Number($('bass-level').value)/100;saveLocal();});
+    $('mic-level').addEventListener('input',()=>{if(micGain)micGain.gain.setTargetAtTime(Number($('mic-level').value)/100,audio.currentTime,.02);});
+    $('words').addEventListener('input',()=>{state.words=$('words').value.slice(0,100000);saveLocal();});
+    $('save').addEventListener('click',()=>download(new Blob([JSON.stringify(state,null,2)+'\n'],{type:'application/json'}),'malosound-sketch.json'));
+    $('open').addEventListener('click',()=>$('file').click());
+    $('file').addEventListener('change',async()=>{const file=$('file').files[0];if(!file)return;try{if(file.size>250000)throw new Error('The sketch file is too large.');const s=JSON.parse(await file.text());if(!valid(s))throw new Error('This is not a supported MaloSound sketch.');if(recording||requestingMic||finishing)throw new Error('Finish the take before opening another sketch.');remember();if(playing)stopBeat();state=s;refresh();if(engine)engine.output.gain.setTargetAtTime(state.level,audio.currentTime,.02);saveLocal();tell('Sketch loaded. Press play when ready.');}catch(e){tell(e.message);}finally{$('file').value='';}});
+    window.addEventListener('keydown',e=>{if(e.code==='Space'&&!e.repeat&&!e.target.closest('button,input,textarea,select,[contenteditable=true],summary,a')){e.preventDefault();toggleBeat();}});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&playing)tick();});
+    window.addEventListener('beforeunload',e=>{if(recording||requestingMic||takeUrls.size){e.preventDefault();e.returnValue='';}});
+    window.addEventListener('pagehide',()=>{if(recording)stopTake();else stopBeat();if(micStream)micStream.getTracks().forEach(t=>t.stop());});
+    if(!window.isSecureContext)$('record').title='Microphone recording requires localhost or HTTPS.';
+  })();
+  </script>
+</body>
+</html>
