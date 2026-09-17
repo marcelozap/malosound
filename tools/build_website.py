@@ -14,6 +14,11 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / 'build'
 PUBLIC_FILES = (
     'index.html', 'site.css', '404.html', 'beat-room.html',
+    'assets/beat-room/grooves.mjs', 'assets/beat-room/engine.mjs',
+    'assets/beat-room/app.mjs', 'assets/beat-room/library.css',
+    'assets/beat-room/listening.mjs',
+    'assets/beat-room/listening.css',
+    'assets/beat-room/moonlight-presto-paul-pitman.mp3',
     'assets/brand/malosound-violet-ice-cover.png',
     'assets/fonts/space-grotesk-latin.ttf',
     'assets/fonts/OFL-SpaceGrotesk.txt',

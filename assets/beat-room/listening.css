@@ -1,0 +1,83 @@
+.background-listening {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(250px, 340px);
+  align-items: center;
+  gap: 12px 28px;
+  margin: 0 0 24px;
+  padding: 20px 24px;
+  border: 1px solid rgba(190, 162, 106, .22);
+  border-radius: 12px;
+  background: linear-gradient(115deg, rgba(190, 162, 106, .055), transparent 70%);
+  color: #eee9de;
+}
+.background-listening__credit { min-width: 0; }
+.background-listening__label {
+  margin: 0 0 8px;
+  color: #bea26a;
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.background-listening h2 {
+  margin: 0;
+  font-size: clamp(19px, 2vw, 25px);
+  line-height: 1.2;
+  font-weight: 500;
+}
+.background-listening__credit > p:last-child {
+  margin: 8px 0 0;
+  color: #b8b7bb;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.background-listening a {
+  display: inline-block;
+  margin-left: 10px;
+  color: #bea26a;
+  text-underline-offset: 3px;
+}
+.background-listening a:focus-visible,
+.background-listening audio:focus-visible {
+  outline: 2px solid #bea26a;
+  outline-offset: 4px;
+}
+.background-listening audio {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  height: 44px;
+  color-scheme: dark;
+}
+.background-listening__status {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #b8b7bb;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.background-listening__layer {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  min-height: 44px;
+  color: #eee9de;
+  font-size: 12px;
+  cursor: pointer;
+}
+.background-listening__layer input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #bea26a;
+}
+.background-listening__layer input:focus-visible {
+  outline: 2px solid #bea26a;
+  outline-offset: 4px;
+}
+@media (max-width: 640px) {
+  .background-listening { grid-template-columns: minmax(0, 1fr); padding: 18px 16px; gap: 14px; }
+  .background-listening__credit > p:last-child { font-size: 11px; }
+  .background-listening a { margin-left: 8px; }
+}
