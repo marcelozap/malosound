@@ -1,14 +1,42 @@
 .background-listening {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(250px, 340px);
-  align-items: center;
-  gap: 12px 28px;
-  margin: 0 0 24px;
-  padding: 20px 24px;
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 100;
+  box-sizing: border-box;
+  width: 360px;
+  max-width: calc(100% - 32px);
+  margin: 0;
+  padding: 0;
   border: 1px solid rgba(190, 162, 106, .22);
   border-radius: 12px;
-  background: linear-gradient(115deg, rgba(190, 162, 106, .055), transparent 70%);
+  background: #111720;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .25);
   color: #eee9de;
+}
+body.has-background-listening { padding-bottom: 88px; }
+.background-listening__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 18px;
+  cursor: pointer;
+  list-style: none;
+  color: #eee9de;
+  font-size: 13px;
+}
+.background-listening__summary::-webkit-details-marker { display: none; }
+.background-listening__summary > span:first-child { font-weight: 600; }
+.background-listening__summary > span:last-child { margin-left: auto; color: #bea26a; font-size: 10px; }
+.background-listening__summary::after { content: '+'; color: #bea26a; }
+.background-listening[open] > summary::after { content: '-'; }
+.background-listening__summary:focus-visible { outline: 2px solid #bea26a; outline-offset: 3px; }
+.background-listening__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  padding: 0 18px 18px;
 }
 .background-listening__credit { min-width: 0; }
 .background-listening__label {
@@ -72,12 +100,13 @@
   margin: 0;
   accent-color: #bea26a;
 }
+.background-listening__layer[hidden] { display: none; }
 .background-listening__layer input:focus-visible {
   outline: 2px solid #bea26a;
   outline-offset: 4px;
 }
 @media (max-width: 640px) {
-  .background-listening { grid-template-columns: minmax(0, 1fr); padding: 18px 16px; gap: 14px; }
+  .background-listening { right: 12px; bottom: 12px; max-width: calc(100% - 24px); }
   .background-listening__credit > p:last-child { font-size: 11px; }
   .background-listening a { margin-left: 8px; }
 }

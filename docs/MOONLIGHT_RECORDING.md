@@ -28,8 +28,11 @@ https://musopen.org/music/2547-piano-sonata-no-14-in-c-sharp-minor-moonlight-son
 
 ## Behavior
 
-Optional native audio player above the groove library. No autoplay, preload
-disabled, initial volume 18%, looping enabled. User must explicitly start it.
+Optional native audio player in a collapsible, page-level Moonlight dock on
+both the MaloSound homepage and Rhythm. It sits outside either instrument's
+main controls. No autoplay, preload disabled, initial volume 18%, looping
+enabled. User must explicitly start it. Collapsing the dock keeps music playing.
+Navigation between pages does not promise seamless playback or auto-resume.
 By default, starting the beat pauses background listening, and starting
 background listening stops a running beat. The optional "Layer with beat"
 checkbox lets both play together with their existing independent volumes.
@@ -38,10 +41,14 @@ layering off pauses the piano if the beat is running. Starting a take or an
 export always pauses background listening, even with layering enabled.
 Background listening never starts or resumes automatically.
 
+The homepage does not expose beat layering. Its Listen control and the
+background recording pause one another, preserving the market instrument's
+own soundtrack and audio mappings.
+
 The player is not connected to the beat engine, offline WAV renderer, or
 microphone recording destination. The MP3 is not included in exported beats or
 the digital recording mix. As with any audio through speakers, a physical
 microphone can pick up room sound; use headphones.
 
-Local addition only. No new playback tests, build, commit, or deployment were
-performed for this addition.
+The shared dock's playback handoff, recording isolation, and mobile layout have
+not been re-tested. Deployment status is recorded in the release handoff.
