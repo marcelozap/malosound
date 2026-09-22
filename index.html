@@ -7,7 +7,10 @@
   <title>MaloSound</title>
   <meta name="description" content="Find the story. Record the take. Guitar and voice first. Marcelo Zapata’s music project.">
   <link rel="canonical" href="https://malosound.ai/">
-  <link rel="stylesheet" href="/site.css?v=music-home-20260922b">
+  <link rel="stylesheet" href="/site.css?v=music-home-20260922c">
+  <style>
+    .track-player { display: block; width: min(100%, 28rem); margin: 4px 0 20px; accent-color: #baa078; }
+  </style>
   <meta property="og:type" content="website">
   <meta property="og:title" content="MaloSound">
   <meta property="og:description" content="Find the story. Record the take. Guitar and voice first.">
@@ -18,7 +21,7 @@
   <meta name="twitter:image" content="https://malosound.ai/assets/brand/malosound-violet-ice-cover.png">
 </head>
 <body class="landing" id="top">
-  <a class="skip-link" href="beat-room.html">Skip to Rhythm</a>
+  <a class="skip-link" href="#track">Skip to Gold in the Dark</a>
   <header class="landing-header">
     <a class="landing-wordmark" href="#top" aria-label="MaloSound home">malosound</a>
     <nav aria-label="Main">
@@ -51,7 +54,9 @@
       <div>
         <h2 id="track-title">Gold in the Dark.</h2>
         <p>A song. Guitar first.</p>
-        <a class="text-link" href="https://www.marcelozapata.com/">Hear more on marcelozapata.com <span aria-hidden="true">&#8599;</span></a>
+        <audio class="track-player" controls preload="metadata" src="https://github.com/marcelozap/malosound/releases/download/gold-in-the-dark/gold-in-the-dark.mp3">
+          <a href="https://github.com/marcelozap/malosound/releases/download/gold-in-the-dark/gold-in-the-dark.mp3">Gold in the Dark</a>
+        </audio>
       </div>
     </section>
   </main>
