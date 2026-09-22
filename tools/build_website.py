@@ -19,6 +19,7 @@ PUBLIC_FILES = (
     'assets/beat-room/listening.mjs',
     'assets/beat-room/listening.css',
     'assets/beat-room/moonlight-presto-paul-pitman.mp3',
+    'assets/tracks/gold-in-the-dark.mp3',
     'assets/brand/malosound-violet-ice-cover.png',
     'assets/fonts/space-grotesk-latin.ttf',
     'assets/fonts/OFL-SpaceGrotesk.txt',

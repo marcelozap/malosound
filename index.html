@@ -7,11 +7,9 @@
   <title>MaloSound</title>
   <meta name="description" content="Find the story. Record the take. Guitar and voice first. Marcelo Zapata’s music project.">
   <link rel="canonical" href="https://malosound.ai/">
-  <link rel="stylesheet" href="/site.css?v=music-home-20260922d">
+  <link rel="stylesheet" href="/site.css?v=gold-20260922">
   <style>
-    .track-player { display: block; width: min(100%, 28rem); margin: 14px 0 0; accent-color: #baa078; }
-    .hero-listen { margin-top: 28px; text-align: left; max-width: 36rem; margin-inline: auto; }
-    .hero-listen h2 { margin: 0 0 6px; font-size: clamp(28px, 4vw, 40px); font-weight: 400; letter-spacing: -.03em; }
+    .track-player { display: block; width: min(100%, 28rem); height: 40px; margin: 8px 0 0; accent-color: #baa078; }
   </style>
   <meta property="og:type" content="website">
   <meta property="og:title" content="MaloSound">
@@ -37,15 +35,19 @@
         <p class="landing-eyebrow">MaloSound</p>
         <h1 id="landing-title">MaloSound</h1>
         <p class="hero-description">Find the story. Record the take. Guitar and voice first.</p>
-        <div class="hero-listen" id="track">
-          <h2>Gold in the Dark.</h2>
-          <p>A song. Guitar first.</p>
-          <audio class="track-player" controls preload="metadata" src="https://github.com/marcelozap/malosound/releases/download/gold-in-the-dark/gold-in-the-dark.mp3">
-            <a href="https://github.com/marcelozap/malosound/releases/download/gold-in-the-dark/gold-in-the-dark.mp3">Gold in the Dark</a>
-          </audio>
-        </div>
+        <a class="landing-action" href="#track">Start with the song <span aria-hidden="true">&#8599;</span></a>
       </div>
       <div class="hero-art"><img src="/assets/brand/malosound-violet-ice-cover.png" width="1690" height="952" fetchpriority="high" alt="MaloSound luminous filament artwork. Visual identity."></div>
+    </section>
+    <section class="landing-about" id="track" aria-labelledby="track-title">
+      <p class="landing-eyebrow">02 / Listen</p>
+      <div>
+        <h2 id="track-title">Gold in the Dark.</h2>
+        <p>A song. Guitar first.</p>
+        <audio class="track-player" controls preload="metadata" src="/assets/tracks/gold-in-the-dark.mp3">
+          <a href="/assets/tracks/gold-in-the-dark.mp3">Gold in the Dark</a>
+        </audio>
+      </div>
     </section>
     <section class="landing-about" id="about" aria-labelledby="about-title">
       <p class="landing-eyebrow">01 / The project</p>
