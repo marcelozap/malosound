@@ -4,578 +4,65 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#050608">
-  <title>MaloSound - Music and technology</title>
-  <meta name="description" content="Build beats, record ideas, and explore sound. AI-built music tools by Marcelo Zapata.">
+  <title>MaloSound</title>
+  <meta name="description" content="Make the beat. Record the take. Find the sound. Marcelo Zapata’s music project.">
   <link rel="canonical" href="https://malosound.ai/">
-  <link rel="stylesheet" href="/site.css?v=evergreen-20260917">
+  <link rel="stylesheet" href="/site.css?v=music-home-20260921">
+  <style>
+    .track-player { display: block; width: min(100%, 42rem); margin: 8px 0 0; accent-color: #baa078; }
+  </style>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="MaloSound — Music and technology">
-  <meta property="og:description" content="Build beats, record ideas, and explore sound. AI-built music tools by Marcelo Zapata.">
+  <meta property="og:title" content="MaloSound">
+  <meta property="og:description" content="Make the beat. Record the take. Find the sound. Marcelo Zapata’s music project.">
   <meta property="og:url" content="https://malosound.ai/">
   <meta property="og:image" content="https://malosound.ai/assets/brand/malosound-violet-ice-cover.png">
-  <meta property="og:image:alt" content="MaloSound visual identity: luminous filaments on black. Artwork, not a measured session.">
+  <meta property="og:image:alt" content="MaloSound visual identity: luminous filaments on black.">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://malosound.ai/assets/brand/malosound-violet-ice-cover.png">
-<link rel="stylesheet" href="/assets/beat-room/listening.css">
 </head>
 <body class="landing" id="top">
-  <a class="skip-link" href="#instrument-player">Skip to the instrument</a>
+  <a class="skip-link" href="beat-room.html">Skip to Rhythm</a>
   <header class="landing-header">
     <a class="landing-wordmark" href="#top" aria-label="MaloSound home">malosound</a>
-    <nav aria-label="Main"><a href="beat-room.html">Rhythm</a><a href="#instrument-player">Price, played back</a><a href="https://www.marcelozapata.dev/">Marcelo Zapata <span aria-hidden="true">&#8599;</span></a></nav>
+    <nav aria-label="Main">
+      <a href="beat-room.html">Rhythm</a>
+      <a href="#listen">Listen</a>
+      <a href="https://www.tiktok.com/@malosound">TikTok @malosound <span aria-hidden="true">&#8599;</span></a>
+      <a href="https://www.marcelozapata.com/">marcelozapata.com <span aria-hidden="true">&#8599;</span></a>
+    </nav>
   </header>
   <main>
     <section class="landing-hero" aria-labelledby="landing-title">
       <div class="hero-copy">
         <p class="landing-eyebrow">MaloSound</p>
-        <h1 id="landing-title">Music and<br>technology.</h1>
-        <p class="hero-description">Make beats. Record ideas. Find your sound.</p>
-        <a class="landing-action" href="beat-room.html">Rhythm <span aria-hidden="true">&#8599;</span></a>
+        <h1 id="landing-title">MaloSound</h1>
+        <p class="hero-description">Make the beat. Record the take. Find the sound.</p>
+        <a class="landing-action" href="beat-room.html">Open Rhythm <span aria-hidden="true">&#8599;</span></a>
       </div>
-      <div class="hero-art"><img src="/assets/brand/malosound-violet-ice-cover.png" width="1690" height="952" fetchpriority="high" alt="MaloSound's luminous filament artwork. Visual identity, not a measured market session."></div>
+      <div class="hero-art"><img src="/assets/brand/malosound-violet-ice-cover.png" width="1690" height="952" fetchpriority="high" alt="MaloSound luminous filament artwork. Visual identity."></div>
     </section>
     <section class="landing-about" id="about" aria-labelledby="about-title">
       <p class="landing-eyebrow">01 / The project</p>
-      <div><h2 id="about-title">Make the beat.<br><em>Find your voice.</em></h2><p>MaloSound is a music and audiovisual project by Marcelo Zapata. Rhythm lets you sequence drums and bass, record a take, and export audio. The original market instrument remains available below.</p><a class="text-link" href="https://www.marcelozapata.dev/">Writing &amp; other work <span aria-hidden="true">&#8599;</span></a></div>
+      <div>
+        <h2 id="about-title">Make the beat.<br><em>Record the take.</em></h2>
+        <p>MaloSound is Marcelo Zapata’s music project. Heavy electronic, neon, motion. Rhythm is the room: drums, bass, a take, an export.</p>
+        <a class="text-link" href="https://www.tiktok.com/@malosound">TikTok @malosound <span aria-hidden="true">&#8599;</span></a>
+      </div>
     </section>
-    <details id="instrument-player" class="player-disclosure">
-      <summary><span class="landing-eyebrow">02 / Listen</span><span class="disclosure-title">Explore the instrument.</span><span class="disclosure-symbol" aria-hidden="true"></span></summary>
-      <div class="player-content">
-    <div class="player-shell">
-      <header class="stage-identity">
-        <div class="brand"><div class="brand-signature"><h2 class="instrument-heading">The instrument.</h2></div><p>Recorded market movement.</p></div>
-        <div class="tracker" role="group" aria-label="Recorded session at the playhead">
-          <div class="tracker-session"><span id="session-label">Loading session</span><span class="recorded-label">Recorded playback</span></div>
-          <dl class="tracker-reading">
-            <div><dt>SPY close</dt><dd id="live-price" title="Recorded one-minute close, not a live quote">Loading</dd></div>
-            <div><dt>Market time</dt><dd id="market-time" title="America/New_York">09:30 ET</dd></div>
-            <div><dt>Pitch</dt><dd id="live-note" title="Session note at the playhead">Silent</dd></div>
-          </dl>
-          <span id="observation-state" class="observation-state">Opening recorded data</span>
-        </div>
-      </header>
-      <figure class="instrument" aria-labelledby="session-label">
-        <canvas id="orbit" role="img" aria-label="Price-derived orbit. Loading session." aria-describedby="orbit-description"></canvas>
-        <p class="sr-only" id="orbit-description">Horizontal movement is price velocity; vertical movement is acceleration. Line color follows musical pitch. Paths stay open and never bridge missing observations.</p>
-        <figcaption class="path-key" aria-label="Path legend"><span class="reference-key">Full session</span><span class="played-key">Played</span><span class="marker-key">Now</span></figcaption>
-      </figure>
-      <section id="transport" class="transport" aria-label="Playback">
-        <button id="listen" title="Play / pause" type="button" aria-pressed="false" disabled>Listen</button>
-        <span class="audio-time"><span class="control-label">Audio</span><span id="clock" role="timer" aria-label="Elapsed audio time and duration">0:00 / 3:15</span></span>
-        <input id="progress" type="range" min="0" max="195" step="0.5" value="0" aria-label="Playback position" aria-valuetext="0:00 of 3:15 audio; 09:30 ET market time" disabled>
-        <div class="sound-choices" role="group" aria-label="Sound">
-          <button type="button" data-sound="pure" title="Notes: two price voices" aria-label="Notes: two price voices" aria-pressed="true" disabled>Notes</button>
-          <button type="button" data-sound="house" title="House: the same notes, arranged with a beat" aria-label="House: the same notes, arranged with a beat" aria-pressed="false" disabled>House</button>
-        </div>
-        <select id="sound" aria-label="Sound" hidden disabled><option value="pure">Notes</option><option value="house">House</option></select>
-        <button id="mute" title="Mute / unmute" type="button" aria-pressed="false" disabled>Mute</button>
-        <p id="status" class="sr-only" role="status" aria-live="polite">Opening the instrument...</p>
-      </section>
-      <div class="session-selector">
-      <div class="session-heading" id="session-heading"><span>Selected sessions</span><span>2026</span></div>
-      <nav class="dates" aria-label="Choose a session" aria-describedby="session-heading">
-        <a id="2026-08-31" href="#2026-08-31" aria-label="August 31, 2026"><span>Aug</span>31</a>
-        <a id="2026-09-01" href="#2026-09-01" aria-label="September 1, 2026"><span>Sep</span>1</a>
-        <a id="2026-09-02" href="#2026-09-02" aria-label="September 2, 2026">2</a>
-        <a id="2026-09-03" href="#2026-09-03" aria-label="September 3, 2026">3</a>
-        <a id="2026-09-04" href="#2026-09-04" aria-label="September 4, 2026">4</a>
-        <a id="2026-09-08" href="#2026-09-08" aria-label="September 8, 2026">8</a>
-        <a id="2026-09-09" href="#2026-09-09" aria-label="September 9, 2026">9</a>
-        <a id="2026-09-10" href="#2026-09-10" aria-label="September 10, 2026">10</a>
-      </nav>
+    <section class="landing-about" id="listen" aria-labelledby="listen-title">
+      <p class="landing-eyebrow">02 / Listen</p>
+      <div>
+        <h2 id="listen-title">Gold in the Dark.</h2>
+        <p>The track. Play it here.</p>
+        <audio class="track-player" controls preload="metadata" src="/assets/tracks/gold-in-the-dark.mp3">
+          <a href="/assets/tracks/gold-in-the-dark.mp3">Gold in the Dark</a>
+        </audio>
       </div>
-    </div>
-    <p class="bridge-caption">Price sets pitch. Pitch sets color.</p>
-    <details class="method">
-      <summary>Method</summary>
-      <div class="method-body">
-      <p class="method-intro">Price &rarr; pitch &rarr; color.<br>Velocity &rarr; horizontal position.<br>Acceleration &rarr; vertical position.</p>
-      <ol class="pitch-key" aria-label="Pitch colors from low to high">
-        <li style="--pitch:#ff8eb9"><b>A</b><span>0%</span></li>
-        <li style="--pitch:#ffa242"><b>B</b><span>23.6%</span></li>
-        <li style="--pitch:#e6b816"><b>C</b><span>38.2%</span></li>
-        <li style="--pitch:#66da85"><b>D</b><span>50%</span></li>
-        <li style="--pitch:#00d8f6"><b>E</b><span>61.8%</span></li>
-        <li style="--pitch:#43c9ff"><b>F</b><span>78.6%</span></li>
-        <li style="--pitch:#cea4ff"><b>G</b><span>88.6%</span></li>
-        <li style="--pitch:#ff8eb9"><b>A <small>+1 octave</small></b><span>100%</span></li>
-      </ol>
-      <p>Eight pitch landmarks, from low to high. Boundaries fall halfway between landmarks; an exact tie takes the higher note.</p>
-      <dl class="method-rules">
-        <div><dt>Range</dt><dd>The trailing five trading sessions, including this day. The lowest and highest observed five-minute closes are frozen as anchors. The open is not an anchor.</dd></div>
-        <div><dt>Price</dt><dd><code>clamp((smoothed close - low) / (high - low), 0, 1)</code><br>The nearest landmark sets the note. A flat range gives A and a stationary orbit.</dd></div>
-        <div><dt>Smoothing</dt><dd>A centered, 11-observation cubic Savitzky-Golay fit. One-minute spacing for the session; five-minute spacing for the context voice.</dd></div>
-        <div><dt>Motion</dt><dd>The fitted price's first derivative is velocity (price/minute); its second is acceleration (price/minute squared). Each axis is scaled to this session's own maximum absolute value. Similar shapes need not mean equal-sized moves.</dd></div>
-        <div><dt>Pitch</dt><dd>A minor: semitone offsets 0, 2, 3, 5, 7, 8, 10, 12. The session starts at A3 (220 Hz); context is an octave below, A2 (110 Hz). <code>frequency = base &times; 2^(semitone / 12)</code></dd></div>
-        <div><dt>Color</dt><dd>Hue is semitone &times; 30&deg;, modulo 360&deg;. OKLCH lightness 0.80 and chroma 0.16 stay fixed. Both A octaves share a color. Color means pitch, not profit.</dd></div>
-        <div><dt>Sound</dt><dd>Notes plays the two price voices. House is their pre-rendered arrangement with a 120 BPM beat. Both use one clock: a market minute takes 0.5 seconds; the session lasts 3:15.</dd></div>
-        <div><dt>Gaps</dt><dd>Five observations at each end of every run are omitted. Missing data splits the path; no gap or overnight interval is connected. Derived voices and the marker stop where their observations end; House drums may continue.</dd></div>
-        <div><dt>Playback</dt><dd>The price readout is the recorded, unsmoothed one-minute close available in the instrument document. Empty readouts identify missing data or smoothing edges. Reduced motion steps between recorded-minute positions.</dd></div>
-        <div><dt>Perspective</dt><dd>This is retrospective, not a live quote or signal. Centered smoothing uses later observations, and the anchors include the completed day. The faint path previews the whole recorded session.</dd></div>
-      </dl>
-      <p id="coverage" class="coverage"></p><p id="voices" class="sr-only" aria-hidden="true">Session / Context</p>
-      </div>
-    </details>
-    <noscript><p>This instrument needs JavaScript for local sound and drawing. Nothing plays automatically.</p></noscript>
-      </div>
-    </details>
+    </section>
   </main>
-  <footer class="landing-footer"><span>MaloSound</span><a href="https://www.marcelozapata.dev/">A project by Marcelo Zapata <span aria-hidden="true">&#8599;</span></a></footer>
-  <script>
-  (() => {
-    'use strict';
-    const DURATION = 195, RATE = 44100, SECONDS_PER_MINUTE = 0.5;
-    const SEMITONES = [0, 2, 3, 5, 7, 8, 10, 12];
-    const LANDMARKS = [0, .236, .382, .5, .618, .786, .886, 1];
-    const links = [...document.querySelectorAll('.dates a')];
-    const dates = links.map(link => link.hash.slice(1));
-    const canvas = document.querySelector('#orbit'), pen = canvas.getContext('2d');
-    const play = document.querySelector('#listen'), mute = document.querySelector('#mute');
-    const status = document.querySelector('#status'), label = document.querySelector('#session-label');
-    const clock = document.querySelector('#clock'), voices = document.querySelector('#voices');
-    const coverage = document.querySelector('#coverage');
-    const seek = document.querySelector('#progress');
-    const marketTime = document.querySelector('#market-time'), observationState = document.querySelector('#observation-state');
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const playerDisclosure = document.querySelector('#instrument-player');
-    let seeking = false, seekResume = false;
-    const supportsOKLCH = CSS.supports('color', 'oklch(0.8 0.16 0)');
-    let data = null, buffers = null, context = null, master = null, sources = [];
-    let playing = false, muted = false, preparing = false, loading = false;
-    let offset = 0, started = 0, frame = 0, generation = 0, request = null;
-    let size = 1, background = null;
-    const sound = document.querySelector('#sound');
-    const houseFiles = {
-      '2026-08-31': 'ee567eb55757bb12c59ef84c5484b11db8bf80bfade8de8621bffaadece9a6dd',
-      '2026-09-01': '86560b947f1f38136e831dccc11130f67eefab9ebc4a0bfe5a9b9b90a2461d70',
-      '2026-09-02': 'b13e95260ce02e7f20d13a5f2ce834f63a940f04bf1d88cddc6860326ce9fab2',
-      '2026-09-03': 'fa7b37665b319a7133c8d69d003bb80d2252f9f5d34b2747cab57dc8b71c08e2',
-      '2026-09-04': 'b7c497b0faa47553732634d3088133ed07b65e07a445c56aab423ca1bcc67155',
-      '2026-09-08': '257c5003f0121282d2db12ddfa47b25319aa8c475ee23cf2918cd3756f10daae',
-      '2026-09-09': 'ad9f3e7de4c9a7c10778e927e85096c7b274c9a5418399e390b9da293dc1b79f',
-      '2026-09-10': '39d4119aad59385117e503b0afb5f1f0ca425963ee10ed6a4a63fceb75e9ae89'
-    };
-    const soundButtons = [...document.querySelectorAll('[data-sound]')];
-    function syncSoundChoices() {
-      seek.disabled = sound.disabled;
-      soundButtons.forEach(button => {
-        button.disabled = sound.disabled || (button.dataset.sound === 'house' && sound.options[1].disabled);
-        button.setAttribute('aria-pressed', String(button.dataset.sound === sound.value));
-      });
-    }
-    soundButtons.forEach(button => button.addEventListener('click', () => {
-      if (button.disabled || sound.value === button.dataset.sound) return;
-      sound.value = button.dataset.sound;
-      sound.dispatchEvent(new Event('change'));
-      syncSoundChoices();
-    }));
-    let soundMode = 'pure', houseBuffers = null;
-    const fail = message => { throw new Error(message); };
-    const finite = n => typeof n === 'number' && Number.isFinite(n);
-    const integer = n => Number.isInteger(n) && n >= 0 && n < 390;
-    const same = (a, b) => Array.isArray(a) && a.length === b.length && a.every((n, i) => n === b[i]);
-
-    function validate(doc, date) {
-      if (!doc || doc.schemaVersion !== 2 || doc.date !== date || doc.symbol !== 'SPY') fail('Unsupported session.');
-      const method = doc.method;
-      if (!method || !same(method.landmarks, LANDMARKS) || !same(method.semitones, SEMITONES) ||
-          method.smoothing?.window !== 11 || method.smoothing.degree !== 3 ||
-          method.smoothing.spacingMinutes !== 1 || method.smoothing.edgeLossEachSide !== 5 ||
-          method.anchors?.frozen !== true || method.anchors.sessionOpenIsAnchor !== false ||
-          !finite(method.anchors.low) || !finite(method.anchors.high) || method.anchors.high < method.anchors.low ||
-          method.colour?.lightness !== .8 || method.colour.chroma !== .16) fail('Unsupported mapping.');
-      if (!doc.bounds || !finite(doc.bounds.maxAbsVelocity) || !finite(doc.bounds.maxAbsAcceleration) ||
-          doc.bounds.maxAbsVelocity < 0 || doc.bounds.maxAbsAcceleration < 0) fail('Invalid orbit bounds.');
-      const palette = method.colour.palette;
-      if (!Array.isArray(palette) || palette.length !== 8) fail('Invalid pitch palette.');
-      palette.forEach((p, i) => {
-        if (p.landmark !== i || p.semitone !== SEMITONES[i] || p.hue !== SEMITONES[i] * 30 % 360 ||
-            p.oklch !== `oklch(0.8 0.16 ${p.hue})` || !/^#[0-9a-f]{6}$/i.test(p.srgbFallback)) fail('Invalid pitch color.');
-      });
-      if (!Array.isArray(doc.runs) || doc.runs.length > 390) fail('Invalid orbit runs.');
-      let previous = -1, count = 0;
-      doc.runs.forEach(run => {
-        if (!Array.isArray(run.points)) fail('Invalid orbit points.');
-        run.points.forEach((p, i) => {
-          if (!integer(p.minute) || p.minute <= previous || (i && p.minute !== previous + 1) ||
-              !finite(p.velocity) || !finite(p.acceleration) ||
-              Math.abs(p.velocity) > doc.bounds.maxAbsVelocity + .000001 ||
-              Math.abs(p.acceleration) > doc.bounds.maxAbsAcceleration + .000001 ||
-              !Number.isInteger(p.landmark) || p.landmark < 0 || p.landmark > 7 ||
-              p.semitone !== SEMITONES[p.landmark]) fail('Invalid orbit observation.');
-          previous = p.minute; count++;
-        });
-      });
-      if (count !== doc.derivedObservations || count > 390) fail('Inconsistent observations.');
-      if (!Array.isArray(doc.source?.missingMinutes) || !doc.source.missingMinutes.every(integer) ||
-          !Array.isArray(doc.parent?.missingSessions) || !Array.isArray(doc.parent.observedSessions) ||
-          doc.parent.samplingMinutes !== 5 || doc.parent.sessionDay?.date !== date) fail('Invalid source coverage.');
-      [doc.noteEvents, doc.parent.sessionDay.noteEvents].forEach((events, stem) => {
-        if (!Array.isArray(events) || events.length > 390) fail('Invalid note events.');
-        let end = -1;
-        events.forEach(event => {
-          if (!integer(event.startMinute) || !integer(event.endMinute) || event.startMinute <= end ||
-              event.endMinute < event.startMinute || event.minutes !== event.endMinute - event.startMinute + 1 ||
-              !Number.isInteger(event.landmark) || event.landmark < 0 || event.landmark > 7 ||
-              event.semitone !== SEMITONES[event.landmark] ||
-              (stem === 1 && (event.startMinute % 5 !== 0 || event.endMinute % 5 !== 4))) fail('Invalid note interval.');
-          end = event.endMinute;
-        });
-      });
-      return doc;
-    }
-
-    function colour(landmark) {
-      const p = data.method.colour.palette[landmark];
-      return supportsOKLCH ? p.oklch : p.srgbFallback;
-    }
-    function position(p) {
-      const radius = size * .435;
-      return [size / 2 + p.velocity / (data.bounds.maxAbsVelocity || 1) * radius,
-              size / 2 - p.acceleration / (data.bounds.maxAbsAcceleration || 1) * radius];
-    }
-    function makeBackground() {
-      if (!pen) return;
-      const ratio = Math.min(devicePixelRatio || 1, 3);
-      size = canvas.getBoundingClientRect().width || 1;
-      canvas.width = Math.round(size * ratio); canvas.height = canvas.width;
-      pen.setTransform(ratio, 0, 0, ratio, 0, 0);
-      background = document.createElement('canvas');
-      background.width = canvas.width; background.height = canvas.height;
-      const g = background.getContext('2d');
-      g.setTransform(ratio, 0, 0, ratio, 0, 0);
-      g.clearRect(0, 0, size, size);
-      if (data) {
-        g.lineWidth = 1.1; g.lineCap = 'round'; g.lineJoin = 'round';
-        for (const run of data.runs) {
-          for (let i = 1; i < run.points.length; i++) {
-            const a = position(run.points[i - 1]), b = position(run.points[i]);
-            g.strokeStyle = colour(run.points[i].landmark);
-            g.shadowBlur = 0;
-            g.beginPath(); g.moveTo(...a); g.lineTo(...b); g.stroke();
-          }
-          if (run.points.length && data.flat) {
-            g.shadowBlur = 0; g.fillStyle = colour(run.points[0].landmark);
-            g.beginPath(); g.arc(size / 2, size / 2, 2, 0, Math.PI * 2); g.fill();
-          }
-        }
-      }
-      draw(offset);
-    }
-    function pointAt(minute) {
-      if (!data) return null;
-      for (const run of data.runs) {
-        const points = run.points;
-        if (!points.length || minute < points[0].minute || minute > points[points.length - 1].minute) continue;
-        const a = points[Math.floor(minute - points[0].minute)];
-        const b = points[Math.min(points.length - 1, Math.floor(minute - points[0].minute) + 1)];
-        const t = b.minute === a.minute ? 0 : (minute - a.minute) / (b.minute - a.minute);
-        return {velocity: a.velocity + (b.velocity - a.velocity) * t,
-          acceleration: a.acceleration + (b.acceleration - a.acceleration) * t, landmark: a.landmark};
-      }
-      return null;
-    }
-    function noteAt(events, minute) {
-      const event = events.find(e => minute >= e.startMinute && minute < e.endMinute + 1);
-      return event ? (event.landmark === 7 ? 'A′' : data.method.notes[event.landmark]) : '—';
-    }
-    function marketStamp(seconds) {
-      const total = 570 + Math.min(390, Math.floor(seconds / SECONDS_PER_MINUTE));
-      return `${String(Math.floor(total / 60)).padStart(2, '0')}:${String(total % 60).padStart(2, '0')} ET`;
-    }
-    function audioStamp(seconds) {
-      const whole = Math.floor(seconds);
-      return `${Math.floor(whole / 60)}:${String(whole % 60).padStart(2, '0')}`;
-    }
-    function draw(seconds) {
-      if (!pen || !background) return;
-      pen.clearRect(0, 0, size, size);
-      // The full measured path is a faint reference, not an invented curve.
-      pen.globalAlpha = .38;
-      pen.drawImage(background, 0, 0, size, size);
-      pen.globalAlpha = 1;
-      const minute = reducedMotion.matches ? Math.floor(seconds / SECONDS_PER_MINUTE) : seconds / SECONDS_PER_MINUTE;
-      const recordedMinute = Math.floor(seconds / SECONDS_PER_MINUTE);
-      let priceSample = null;
-      if (data) {
-        pen.lineWidth = 1.65; pen.lineCap = 'round'; pen.lineJoin = 'round';
-        for (const run of data.runs) {
-          const points = run.points;
-          if (!points.length) continue;
-          if (recordedMinute >= points[0].minute && recordedMinute <= points[points.length - 1].minute) {
-            for (const sample of points) {
-              if (sample.minute > recordedMinute) break;
-              priceSample = sample;
-            }
-          }
-          for (let i = 1; i < points.length; i++) {
-            const a = points[i - 1], b = points[i];
-            if (a.minute >= minute) break;
-            const fraction = Math.min(1, (minute - a.minute) / (b.minute - a.minute));
-            const [ax, ay] = position(a), [bx, by] = position(b);
-            pen.strokeStyle = colour(b.landmark);
-            pen.shadowColor = pen.strokeStyle; pen.shadowBlur = reducedMotion.matches ? 0 : 1.5;
-            pen.beginPath(); pen.moveTo(ax, ay);
-            pen.lineTo(ax + (bx - ax) * fraction, ay + (by - ay) * fraction); pen.stroke();
-            if (fraction < 1) break;
-          }
-        }
-      }
-      pen.shadowBlur = 0;
-      const p = pointAt(minute);
-      if (p) {
-        const [x, y] = position(p);
-        pen.shadowColor = colour(p.landmark); pen.shadowBlur = reducedMotion.matches ? 0 : 5;
-        pen.fillStyle = colour(p.landmark); pen.beginPath(); pen.arc(x, y, 4, 0, Math.PI * 2); pen.fill();
-        pen.shadowBlur = 0; pen.strokeStyle = '#f1ede3'; pen.lineWidth = 1.25;
-        pen.beginPath(); pen.arc(x, y, 5.5, 0, Math.PI * 2); pen.stroke();
-      }
-      // Readouts share the audio clock. A gap never borrows an adjacent price.
-      const price = document.querySelector('#live-price'), note = document.querySelector('#live-note');
-      const event = data ? data.noteEvents.find(e => minute >= e.startMinute && minute < e.endMinute + 1) : null;
-      if (priceSample && Number.isFinite(priceSample.close)) {
-        price.textContent = priceSample.close.toFixed(2);
-        price.title = `Recorded one-minute close at ${marketStamp(priceSample.minute * SECONDS_PER_MINUTE)}. Not a live quote.`;
-        observationState.textContent = '';
-        observationState.dataset.state = 'observed';
-      } else {
-        price.textContent = data ? 'No sample' : 'Loading';
-        const missing = data?.source.missingMinutes.includes(recordedMinute);
-        const nearGap = data?.source.missingMinutes.some(m => Math.abs(m - recordedMinute) <= data.method.smoothing.edgeLossEachSide);
-        observationState.textContent = !data ? 'Opening recorded data' : recordedMinute >= 390 ? 'Session complete' : missing ? 'Missing source minute' : nearGap ? 'Gap in smoothing window' : 'Edge of smoothing window';
-        observationState.dataset.state = !data ? 'loading' : recordedMinute >= 390 ? 'complete' : missing ? 'missing' : nearGap ? 'gap' : 'edge';
-        price.title = observationState.textContent + '. No price substituted.';
-      }
-      marketTime.textContent = marketStamp(seconds);
-      if (event) {
-        note.textContent = data.method.notes[event.landmark] + (3 + Math.floor((9 + event.semitone) / 12));
-        note.style.color = colour(event.landmark);
-        note.title = `Session note ${note.textContent}; context voice is anchored at A2`;
-      } else {
-        note.textContent = 'Silent'; note.style.color = ''; note.title = 'No session note at this market minute';
-      }
-      seek.value = String(seconds);
-      seek.style.setProperty('--played', `${seconds / DURATION * 100}%`);
-      seek.setAttribute('aria-valuetext', `${audioStamp(seconds)} of 3:15 audio; ${marketStamp(seconds)} market time`);
-      canvas.dataset.marker = p ? 'visible' : 'hidden';
-      canvas.dataset.minute = String(recordedMinute);
-      play.setAttribute('aria-pressed', String(playing));
-      clock.textContent = `${audioStamp(seconds)} / 3:15`;
-      if (data) voices.textContent = `Session ${noteAt(data.noteEvents, minute)} / Context ${noteAt(data.parent.sessionDay.noteEvents, minute)}`;
-    }
-    function now() { return playing ? Math.min(DURATION, Math.max(offset, context.currentTime - started + offset)) : offset; }
-    let redrawTimer = null;
-    function disposeSources() {
-      clearInterval(redrawTimer); redrawTimer = null;
-      for (const source of sources) { source.onended = null; try { source.stop(); } catch (_) {} source.disconnect(); }
-      sources = [];
-    }
-    function pause() {
-      offset = now(); playing = false; cancelAnimationFrame(frame); disposeSources();
-      play.textContent = offset >= DURATION ? 'Replay' : offset > 0 ? 'Resume' : 'Listen';
-      canvas.dataset.state = 'paused'; draw(offset);
-    }
-    function updatePlayback() {
-      if (!playing) return;
-      const seconds = now(); draw(seconds);
-      if (seconds >= DURATION) { offset = DURATION; pause(); status.textContent = 'Session complete.'; return; }
-    }
-    function tick() {
-      updatePlayback();
-      if (playing && !reducedMotion.matches) frame = requestAnimationFrame(tick);
-    }
-    function startRedraw() {
-      clearInterval(redrawTimer);
-      redrawTimer = setInterval(updatePlayback, 250);
-      tick();
-    }
-    reducedMotion.addEventListener('change', () => {
-      cancelAnimationFrame(frame);
-      canvas.dataset.motion = reducedMotion.matches ? 'reduced' : 'full';
-      if (playing) tick(); else draw(offset);
-    });
-    canvas.dataset.motion = reducedMotion.matches ? 'reduced' : 'full';
-    seek.addEventListener('input', () => {
-      if (loading || preparing || !data) return;
-      const target = Math.max(0, Math.min(DURATION, Number(seek.value)));
-      if (!seeking) { seekResume = playing; pause(); seeking = true; }
-      offset = target;
-      play.textContent = offset >= DURATION ? 'Replay' : offset > 0 ? 'Resume' : 'Listen';
-      draw(offset);
-    });
-    seek.addEventListener('change', () => {
-      if (!seeking) return;
-      seeking = false;
-      const resume = seekResume; seekResume = false;
-      status.textContent = `Position ${audioStamp(offset)}. ${marketStamp(offset)} recorded market time.`;
-      if (resume && offset < DURATION) play.click();
-    });
-    function envelope(offline, event, base, attack, release) {
-      const start = event.startMinute * SECONDS_PER_MINUTE;
-      const end = (event.endMinute + 1) * SECONDS_PER_MINUTE;
-      const oscillator = offline.createOscillator(), gain = offline.createGain();
-      oscillator.setPeriodicWave(offline.createPeriodicWave(new Float32Array(4), new Float32Array([0, 1, .35, .15]), {disableNormalization: true}));
-      oscillator.frequency.value = base * 2 ** (event.semitone / 12);
-      const up = new Float32Array(128), down = new Float32Array(128);
-      for (let i = 0; i < 128; i++) { up[i] = .5 * Math.sin(Math.PI / 2 * i / 127) ** 2; down[i] = .5 * Math.cos(Math.PI / 2 * i / 127) ** 2; }
-      gain.gain.setValueAtTime(0, start);
-      gain.gain.setValueCurveAtTime(up, start, attack);
-      gain.gain.setValueAtTime(.5, end - release);
-      gain.gain.setValueCurveAtTime(down, end - release, release);
-      oscillator.connect(gain); gain.connect(offline.destination);
-      oscillator.start(start); oscillator.stop(end);
-    }
-    async function renderStem(events, base, attack, release) {
-      const Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-      if (!Offline) fail('Offline audio is unavailable.');
-      const offline = new Offline(1, DURATION * RATE, RATE);
-      for (const event of events) envelope(offline, event, base, attack, release);
-      return offline.startRendering();
-    }
-    async function renderAudio(doc) {
-      const stems = await Promise.all([
-        renderStem(doc.noteEvents, 220, .02, .08),
-        renderStem(doc.parent.sessionDay.noteEvents, 110, .15, .40)
-      ]);
-      const a = stems[0].getChannelData(0), b = stems[1].getChannelData(0);
-      let peak = 0;
-      for (let i = 0; i < a.length; i++) peak = Math.max(peak, Math.abs(a[i] + b[i]));
-      const gain = peak ? 10 ** (-1 / 20) / peak : 1;
-      for (let i = 0; i < a.length; i++) { a[i] *= gain; b[i] *= gain; }
-      return stems;
-    }
-    soundButtons.forEach((button, index) => button.addEventListener('keydown', event => {
-      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-      event.preventDefault();
-      const other = soundButtons[(index + 1) % soundButtons.length];
-      if (!other.disabled) other.focus();
-    }));
-    async function renderHouse(date) {
-      if (!houseFiles[date]) fail('House recording not available for this date.');
-      const response = await fetch(`/assets/instrument/${date}-house.mp3`, {signal: AbortSignal.timeout(15000)});
-      if (!response.ok) fail('House recording unavailable.');
-      const bytes = await response.arrayBuffer();
-      const digest = await crypto.subtle.digest('SHA-256', bytes);
-      const hash = [...new Uint8Array(digest)].map(n => n.toString(16).padStart(2, '0')).join('');
-      if (hash !== houseFiles[date]) fail('House recording does not match the approved file.');
-      const buffer = await context.decodeAudioData(bytes);
-      if (Math.abs(buffer.duration - DURATION) > .15) fail('House duration does not match the session.');
-      return [buffer];
-    }
-    sound.addEventListener('change', () => {
-      if (preparing || loading || !data) return;
-      const resume = playing;
-      pause(); soundMode = sound.value;
-      status.textContent = soundMode === 'house' ? 'House. The same notes, arranged with a beat.' : 'Notes. Two voices from the same price data.';
-      if (resume) play.click();
-    });
-    play.addEventListener('click', async () => {
-      if (loading || preparing || !data) return;
-      if (playing) { pause(); status.textContent = 'Paused.'; return; }
-      const token = generation;
-      preparing = true; play.disabled = true; sound.disabled = true; syncSoundChoices();
-      status.textContent = soundMode === 'house' ? 'Loading house recording…' : 'Preparing two voices…';
-      try {
-        const Audio = window.AudioContext || window.webkitAudioContext;
-        if (!Audio) fail('Web Audio is unavailable.');
-        if (!context) {
-          context = new Audio({sampleRate: RATE}); master = context.createGain();
-          master.gain.value = muted ? 0 : 1; master.connect(context.destination);
-          context.addEventListener('statechange', () => {
-            if (playing && context.state !== 'running') { pause(); status.textContent = 'Playback interrupted. Press Resume.'; }
-          });
-        }
-        await context.resume();
-        if (token !== generation) return;
-        const rendered = soundMode === 'house' ? (houseBuffers || await renderHouse(data.date)) : (buffers || await renderAudio(data));
-        if (token !== generation) return;
-        if (soundMode === 'house') houseBuffers = rendered; else buffers = rendered;
-        if (offset >= DURATION) offset = 0;
-        started = context.currentTime + .035;
-        sources = rendered.map(buffer => {
-          const source = context.createBufferSource(); source.buffer = buffer;
-          source.connect(master); source.start(started, offset); return source;
-        });
-        playing = true; canvas.dataset.state = 'playing'; play.textContent = 'Pause';
-        status.textContent = soundMode === 'house' ? 'House and movement share one clock.' : 'Two voices. One price-derived movement.'; startRedraw();
-      } catch (error) {
-        if (token === generation) { disposeSources(); playing = false; status.textContent = 'Sound could not start. Press Listen to retry.'; }
-      } finally {
-        if (token === generation) { preparing = false; play.disabled = loading || !data; sound.disabled = loading || !data; syncSoundChoices(); }
-      }
-    });
-    mute.addEventListener('click', () => {
-      muted = !muted; mute.setAttribute('aria-pressed', String(muted));
-      mute.textContent = muted ? 'Unmute' : 'Mute';
-      if (master) master.gain.setTargetAtTime(muted ? 0 : 1, context.currentTime, .01);
-    });
-    async function select(date) {
-      const token = ++generation;
-      pause(); offset = 0; preparing = false; loading = true; seeking = false; seekResume = false;
-      play.disabled = true; mute.disabled = true; sound.disabled = true; syncSoundChoices(); play.textContent = 'Listen';
-      request?.abort(); request = new AbortController();
-      const timer = setTimeout(() => request.abort(), 12000);
-      status.textContent = `Opening ${date}…`;
-      try {
-        const response = await fetch(`/content/instrument/${date}.json`, {signal: request.signal});
-        if (!response.ok) fail('Session unavailable.');
-        const next = validate(await response.json(), date);
-        if (token !== generation) return;
-        data = next; buffers = null; houseBuffers = null; offset = 0;
-        soundMode = 'pure'; sound.value = 'pure';
-        sound.options[1].disabled = !houseFiles[date];
-        sound.options[1].textContent = houseFiles[date] ? 'House' : 'House (not available yet)';
-        label.textContent = new Intl.DateTimeFormat('en-US', {month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'}).format(new Date(`${data.date}T12:00:00Z`));
-        canvas.setAttribute('aria-label', `${data.symbol}, ${data.date}. Price velocity by acceleration; note-colored open paths.`);
-        canvas.dataset.session = date; canvas.dataset.state = 'ready';
-        links.forEach(link => { if (link.hash === `#${date}`) link.setAttribute('aria-current', 'date'); else link.removeAttribute('aria-current'); });
-        const missing = data.source.missingMinutes.length;
-        coverage.textContent = `${data.parent.observedSessions.length}/5 context sessions observed. ${data.derivedObservations} mapped observations${missing ? `; ${missing} missing source minute${missing === 1 ? '' : 's'}` : '; no internal missing minutes'}. Frozen range: ${data.method.anchors.low.toFixed(2)} to ${data.method.anchors.high.toFixed(2)}.${data.parent.missingSessions.length ? ` Missing sessions: ${data.parent.missingSessions.join(', ')}.` : ''}`;
-        makeBackground();
-        status.textContent = data.derivedObservations ? 'Ready. Two voices from the same price data.' : 'No derived observations. This session is silent.';
-      } catch (error) {
-        if (token !== generation) return;
-        if (data) {
-          draw(0); status.textContent = `${date} unavailable. Keeping ${data.date}; no newer data substituted.`;
-        } else {
-          label.textContent = 'No verified session available';
-          status.textContent = 'The instrument is in development. Session data could not load; choose a date to retry.';
-        }
-      } finally {
-        clearTimeout(timer);
-        if (token === generation) { loading = false; play.disabled = !data || !pen; mute.disabled = !data; sound.disabled = !data; syncSoundChoices(); }
-      }
-    }
-    const featuredDate = '2026-09-04';
-    const route = () => {
-      const target = location.hash.slice(1);
-      const isSession = dates.includes(target);
-      if (isSession || target === 'instrument-player') playerDisclosure.open = true;
-      if (isSession) select(target);
-      else if (playerDisclosure.open && !data && !loading) select(featuredDate);
-    };
-    playerDisclosure.addEventListener('toggle', () => {
-      if (playerDisclosure.open) {
-        if (!data && !loading) select(featuredDate);
-        else makeBackground();
-      } else if (playing) pause();
-    });
-    links.forEach(link => link.addEventListener('click', event => {
-      event.preventDefault();
-      if (location.hash === link.hash) route();
-      else { history.replaceState(null, '', link.hash); route(); }
-    }));
-        links.forEach((link, index) => link.addEventListener('keydown', event => {
-      const next = event.key === 'ArrowRight' ? (index + 1) % links.length : event.key === 'ArrowLeft' ? (index + links.length - 1) % links.length : event.key === 'Home' ? 0 : event.key === 'End' ? links.length - 1 : -1;
-      if (next >= 0) { event.preventDefault(); links[next].focus(); }
-    }));
-    window.addEventListener('hashchange', route);
-    window.addEventListener('pagehide', () => { generation++; request?.abort(); pause(); context?.suspend(); });
-    document.addEventListener('visibilitychange', () => { if (document.hidden && playing) pause(); });
-    new ResizeObserver(makeBackground).observe(canvas);
-    route();
-  })();
-  </script>
-<script type="module" src="/assets/beat-room/listening.mjs"></script>
+  <footer class="landing-footer">
+    <span>MaloSound</span>
+    <a href="https://www.marcelozapata.com/">marcelozapata.com <span aria-hidden="true">&#8599;</span></a>
+  </footer>
 </body>
 </html>
